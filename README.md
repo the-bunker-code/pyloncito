@@ -32,7 +32,7 @@ publicidad. El progreso queda en el dispositivo.
 | Brandbook y tokens | Hecho |
 | Arquitectura | Hecho |
 | Repo y Project de GitHub | Hecho |
-| Fase 0 — snapshot y verificación | Listo |
+| Fase 0 — snapshot y verificación | Listo para empezar |
 | Marca Pyloncito | En curso |
 | Sitio Astro + hub | Pendiente |
 | Migración de los cuatro juegos | Pendiente |
