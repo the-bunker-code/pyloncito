@@ -1,0 +1,54 @@
+name: Épica
+description: Un bloque de trabajo con objetivo, alcance y criterios de aceptación.
+title: "[Epic] "
+labels:
+  - tipo/epic
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Usá una épica para agrupar varias tareas de una fase, un juego o un área.
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: Objetivo
+      description: Qué resultado produce esta épica.
+      placeholder: Al terminar, ...
+    validations:
+      required: true
+  - type: textarea
+    id: alcance
+    attributes:
+      label: Alcance
+      description: Qué entra y qué queda fuera.
+      placeholder: |
+        Entra:
+        - ...
+        No entra:
+        - ...
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación
+      description: Lista verificable para cerrar la épica.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: input
+    id: dependencias
+    attributes:
+      label: Dependencias
+      description: Issues o fases que deben terminar antes.
+      placeholder: "#12, Fase 1"
+  - type: textarea
+    id: enlaces
+    attributes:
+      label: Enlaces
+      description: Arquitectura, juego original, preview o documentación.
+      placeholder: |
+        - ARQUITECTURA.md
+        - ...

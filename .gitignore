@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build and generated output
+dist/
+.astro/
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Local environment and editor files
+.env
+.env.*
+!.env.example
+.DS_Store
+.idea/
+.vscode/
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

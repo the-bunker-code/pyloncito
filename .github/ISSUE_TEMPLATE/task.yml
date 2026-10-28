@@ -1,0 +1,50 @@
+name: Tarea
+description: Un cambio concreto, verificable y acotado.
+title: "[Tarea] "
+labels:
+  - tipo/tarea
+body:
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto
+      description: Por qué hace falta y a qué épica pertenece.
+      placeholder: Parte de #12. ...
+    validations:
+      required: true
+  - type: textarea
+    id: trabajo
+    attributes:
+      label: Qué hacer
+      description: Pasos o resultado esperado.
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación
+      description: Cómo se sabe que está terminada.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: pruebas
+    attributes:
+      label: Pruebas
+      description: Tests, viewports, teclado, consola o capturas.
+      placeholder: |
+        - [ ] `pnpm check`
+        - [ ] 390×844
+        - [ ] 1366×900
+  - type: textarea
+    id: archivos
+    attributes:
+      label: Archivos esperados
+      description: Rutas probables. No es obligatorio acertar.
+      placeholder: |
+        - src/...
+        - tests/...

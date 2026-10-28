@@ -1,0 +1,43 @@
+name: Decisión
+description: Una decisión que cambia el resultado y necesita registro.
+title: "[Decisión] "
+labels:
+  - tipo/decision
+body:
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto
+      description: Qué problema o duda hay que resolver.
+    validations:
+      required: true
+  - type: textarea
+    id: opciones
+    attributes:
+      label: Opciones
+      description: Alternativas consideradas, con ventajas y riesgos.
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: Decisión
+      description: Qué se eligió y por qué.
+    validations:
+      required: true
+  - type: textarea
+    id: consecuencias
+    attributes:
+      label: Consecuencias
+      description: Qué cambia, qué queda pendiente y qué se debe documentar.
+    validations:
+      required: true
+  - type: input
+    id: fecha
+    attributes:
+      label: Fecha
+      description: Fecha de la decisión.
+      placeholder: 2026-10-28
