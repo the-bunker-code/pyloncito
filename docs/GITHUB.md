@@ -31,15 +31,22 @@ en el Project “Pyloncito”. Las decisiones de producto se registran en
 
 ### Vistas
 
-- **Ahora**: lo que no está Done.
-- **Tablero**: columnas por Estado.
-- **Por juego**: agrupado por Juego.
-- **Roadmap**: agrupado por Fase.
-- **Bloqueados**: label `bloqueado`.
-- **Hecho**: historial.
+| Vista | Tipo | Filtro / agrupación |
+|---|---|---|
+| Ahora | Tabla | `-status:Done` |
+| Tablero | Board | Columnas por Estado |
+| Por juego | Tabla | Agrupar por Juego (manual) |
+| Roadmap | Roadmap | Agrupar por Fase (manual) |
+| Bloqueados | Tabla | `label:bloqueado` |
+| Hecho | Tabla | `status:Done` |
 
-Las vistas y el agrupamiento se terminan de configurar en la UI; la API de GitHub no
-expone todos los ajustes.
+La API creó las vistas y los filtros. El agrupamiento y los workflows se terminan en la
+UI porque la API de GitHub no expone todos los ajustes. La vista por defecto “View 1”
+se puede renombrar o eliminar.
+
+### Estado inicial
+
+Al 2026-10-28: 49 issues; 7 Done, 5 Ready, 2 In progress y 35 Backlog.
 
 ### Reglas del tablero
 
