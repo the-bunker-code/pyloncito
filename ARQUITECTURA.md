@@ -31,9 +31,11 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 | Tema | Decisión |
 |---|---|
 | Alcance | Pyloncito: sitio único con hub + 4 juegos + receta para juegos nuevos |
-| Frontend | Astro, Vue 3.5, TypeScript, Tailwind 4 (versiones exactas se fijan en fase 0) |
-| Runtime | Node 24 LTS |
-| Gestor de paquetes | **pnpm**, fijado con `packageManager` en `package.json` |
+| Frontend | Astro 7.4.2 · Vue 3.5.44 · TypeScript 6.0.3 · Tailwind 4.3.3 |
+| Runtime | Node 24.18.0 (mínimo de Astro: >=22.23.4) |
+| Gestor de paquetes | **pnpm 12.15.0**, fijado con `packageManager` en `package.json` |
+| Testing | Vitest 5.0.5 · Playwright 1.64.1 · axe-core 4.14.0 |
+| Calidad | ESLint 10.13.0 · Prettier 3.9.10 · `astro check` 0.9.12 · `vue-tsc` 3.3.13 |
 | Estilos | Tailwind para layout/hub; CSS semántico para piezas custom. **Sin SCSS** |
 | 4K | Monitor de cerca: ancho máximo + `3xl: 2560px`; sin UI de 10 pies |
 | Público | Sí; sin cuentas, perfiles, cookies ni analytics |
@@ -62,7 +64,9 @@ code/pyloncito/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/{epic,task,bug,decision}.yml
 │   └── PULL_REQUEST_TEMPLATE.md
-├── docs/GITHUB.md               # Project, campos, labels y flujo
+├── docs/
+│   ├── GITHUB.md                # Project, campos, labels y flujo
+│   └── baseline/                # capturas, versiones y reporte de Fase 0
 ├── public/
 │   ├── _headers
 │   ├── fonts/fredoka-latin-v17.woff2
@@ -187,11 +191,11 @@ juegos.
 - Textos fuera de la lógica. Nada de frases en `rules.ts` ni `engine.ts`.
 - Audio: voz local primero; si solo hay voces de red, se usan solo con voz activada y
   se avisa en privacidad. Tonos con Web Audio, sin archivos.
-- CSP con el soporte de Astro (verificar en fase 0 si sigue siendo experimental) +
-  directivas HTTP en `_headers`.
-- PWA: un manifiesto y un service worker para todo el sitio. HTML network-first;
-  assets con hash cache-first. Verificar que `@vite-pwa/astro` soporte la versión de
-  Astro elegida; si no, `sw.js` propio generado en build.
+- CSP con `security.csp` de Astro (estable desde Astro 6; hashes de scripts y estilos)
+  + directivas HTTP en `_headers`.
+- PWA: un manifiesto y un `sw.js` propio para todo el sitio. HTML network-first;
+  assets con hash cache-first. `@vite-pwa/astro` 1.2.0 no declara compatibilidad con
+  Astro 7, así que no se usa; se reutiliza el patrón de los cuatro juegos actuales.
 - Sin `innerHTML` con datos de usuario. Vue escapa por defecto.
 
 ## 6. Requisitos de uso infantil
@@ -203,7 +207,7 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 |---|---|
 | Ancla visual | Cada juego tiene un ícono y un color fijos, idénticos en hub, `GameHeader`, PWA y guía. No cambian entre versiones |
 | Aviso de cierre | `ClosingNotice` anuncia el final antes de que llegue ("dos rondas más", "una más", "terminamos"), con voz y visual. Nunca se corta de golpe |
-| Duración | Sesiones por defecto de 5 a 15 minutos. `session.ts` controla rondas y tiempo |
+| Duración | Sesiones configurables de 3 a 15 minutos. `session.ts` controla rondas y tiempo; cada juego conserva su duración actual (Memo 3/5/8 rondas, Miradas 5 min) |
 | Gate de adultos | Pulsación sostenida de 3 s sobre un botón, con barra de progreso. No usar sumas: los juegos enseñan a sumar |
 | Carga sensorial | Sin destellos, sin sonidos fuertes, animaciones de premio cortas; `prefers-reduced-motion` obligatorio |
 | Toque | Objetivos de al menos 64 px en móvil; sin gestos complejos (arrastrar solo donde el juego lo requiera) |

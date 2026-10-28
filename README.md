@@ -32,15 +32,16 @@ publicidad. El progreso queda en el dispositivo.
 | Brandbook y tokens | Hecho |
 | Arquitectura | Hecho |
 | Repo y Project de GitHub | Hecho |
-| Fase 0 — snapshot y verificación | Listo para empezar |
+| Fase 0 — snapshot y verificación | Hecho |
 | Marca Pyloncito | En curso |
 | Sitio Astro + hub | Pendiente |
 | Migración de los cuatro juegos | Pendiente |
 | PWA, CSP, 4K y deploy | Pendiente |
 
-Al 2026-10-28 el tablero tiene 49 issues: 7 hechos, 5 listos, 2 en curso y 35 en
+Al 2026-10-28 el tablero tiene 49 issues: 11 hechos, 1 listo, 2 en curso y 35 en
 backlog. El detalle y el orden de trabajo están en [ARQUITECTURA.md](./ARQUITECTURA.md)
-y en [docs/GITHUB.md](./docs/GITHUB.md).
+y en [docs/GITHUB.md](./docs/GITHUB.md). El baseline visual y las versiones están en
+[docs/baseline/](./docs/baseline/).
 
 ## Desarrollo
 

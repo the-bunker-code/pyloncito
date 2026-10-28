@@ -1,0 +1,36 @@
+Pyloncito — baseline de los cuatro juegos originales
+Fecha: 2026-10-28
+Método: sin bundles locales; GitHub es el respaldo. Se registran commit y remoto.
+
+dados
+  repo: code/matematicas-con-dados
+  remoto: git@github.com:the-bunker-code/matematicas-con-dados.git
+  rama: main
+  commit: 142cdbe
+  estado: limpio, en sync
+
+memoria
+  repo: code/memo-colores
+  remoto: https://github.com/the-bunker-code/memo-colores.git
+  rama: main
+  commit: 7f73095
+  estado: limpio, en sync
+
+miradas
+  repo: code/miradas
+  remoto: https://github.com/the-bunker-code/miradas.git
+  rama: main
+  commit: dbd18a8
+  estado: limpio, en sync
+
+mira-y-dime
+  repo: code/mira-y-dime
+  remoto: https://github.com/the-bunker-code/mira-y-dime.git
+  rama: main
+  commit: a67b9a1
+  estado: limpio, en sync
+
+Capturas:
+  code/juegos-baseline/capturas/<juego>/<viewport>/{inicio,ronda,final}.png
+  Viewports: 390x844 y 1366x900
+  Consola: code/juegos-baseline/capturas/console.txt (vacío = sin errores)
