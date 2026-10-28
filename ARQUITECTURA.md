@@ -92,6 +92,7 @@ code/pyloncito/
 │   │       └── mira-y-dime.astro
 │   ├── components/
 │   │   ├── hub/GameCard.astro
+│   │   ├── layout/{SiteHeader,SiteFooter}.astro
 │   │   ├── ui/
 │   │   │   ├── AppButton.vue
 │   │   │   ├── AppDialog.vue
@@ -111,7 +112,7 @@ code/pyloncito/
 │   │       ├── miradas/Game.vue
 │   │       └── mira-y-dime/Game.vue
 │   ├── games/
-│   │   ├── shared/{types,timers,focus,session}.ts
+│   │   ├── shared/{timers,focus,session}.ts
 │   │   ├── dados/{rules,engine,config,copy,storage}.ts
 │   │   ├── memoria/{rules,engine,config,copy,storage}.ts
 │   │   ├── miradas/{rules,engine,config,copy,storage}.ts
@@ -146,14 +147,18 @@ code/pyloncito/
 export interface GameEntry {
   slug: string; // kebab-case, estable para siempre
   name: string; // nombre visible
-  icon: string; // ruta en /icons/, fija para siempre
-  theme: { main: string; dark: string; soft: string }; // tokens, no hex sueltos
+  icon: IconName; // nombre del mapa de íconos del proyecto
+  theme: 'dados' | 'memoria' | 'miradas' | 'mira-y-dime';
   age: string; // "3–6 años"
   skill: string; // "Contar y sumar"
-  minutes: [number, number]; // duración sugerida, dentro de 5–15
-  status: 'ready' | 'beta' | 'hidden';
+  minutes: readonly [number, number]; // duración sugerida, dentro de 3–15
+  status: 'ready' | 'beta' | 'coming' | 'hidden';
+  description: string; // una frase para el hub y la guía
 }
 ```
+
+`coming` muestra la tarjeta como “Próximamente”; `hidden` no aparece en el hub.
+El tema se resuelve con la clase `game-card--<theme>`; no se usan estilos inline.
 
 Desde el registro se generan: tarjetas del hub, sitemap, manifiesto, accesos directos
 de la PWA y el índice de la guía. Ninguna otra parte del código repite la lista de
@@ -291,7 +296,7 @@ manual o en PR a `main`.
 
 - Crear `code/pyloncito/` con Astro, Vue, Tailwind, TS, Vitest, Playwright, ESLint,
   Prettier, pnpm.
-- `games.ts` con los 4 juegos en `status: 'hidden'`.
+- `games.ts` con los 4 juegos en `status: 'coming'` (tarjetas “Próximamente”).
 - Layout, tokens, componentes UI (incluye `GameHeader`, `ClosingNotice`, `AdultGate`,
   `VoiceTest`), hub, guía, privacidad, créditos, 404.
 - `audio`, `speech`, `random`, `storage`, `timers`, `focus`, `session`.

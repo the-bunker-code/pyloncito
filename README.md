@@ -8,8 +8,8 @@ Pyloncito reúne cuatro juegos para niñas y niños de 3 a 7 años, pensados par
 con un adulto cerca. El sitio es público, estático, sin cuentas, sin analytics y sin
 publicidad. El progreso queda en el dispositivo.
 
-> Estado: Fase 1A lista. La base Astro compila y pasa `pnpm check`; el hub visual y el
-> deploy llegan en 1B y 1C.
+> Estado: Fase 1B lista. El hub, las páginas públicas y el sistema visual ya compilan;
+> el deploy de preview llega en 1C.
 
 [Repo](https://github.com/the-bunker-code/pyloncito) ·
 [Project](https://github.com/orgs/the-bunker-code/projects/2) ·
@@ -37,7 +37,7 @@ publicidad. El progreso queda en el dispositivo.
 | Fase 1A — base Astro + tooling   | Hecho     |
 | Ramas y protección               | Hecho     |
 | Marca Pyloncito                  | En curso  |
-| Fase 1B — hub y sistema visual   | Pendiente |
+| Fase 1B — hub y sistema visual   | Hecho     |
 | Fase 1C — deploy y preview       | Pendiente |
 | Migración de los cuatro juegos   | Pendiente |
 | PWA, CSP, 4K y deploy final      | Pendiente |
