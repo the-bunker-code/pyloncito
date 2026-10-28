@@ -42,7 +42,7 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 | Progreso           | `localStorage`, validado y con claves por juego                                        |
 | Voz                | Web Speech; voz local primero; preferencia `es-419` → `es-PE` → `es-*`; silenciable    |
 | IA                 | Fuera de fase 1. Sin Worker, sin OpenRouter, sin fotos                                 |
-| Deploy             | Cloudflare Pages conectado a Git desde la **fase 1**; `*.pages.dev`                    |
+| Deploy             | Cloudflare Workers (static assets) conectado a Git; producción en `pyloncito.app`      |
 | Idioma             | Solo español; textos centralizados                                                     |
 | Nombre             | **Pyloncito**. Dominio: `pyloncito.app` (apex canónico; `www` redirige)                |
 | Repo               | `code/pyloncito/` → `the-bunker-code/pyloncito`; los 4 actuales quedan como referencia |
@@ -53,6 +53,7 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 ```text
 code/pyloncito/
 ├── astro.config.mjs
+├── wrangler.jsonc
 ├── package.json
 ├── pnpm-lock.yaml
 ├── tsconfig.json
@@ -301,7 +302,7 @@ manual o en PR a `main`.
   `VoiceTest`), hub, guía, privacidad, créditos, 404.
 - `audio`, `speech`, `random`, `storage`, `timers`, `focus`, `session`.
 - `scripts/new-game.ts` y sección "Cómo agregar un juego" en el README.
-- Conectar Cloudflare Pages al repo; preview funcionando.
+- Conectar Cloudflare Workers (static assets) al repo; preview funcionando.
 - `pnpm check` verde.
 
 ### Fase 2 — Memo Colores
@@ -382,7 +383,7 @@ manual o en PR a `main`.
 - 390×844, 844×390, 1366×900, 2560×1440 y 3840×2160 revisados.
 - axe sin violaciones graves.
 - Privacidad y créditos publicados.
-- Preview de Pages aprobado.
+- Preview de Workers aprobado.
 - Nada de los juegos viejos borrado.
 
 ## 14. GitHub

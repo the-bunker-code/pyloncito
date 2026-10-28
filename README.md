@@ -78,12 +78,13 @@ hasta que cambies su estado.
 
 ## Deploy
 
-Cloudflare Pages, sin secretos en el repo:
+Cloudflare Workers con static assets, sin secretos en el repo:
 
 - Producción: `https://pyloncito.app` (rama `main`).
-- Preview: `https://develop.pyloncito.pages.dev`.
+- Preview de `develop`: `https://dev.pyloncito.app` (preview name `dev`).
 - Build command: `pnpm build`.
-- Output directory: `dist`.
+- Deploy command: `npx wrangler deploy`.
+- `wrangler.jsonc` sirve `./dist` y `_headers`.
 - Node: 24 (`NODE_VERSION=24` en el panel).
 - `www.pyloncito.app` redirige al apex.
 
