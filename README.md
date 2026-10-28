@@ -8,8 +8,8 @@ Pyloncito reúne cuatro juegos para niñas y niños de 3 a 7 años, pensados par
 con un adulto cerca. El sitio es público, estático, sin cuentas, sin analytics y sin
 publicidad. El progreso queda en el dispositivo.
 
-> Estado: Fase 1B lista. El hub, las páginas públicas y el sistema visual ya compilan;
-> el deploy de preview llega en 1C.
+> Estado: Fase 1B lista. El generador de juegos y el deploy de preview se están cerrando
+> en 1C.
 
 [Repo](https://github.com/the-bunker-code/pyloncito) ·
 [Project](https://github.com/orgs/the-bunker-code/projects/2) ·
@@ -38,7 +38,7 @@ publicidad. El progreso queda en el dispositivo.
 | Ramas y protección               | Hecho     |
 | Marca Pyloncito                  | En curso  |
 | Fase 1B — hub y sistema visual   | Hecho     |
-| Fase 1C — deploy y preview       | Pendiente |
+| Fase 1C — deploy y preview       | En curso  |
 | Migración de los cuatro juegos   | Pendiente |
 | PWA, CSP, 4K y deploy final      | Pendiente |
 
@@ -54,13 +54,37 @@ Requisitos: Node >= 22.23.4, pnpm >= 10.
 
 ```bash
 pnpm install
-pnpm dev        # servidor local
+pnpm dev        # servidor local (Astro 7 lo deja en segundo plano)
+pnpm exec astro dev stop  # detener el servidor anterior
+pnpm new-game <slug>      # crear el esqueleto de un juego nuevo
 pnpm check      # lint, formato, tipos, tests, build y E2E
 pnpm format     # Prettier
 pnpm test       # Vitest
 pnpm test:e2e   # Playwright contra dist/
 pnpm build      # sitio estático en dist/
 ```
+
+## Cómo agregar un juego
+
+1. Ejecutá `pnpm new-game mi-juego`.
+2. Editá su entrada en `src/config/games.ts`: nombre, ícono, tema, edad, habilidad,
+   duración y descripción. El estado arranca en `hidden`.
+3. Implementá `rules.ts` con tests, después `engine.ts`, la vista y los ajustes.
+4. Pasá el estado a `coming`, `beta` o `ready` cuando corresponda.
+5. Ejecutá `pnpm check`.
+
+El generador crea la página `/juegos/<slug>/` con `noindex` y no la muestra en el hub
+hasta que cambies su estado.
+
+## Deploy
+
+Cloudflare Pages, sin secretos en el repo:
+
+- Producción: rama `main`.
+- Build command: `pnpm build`.
+- Output directory: `dist`.
+- Node: 24 (`NODE_VERSION=24` en el panel).
+- Preview: ramas y PRs de `develop`.
 
 ## Ramas y PRs
 

@@ -16,6 +16,7 @@ for (const [path, heading] of pages) {
 
 test('la guía hidrata el probador de voz', async ({ page }) => {
   await page.goto('/guia/');
+  await expect(page.locator('.voice-test')).toHaveAttribute('data-ready', 'true');
   await page.getByRole('button', { name: 'Probar la voz' }).click();
   await expect(page.locator('.voice-test__status')).not.toHaveText('');
 });
