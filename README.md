@@ -78,12 +78,14 @@ hasta que cambies su estado.
 
 ## Deploy
 
-Cloudflare Workers con static assets, sin secretos en el repo:
+Cloudflare Workers con static assets, dos Workers y sin secretos en el repo:
 
-- Producción: `https://pyloncito.app` (rama `main`).
-- Preview de `develop`: `https://dev.pyloncito.app` (preview name `dev`).
+- `pyloncito`: rama `main` → `https://pyloncito.app`.
+- `pyloncito-dev`: rama `develop` → `https://dev.pyloncito.app`.
+- Preview Builds desactivado: las ramas `feature/*`, `fix/*` y `chore/*` no generan builds de Cloudflare.
 - Build command: `pnpm build`.
 - Deploy command: `npx wrangler deploy`.
+- Deploy command del Worker dev: `npx wrangler deploy --name pyloncito-dev`.
 - `wrangler.jsonc` sirve `./dist` y `_headers`.
 - Node: 24 (`NODE_VERSION=24` en el panel).
 - `www.pyloncito.app` redirige al apex.

@@ -302,7 +302,7 @@ manual o en PR a `main`.
   `VoiceTest`), hub, guía, privacidad, créditos, 404.
 - `audio`, `speech`, `random`, `storage`, `timers`, `focus`, `session`.
 - `scripts/new-game.ts` y sección "Cómo agregar un juego" en el README.
-- Conectar Cloudflare Workers (static assets) al repo; preview funcionando.
+- Conectar Workers `pyloncito` (main) y `pyloncito-dev` (develop); verificar `dev.pyloncito.app`.
 - `pnpm check` verde.
 
 ### Fase 2 — Memo Colores
@@ -383,7 +383,7 @@ manual o en PR a `main`.
 - 390×844, 844×390, 1366×900, 2560×1440 y 3840×2160 revisados.
 - axe sin violaciones graves.
 - Privacidad y créditos publicados.
-- Preview de Workers aprobado.
+- Preview `dev.pyloncito.app` aprobado.
 - Nada de los juegos viejos borrado.
 
 ## 14. GitHub
