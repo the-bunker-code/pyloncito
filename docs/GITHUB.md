@@ -98,7 +98,7 @@ conteos cambian con el trabajo. El baseline visual y las versiones están en
 | `area/diseno`        | Tokens, componentes visuales, marca |
 | `area/contenido`     | Copy y guía                         |
 | `area/testing`       | Tests, E2E, a11y, Lighthouse        |
-| `area/deploy`        | CI, Pages, cabeceras                |
+| `area/deploy`        | CI, Workers, cabeceras              |
 | `area/accesibilidad` | WCAG, teclado, movimiento           |
 | `area/docs`          | README y documentación              |
 | `bloqueado`          | No se puede avanzar                 |
