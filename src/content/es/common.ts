@@ -1,0 +1,54 @@
+export const common = {
+  nav: {
+    home: 'Inicio',
+    guide: 'Guía para adultos',
+    guideShort: 'Guía',
+    privacy: 'Privacidad',
+    credits: 'Créditos',
+  },
+  hub: {
+    eyebrow: 'Aprender jugando, tapita a tapita',
+    title: 'Pyloncito',
+    subtitle: 'Cuatro juegos para mirar, contar, recordar y hablar.',
+    adultNote: 'Juegos tranquilos para disfrutar con un adulto cerca.',
+    gamesTitle: 'Elige un juego',
+    gamesHint: 'Estamos preparando los cuatro juegos. Vuelven pronto.',
+    soon: 'Próximamente',
+    guideTitle: 'Para acompañar',
+    guideText: 'Ideas, tiempos y sugerencias para jugar sin apuro.',
+    guideLink: 'Ver la guía',
+    privacyTitle: 'Sin cuentas ni vueltas',
+    privacyText: 'El progreso queda en este dispositivo. Sin publicidad ni analytics.',
+    privacyLink: 'Cómo cuidamos los datos',
+  },
+  footer: {
+    madeBy: 'Hecho por The Bunker Code y contribuidores.',
+    license: 'MIT',
+  },
+  actions: {
+    backHome: 'Volver al inicio',
+    openGuide: 'Abrir guía',
+    testVoice: 'Probar la voz',
+    close: 'Cerrar',
+  },
+  settings: {
+    title: 'Ajustes',
+    soundOn: 'Silenciar sonido',
+    soundOff: 'Activar sonido',
+    progress: 'Progreso',
+    adultGate: 'Mantener presionado para abrir ajustes',
+  },
+  session: {
+    two: 'Dos más y terminamos',
+    one: 'Una más y terminamos',
+    finished: 'Terminamos',
+  },
+  voice: {
+    sample: 'Hola, soy Pyloncito.',
+    unavailable: 'Este navegador no tiene una voz en español disponible.',
+    played: 'Sonó la voz del navegador.',
+  },
+  units: {
+    minutes: 'min',
+  },
+} as const;

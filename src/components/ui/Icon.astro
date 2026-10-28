@@ -1,0 +1,39 @@
+---
+import { icons, type IconName } from './icons';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  label?: string;
+  strokeWidth?: number;
+  class?: string;
+}
+
+const { name, size = 24, label = '', strokeWidth = 2.5, class: className = '' } = Astro.props;
+const parts = icons[name];
+---
+
+<svg
+  class:list={['icon', className]}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label || undefined}
+>
+  {parts.map((part) =>
+    part.tag === 'path' ? (
+      <path {...part.attrs} />
+    ) : part.tag === 'circle' ? (
+      <circle {...part.attrs} />
+    ) : (
+      <rect {...part.attrs} />
+    ),
+  )}
+</svg>

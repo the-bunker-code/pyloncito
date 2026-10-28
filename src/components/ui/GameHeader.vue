@@ -1,0 +1,43 @@
+<script setup lang="ts">
+import { common } from '../../content/es/common';
+import type { GameEntry } from '../../config/games';
+import Icon from './Icon.vue';
+import ProgressBar from './ProgressBar.vue';
+
+withDefaults(
+  defineProps<{
+    game: GameEntry;
+    progress?: number;
+    progressMax?: number;
+    progressLabel?: string;
+  }>(),
+  {
+    progress: undefined,
+    progressMax: 100,
+    progressLabel: common.settings.progress,
+  },
+);
+</script>
+
+<template>
+  <header class="game-header" :class="`game-header--${game.theme}`">
+    <a class="icon-button" href="/" :aria-label="common.actions.backHome">
+      <Icon name="arrow-left" :size="20" />
+    </a>
+    <span class="game-header__icon">
+      <Icon :name="game.icon" :size="22" />
+    </span>
+    <div class="game-header__body">
+      <h1>{{ game.name }}</h1>
+      <p class="game-header__meta">{{ game.skill }}</p>
+      <ProgressBar
+        v-if="progress !== undefined"
+        :value="progress"
+        :max="progressMax"
+        :label="progressLabel"
+      />
+    </div>
+    <span class="game-header__spacer"></span>
+    <slot />
+  </header>
+</template>

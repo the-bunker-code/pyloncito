@@ -1,0 +1,38 @@
+---
+import { common } from '../../content/es/common';
+import type { GameEntry } from '../../config/games';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  game: GameEntry;
+}
+
+const { game } = Astro.props;
+const isAvailable = game.status === 'ready' || game.status === 'beta';
+const Tag = isAvailable ? 'a' : 'article';
+const href = isAvailable ? `/juegos/${game.slug}/` : undefined;
+const minutes = `${game.minutes[0]}–${game.minutes[1]} ${common.units.minutes}`;
+---
+
+<Tag
+  class:list={['game-card', `game-card--${game.theme}`, !isAvailable && 'game-card--soon']}
+  href={href}
+  aria-label={!isAvailable ? `${game.name}: ${common.hub.soon}` : undefined}
+>
+  <span class="game-card__icon">
+    <Icon name={game.icon} size={28} />
+  </span>
+  <h3>{game.name}</h3>
+  <p class="game-card__skill">{game.skill}</p>
+  <p class="game-card__skill">{game.description}</p>
+  <div class="game-card__meta">
+    <span>{game.age}</span>
+    <span>{minutes}</span>
+    {isAvailable && (
+      <span>
+        <Icon name="arrow-right" size={14} /> Jugar
+      </span>
+    )}
+  </div>
+  {!isAvailable && <span class="game-card__soon">{common.hub.soon}</span>}
+</Tag>
