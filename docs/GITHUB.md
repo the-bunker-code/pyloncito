@@ -44,10 +44,11 @@ La API creó las vistas y los filtros. El agrupamiento y los workflows se termin
 UI porque la API de GitHub no expone todos los ajustes. La vista por defecto “View 1”
 se puede renombrar o eliminar.
 
-### Estado inicial
+### Estado
 
-Al 2026-10-28: 49 issues; 11 Done, 2 Ready, 2 In progress y 34 Backlog.
-El baseline visual y las versiones están en [`docs/baseline/`](./baseline/).
+El tablero es la fuente de verdad del avance. Al 2026-10-28 quedó en 49 issues; los
+conteos cambian con el trabajo. El baseline visual y las versiones están en
+[`docs/baseline/`](./baseline/).
 
 ### Reglas del tablero
 

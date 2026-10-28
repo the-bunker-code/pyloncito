@@ -41,9 +41,10 @@ publicidad. El progreso queda en el dispositivo.
 | Migración de los cuatro juegos   | Pendiente |
 | PWA, CSP, 4K y deploy final      | Pendiente |
 
-Al 2026-10-28 el tablero tiene 49 issues: 11 hechos, 2 listos, 2 en curso y 34 en
-backlog. El detalle y el orden de trabajo están en [ARQUITECTURA.md](./ARQUITECTURA.md)
-y en [docs/GITHUB.md](./docs/GITHUB.md). El baseline visual y las versiones están en
+El tablero muestra el estado actual:
+[Project Pyloncito](https://github.com/orgs/the-bunker-code/projects/2). El detalle y el
+orden de trabajo están en [ARQUITECTURA.md](./ARQUITECTURA.md) y en
+[docs/GITHUB.md](./docs/GITHUB.md). El baseline visual y las versiones están en
 [docs/baseline/](./docs/baseline/).
 
 ## Desarrollo

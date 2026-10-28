@@ -32,6 +32,10 @@ fix(memoria): cancel pending round timer
 docs(github): map phases to milestones
 ```
 
+Para cerrar un issue automáticamente, incluí `Closes #N` en el commit o en el PR.
+Sin esa referencia, GitHub no lo cierra; el tablero solo actualiza el estado cuando
+el issue ya está cerrado.
+
 ## Seguridad
 
 No incluyas secretos, tokens, `.env` ni datos personales. Ver [SECURITY.md](./SECURITY.md).
