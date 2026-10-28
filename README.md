@@ -10,6 +10,11 @@ publicidad. El progreso queda en el dispositivo.
 
 > Estado: fundación del proyecto. La aplicación empieza a construirse en la Fase 1.
 
+[Repo](https://github.com/the-bunker-code/pyloncito) ·
+[Project](https://github.com/orgs/the-bunker-code/projects/2) ·
+[Arquitectura](./ARQUITECTURA.md) ·
+[Mapa de GitHub](./docs/GITHUB.md)
+
 ## Juegos
 
 | Juego | Habilidad | Repo original |

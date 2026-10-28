@@ -375,3 +375,12 @@ manual o en PR a `main`.
 - Privacidad y créditos publicados.
 - Preview de Pages aprobado.
 - Nada de los juegos viejos borrado.
+
+## 14. GitHub
+
+- Repo: https://github.com/the-bunker-code/pyloncito
+- Project: https://github.com/orgs/the-bunker-code/projects/2
+- Issues: trabajo ejecutable, en español.
+- `ARQUITECTURA.md` y `docs/GITHUB.md`: diseño y flujo.
+- `docs/knowledge/DECISIONS.md` del workspace: decisiones de producto.
+- Labels, milestones y campos del Project se describen en `docs/GITHUB.md`.

@@ -6,12 +6,13 @@ en el Project “Pyloncito”. Las decisiones de producto se registran en
 
 ## Repo
 
-- `the-bunker-code/pyloncito`
+- https://github.com/the-bunker-code/pyloncito
 - Público, rama `main`, licencia MIT.
 - Issues y labels en español; código y commits en inglés.
 
 ## Project
 
+- https://github.com/orgs/the-bunker-code/projects/2
 - Nombre: **Pyloncito**
 - Visibilidad: privada.
 - Vinculado al repo.
