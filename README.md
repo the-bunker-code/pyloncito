@@ -35,6 +35,7 @@ publicidad. El progreso queda en el dispositivo.
 | Repo y Project de GitHub         | Hecho     |
 | Fase 0 — snapshot y verificación | Hecho     |
 | Fase 1A — base Astro + tooling   | Hecho     |
+| Ramas y protección               | Hecho     |
 | Marca Pyloncito                  | En curso  |
 | Fase 1B — hub y sistema visual   | Pendiente |
 | Fase 1C — deploy y preview       | Pendiente |
