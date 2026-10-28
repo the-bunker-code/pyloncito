@@ -1,6 +1,6 @@
 name: Tarea
 description: Un cambio concreto, verificable y acotado.
-title: "[Tarea] "
+title: '[Tarea] '
 labels:
   - tipo/tarea
 body:

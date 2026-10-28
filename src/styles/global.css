@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-kid: 'Fredoka', ui-rounded, system-ui, sans-serif;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  min-width: 320px;
+}

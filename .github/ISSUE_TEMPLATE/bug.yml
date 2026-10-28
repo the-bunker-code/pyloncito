@@ -1,6 +1,6 @@
 name: Bug
 description: Algo no funciona como se esperaba.
-title: "[Bug] "
+title: '[Bug] '
 labels:
   - tipo/bug
 body:

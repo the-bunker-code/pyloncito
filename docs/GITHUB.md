@@ -20,25 +20,25 @@ en el Project “Pyloncito”. Las decisiones de producto se registran en
 
 ### Campos
 
-| Campo | Uso |
-|---|---|
-| Estado | Backlog, Ready, In progress, In review, Done |
-| Fase | Fundación, Fase 0–7, Marca |
-| Juego | Hub, Dados y Tapitas, Memo Colores, Miradas, Mira y Dime, Compartido |
-| Área | Arquitectura, Frontend, Diseño, Contenido, Testing, Deploy, Accesibilidad, Docs |
-| Prioridad | P0, P1, P2 |
-| Tamaño | XS, S, M, L, XL |
+| Campo     | Uso                                                                             |
+| --------- | ------------------------------------------------------------------------------- |
+| Estado    | Backlog, Ready, In progress, In review, Done                                    |
+| Fase      | Fundación, Fase 0–7, Marca                                                      |
+| Juego     | Hub, Dados y Tapitas, Memo Colores, Miradas, Mira y Dime, Compartido            |
+| Área      | Arquitectura, Frontend, Diseño, Contenido, Testing, Deploy, Accesibilidad, Docs |
+| Prioridad | P0, P1, P2                                                                      |
+| Tamaño    | XS, S, M, L, XL                                                                 |
 
 ### Vistas
 
-| Vista | Tipo | Filtro / agrupación |
-|---|---|---|
-| Ahora | Tabla | `-status:Done` |
-| Tablero | Board | Columnas por Estado |
-| Por juego | Tabla | Agrupar por Juego (manual) |
-| Roadmap | Roadmap | Agrupar por Fase (manual) |
-| Bloqueados | Tabla | `label:bloqueado` |
-| Hecho | Tabla | `status:Done` |
+| Vista      | Tipo    | Filtro / agrupación        |
+| ---------- | ------- | -------------------------- |
+| Ahora      | Tabla   | `-status:Done`             |
+| Tablero    | Board   | Columnas por Estado        |
+| Por juego  | Tabla   | Agrupar por Juego (manual) |
+| Roadmap    | Roadmap | Agrupar por Fase (manual)  |
+| Bloqueados | Tabla   | `label:bloqueado`          |
+| Hecho      | Tabla   | `status:Done`              |
 
 La API creó las vistas y los filtros. El agrupamiento y los workflows se terminan en la
 UI porque la API de GitHub no expone todos los ajustes. La vista por defecto “View 1”
@@ -59,29 +59,29 @@ El baseline visual y las versiones están en [`docs/baseline/`](./baseline/).
 
 ## Labels
 
-| Label | Uso |
-|---|---|
-| `tipo/epic` | Épica |
-| `tipo/tarea` | Tarea |
-| `tipo/bug` | Bug |
-| `tipo/decision` | Decisión que necesita registro |
-| `fase/0` … `fase/7` | Fase del plan |
-| `juego/hub` | Hub y páginas públicas |
-| `juego/dados` | Dados y Tapitas |
-| `juego/memoria` | Memo Colores |
-| `juego/miradas` | Miradas |
-| `juego/mira-y-dime` | Mira y Dime |
-| `juego/compartido` | Shell y librerías compartidas |
-| `area/arquitectura` | Arquitectura |
-| `area/frontend` | HTML, CSS, Vue, Astro |
-| `area/diseno` | Tokens, componentes visuales, marca |
-| `area/contenido` | Copy y guía |
-| `area/testing` | Tests, E2E, a11y, Lighthouse |
-| `area/deploy` | CI, Pages, cabeceras |
-| `area/accesibilidad` | WCAG, teclado, movimiento |
-| `area/docs` | README y documentación |
-| `bloqueado` | No se puede avanzar |
-| `necesita-decision` | Requiere una decisión humana |
+| Label                | Uso                                 |
+| -------------------- | ----------------------------------- |
+| `tipo/epic`          | Épica                               |
+| `tipo/tarea`         | Tarea                               |
+| `tipo/bug`           | Bug                                 |
+| `tipo/decision`      | Decisión que necesita registro      |
+| `fase/0` … `fase/7`  | Fase del plan                       |
+| `juego/hub`          | Hub y páginas públicas              |
+| `juego/dados`        | Dados y Tapitas                     |
+| `juego/memoria`      | Memo Colores                        |
+| `juego/miradas`      | Miradas                             |
+| `juego/mira-y-dime`  | Mira y Dime                         |
+| `juego/compartido`   | Shell y librerías compartidas       |
+| `area/arquitectura`  | Arquitectura                        |
+| `area/frontend`      | HTML, CSS, Vue, Astro               |
+| `area/diseno`        | Tokens, componentes visuales, marca |
+| `area/contenido`     | Copy y guía                         |
+| `area/testing`       | Tests, E2E, a11y, Lighthouse        |
+| `area/deploy`        | CI, Pages, cabeceras                |
+| `area/accesibilidad` | WCAG, teclado, movimiento           |
+| `area/docs`          | README y documentación              |
+| `bloqueado`          | No se puede avanzar                 |
+| `necesita-decision`  | Requiere una decisión humana        |
 
 ## Milestones
 

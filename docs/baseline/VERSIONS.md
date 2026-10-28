@@ -5,31 +5,31 @@ Entorno: Node 24.18.0 · pnpm 12.15.0 · Astro 7.4.2
 
 ## Versiones consultadas
 
-| Paquete | Versión |
-|---|---|
-| astro | 7.4.2 |
-| vue | 3.5.44 |
-| @astrojs/vue | 7.1.2 |
-| tailwindcss | 4.3.3 |
-| @tailwindcss/vite | 4.3.3 |
-| typescript | 7.0.2 (latest) / 6.0.3 (compatible) |
-| vitest | 5.0.5 |
-| @vue/test-utils | 2.5.1 |
-| @playwright/test | 1.64.1 |
-| @axe-core/playwright | 4.14.0 |
-| eslint | 10.13.0 |
-| eslint-plugin-astro | 3.2.1 |
-| eslint-plugin-vue | 10.12.0 |
-| prettier | 3.9.10 |
-| prettier-plugin-astro | 1.1.2 |
-| prettier-plugin-tailwindcss | 0.8.1 |
-| @vite-pwa/astro | 1.2.0 |
-| @astrojs/check | 0.9.12 |
-| vue-tsc | 3.3.13 |
-| @astrojs/sitemap | 3.7.4 |
-| tsx | 4.23.15 |
-| typescript-eslint | 8.72.1 |
-| vue-eslint-parser | 10.4.1 |
+| Paquete                     | Versión                             |
+| --------------------------- | ----------------------------------- |
+| astro                       | 7.4.2                               |
+| vue                         | 3.5.44                              |
+| @astrojs/vue                | 7.1.2                               |
+| tailwindcss                 | 4.3.3                               |
+| @tailwindcss/vite           | 4.3.3                               |
+| typescript                  | 7.0.2 (latest) / 6.0.3 (compatible) |
+| vitest                      | 5.0.5                               |
+| @vue/test-utils             | 2.5.1                               |
+| @playwright/test            | 1.64.1                              |
+| @axe-core/playwright        | 4.14.0                              |
+| eslint                      | 10.13.0                             |
+| eslint-plugin-astro         | 3.2.1                               |
+| eslint-plugin-vue           | 10.12.0                             |
+| prettier                    | 3.9.10                              |
+| prettier-plugin-astro       | 1.1.2                               |
+| prettier-plugin-tailwindcss | 0.8.1                               |
+| @vite-pwa/astro             | 1.2.0                               |
+| @astrojs/check              | 0.9.12                              |
+| vue-tsc                     | 3.3.13                              |
+| @astrojs/sitemap            | 3.7.4                               |
+| tsx                         | 4.23.15                             |
+| typescript-eslint           | 8.72.1                              |
+| vue-eslint-parser           | 10.4.1                              |
 
 ## Compatibilidad
 

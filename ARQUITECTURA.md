@@ -13,12 +13,12 @@ Un solo sitio público, estático y sin backend, con los juegos de la serie, pre
 para sumar juegos nuevos con poco esfuerzo. El sitio y el sistema se llaman
 **Pyloncito**.
 
-| Slug | Juego | Origen |
-|---|---|---|
-| `dados` | Dados y Tapitas | `code/matematicas-con-dados/` |
-| `memoria` | Memo Colores | `code/memo-colores/` |
-| `miradas` | Miradas | `code/miradas/` |
-| `mira-y-dime` | Mira y Dime | `code/mira-y-dime/` |
+| Slug          | Juego           | Origen                        |
+| ------------- | --------------- | ----------------------------- |
+| `dados`       | Dados y Tapitas | `code/matematicas-con-dados/` |
+| `memoria`     | Memo Colores    | `code/memo-colores/`          |
+| `miradas`     | Miradas         | `code/miradas/`               |
+| `mira-y-dime` | Mira y Dime     | `code/mira-y-dime/`           |
 
 Un dominio, un deploy, un hub. Los cuatro juegos conservan su comportamiento; se
 reescriben sobre una base común Astro + Vue.
@@ -28,25 +28,25 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 
 ## 2. Decisiones cerradas
 
-| Tema | Decisión |
-|---|---|
-| Alcance | Pyloncito: sitio único con hub + 4 juegos + receta para juegos nuevos |
-| Frontend | Astro 7.4.2 · Vue 3.5.44 · TypeScript 6.0.3 · Tailwind 4.3.3 |
-| Runtime | Node 24.18.0 (mínimo de Astro: >=22.23.4) |
-| Gestor de paquetes | **pnpm 12.15.0**, fijado con `packageManager` en `package.json` |
-| Testing | Vitest 5.0.5 · Playwright 1.64.1 · axe-core 4.14.0 |
-| Calidad | ESLint 10.13.0 · Prettier 3.9.10 · `astro check` 0.9.12 · `vue-tsc` 3.3.13 |
-| Estilos | Tailwind para layout/hub; CSS semántico para piezas custom. **Sin SCSS** |
-| 4K | Monitor de cerca: ancho máximo + `3xl: 2560px`; sin UI de 10 pies |
-| Público | Sí; sin cuentas, perfiles, cookies ni analytics |
-| Progreso | `localStorage`, validado y con claves por juego |
-| Voz | Web Speech; voz local primero; preferencia `es-419` → `es-PE` → `es-*`; silenciable |
-| IA | Fuera de fase 1. Sin Worker, sin OpenRouter, sin fotos |
-| Deploy | Cloudflare Pages conectado a Git desde la **fase 1**; `*.pages.dev` |
-| Idioma | Solo español; textos centralizados |
-| Nombre | **Pyloncito**. Dominio provisional: `pyloncito.pages.dev` |
-| Repo | `code/pyloncito/` → `the-bunker-code/pyloncito`; los 4 actuales quedan como referencia |
-| GitHub | Project “Pyloncito” como tablero de ejecución; issues en español |
+| Tema               | Decisión                                                                               |
+| ------------------ | -------------------------------------------------------------------------------------- |
+| Alcance            | Pyloncito: sitio único con hub + 4 juegos + receta para juegos nuevos                  |
+| Frontend           | Astro 7.4.2 · Vue 3.5.44 · TypeScript 6.0.3 · Tailwind 4.3.3                           |
+| Runtime            | Node 24.18.0 (mínimo de Astro: >=22.23.4)                                              |
+| Gestor de paquetes | **pnpm 12.15.0**, fijado con `packageManager` en `package.json`                        |
+| Testing            | Vitest 5.0.5 · Playwright 1.64.1 · axe-core 4.14.0                                     |
+| Calidad            | ESLint 10.13.0 · Prettier 3.9.10 · `astro check` 0.9.12 · `vue-tsc` 3.3.13             |
+| Estilos            | Tailwind para layout/hub; CSS semántico para piezas custom. **Sin SCSS**               |
+| 4K                 | Monitor de cerca: ancho máximo + `3xl: 2560px`; sin UI de 10 pies                      |
+| Público            | Sí; sin cuentas, perfiles, cookies ni analytics                                        |
+| Progreso           | `localStorage`, validado y con claves por juego                                        |
+| Voz                | Web Speech; voz local primero; preferencia `es-419` → `es-PE` → `es-*`; silenciable    |
+| IA                 | Fuera de fase 1. Sin Worker, sin OpenRouter, sin fotos                                 |
+| Deploy             | Cloudflare Pages conectado a Git desde la **fase 1**; `*.pages.dev`                    |
+| Idioma             | Solo español; textos centralizados                                                     |
+| Nombre             | **Pyloncito**. Dominio provisional: `pyloncito.pages.dev`                              |
+| Repo               | `code/pyloncito/` → `the-bunker-code/pyloncito`; los 4 actuales quedan como referencia |
+| GitHub             | Project “Pyloncito” como tablero de ejecución; issues en español                       |
 
 ## 3. Estructura
 
@@ -144,12 +144,12 @@ code/pyloncito/
 
 ```ts
 export interface GameEntry {
-  slug: string;            // kebab-case, estable para siempre
-  name: string;            // nombre visible
-  icon: string;            // ruta en /icons/, fija para siempre
+  slug: string; // kebab-case, estable para siempre
+  name: string; // nombre visible
+  icon: string; // ruta en /icons/, fija para siempre
   theme: { main: string; dark: string; soft: string }; // tokens, no hex sueltos
-  age: string;             // "3–6 años"
-  skill: string;           // "Contar y sumar"
+  age: string; // "3–6 años"
+  skill: string; // "Contar y sumar"
   minutes: [number, number]; // duración sugerida, dentro de 5–15
   status: 'ready' | 'beta' | 'hidden';
 }
@@ -192,7 +192,7 @@ juegos.
 - Audio: voz local primero; si solo hay voces de red, se usan solo con voz activada y
   se avisa en privacidad. Tonos con Web Audio, sin archivos.
 - CSP con `security.csp` de Astro (estable desde Astro 6; hashes de scripts y estilos)
-  + directivas HTTP en `_headers`.
+  - directivas HTTP en `_headers`.
 - PWA: un manifiesto y un `sw.js` propio para todo el sitio. HTML network-first;
   assets con hash cache-first. `@vite-pwa/astro` 1.2.0 no declara compatibilidad con
   Astro 7, así que no se usa; se reutiliza el patrón de los cuatro juegos actuales.
@@ -203,15 +203,15 @@ juegos.
 Aplican a todos los juegos, actuales y futuros. Se implementan en componentes
 compartidos para que ningún juego tenga que resolverlos por su cuenta.
 
-| Requisito | Implementación |
-|---|---|
-| Ancla visual | Cada juego tiene un ícono y un color fijos, idénticos en hub, `GameHeader`, PWA y guía. No cambian entre versiones |
-| Aviso de cierre | `ClosingNotice` anuncia el final antes de que llegue ("dos rondas más", "una más", "terminamos"), con voz y visual. Nunca se corta de golpe |
-| Duración | Sesiones configurables de 3 a 15 minutos. `session.ts` controla rondas y tiempo; cada juego conserva su duración actual (Memo 3/5/8 rondas, Miradas 5 min) |
-| Gate de adultos | Pulsación sostenida de 3 s sobre un botón, con barra de progreso. No usar sumas: los juegos enseñan a sumar |
-| Carga sensorial | Sin destellos, sin sonidos fuertes, animaciones de premio cortas; `prefers-reduced-motion` obligatorio |
-| Toque | Objetivos de al menos 64 px en móvil; sin gestos complejos (arrastrar solo donde el juego lo requiera) |
-| Voz | `VoiceTest` en ajustes permite escuchar y elegir la voz |
+| Requisito       | Implementación                                                                                                                                             |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ancla visual    | Cada juego tiene un ícono y un color fijos, idénticos en hub, `GameHeader`, PWA y guía. No cambian entre versiones                                         |
+| Aviso de cierre | `ClosingNotice` anuncia el final antes de que llegue ("dos rondas más", "una más", "terminamos"), con voz y visual. Nunca se corta de golpe                |
+| Duración        | Sesiones configurables de 3 a 15 minutos. `session.ts` controla rondas y tiempo; cada juego conserva su duración actual (Memo 3/5/8 rondas, Miradas 5 min) |
+| Gate de adultos | Pulsación sostenida de 3 s sobre un botón, con barra de progreso. No usar sumas: los juegos enseñan a sumar                                                |
+| Carga sensorial | Sin destellos, sin sonidos fuertes, animaciones de premio cortas; `prefers-reduced-motion` obligatorio                                                     |
+| Toque           | Objetivos de al menos 64 px en móvil; sin gestos complejos (arrastrar solo donde el juego lo requiera)                                                     |
+| Voz             | `VoiceTest` en ajustes permite escuchar y elegir la voz                                                                                                    |
 
 ## 7. Diseño, Tailwind y 4K
 
@@ -220,13 +220,13 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
   `--breakpoint-3xl: 2560px`.
 - Breakpoints:
 
-  | Token | Ancho |
-  |---|---|
-  | `xs` | 0 |
-  | `sm` | 576px |
-  | `md` | 768px |
-  | `lg` | 1024px |
-  | `xl` | 1280px |
+  | Token | Ancho  |
+  | ----- | ------ |
+  | `xs`  | 0      |
+  | `sm`  | 576px  |
+  | `md`  | 768px  |
+  | `lg`  | 1024px |
+  | `xl`  | 1280px |
   | `2xl` | 1536px |
   | `3xl` | 2560px |
 
@@ -353,18 +353,18 @@ manual o en PR a `main`.
 
 ## 12. Riesgos
 
-| Riesgo | Mitigación |
-|---|---|
-| La reescritura pierde comportamiento sutil | Reglas y tests primero, juego por juego, capturas de paridad |
-| `miradas` no tiene commits | Baseline antes de empezar |
-| Tailwind + CSS custom se pisan | Tailwind solo layout; CSS semántico para piezas |
-| CSP rompe islas Vue/Astro | Probar en build; E2E falla con violaciones |
-| PWA con la versión de Astro | Verificar en fase 0; si no, SW propio |
-| 4K con UI diminuta | Ancho máximo + `clamp()` + `3xl`; probar 3840×2160 |
-| Voz distinta por dispositivo | Preferencia de idioma + `VoiceTest` en ajustes |
-| Pruebas frenan el avance | Nivel A por fase; nivel B solo en fase 6 |
-| Juegos nuevos rompen la consistencia | Registro único + `new-game` + requisitos de §6 en componentes compartidos |
-| Deploy público con IA accidental | IA fuera de alcance; sin Worker ni claves |
+| Riesgo                                     | Mitigación                                                                |
+| ------------------------------------------ | ------------------------------------------------------------------------- |
+| La reescritura pierde comportamiento sutil | Reglas y tests primero, juego por juego, capturas de paridad              |
+| `miradas` no tiene commits                 | Baseline antes de empezar                                                 |
+| Tailwind + CSS custom se pisan             | Tailwind solo layout; CSS semántico para piezas                           |
+| CSP rompe islas Vue/Astro                  | Probar en build; E2E falla con violaciones                                |
+| PWA con la versión de Astro                | Verificar en fase 0; si no, SW propio                                     |
+| 4K con UI diminuta                         | Ancho máximo + `clamp()` + `3xl`; probar 3840×2160                        |
+| Voz distinta por dispositivo               | Preferencia de idioma + `VoiceTest` en ajustes                            |
+| Pruebas frenan el avance                   | Nivel A por fase; nivel B solo en fase 6                                  |
+| Juegos nuevos rompen la consistencia       | Registro único + `new-game` + requisitos de §6 en componentes compartidos |
+| Deploy público con IA accidental           | IA fuera de alcance; sin Worker ni claves                                 |
 
 ## 13. Criterio de aprobación final
 

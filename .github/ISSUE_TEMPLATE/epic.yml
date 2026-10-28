@@ -1,6 +1,6 @@
 name: Épica
 description: Un bloque de trabajo con objetivo, alcance y criterios de aceptación.
-title: "[Epic] "
+title: '[Epic] '
 labels:
   - tipo/epic
 body:
@@ -43,7 +43,7 @@ body:
     attributes:
       label: Dependencias
       description: Issues o fases que deben terminar antes.
-      placeholder: "#12, Fase 1"
+      placeholder: '#12, Fase 1'
   - type: textarea
     id: enlaces
     attributes:

@@ -8,7 +8,8 @@ Pyloncito reúne cuatro juegos para niñas y niños de 3 a 7 años, pensados par
 con un adulto cerca. El sitio es público, estático, sin cuentas, sin analytics y sin
 publicidad. El progreso queda en el dispositivo.
 
-> Estado: fundación del proyecto. La aplicación empieza a construirse en la Fase 1.
+> Estado: Fase 1A lista. La base Astro compila y pasa `pnpm check`; el hub visual y el
+> deploy llegan en 1B y 1C.
 
 [Repo](https://github.com/the-bunker-code/pyloncito) ·
 [Project](https://github.com/orgs/the-bunker-code/projects/2) ·
@@ -17,26 +18,28 @@ publicidad. El progreso queda en el dispositivo.
 
 ## Juegos
 
-| Juego | Habilidad | Repo original |
-|---|---|---|
-| Dados y Tapitas | Contar y operar | [matematicas-con-dados](https://github.com/the-bunker-code/matematicas-con-dados) |
-| Memo Colores | Memoria visual | [memo-colores](https://github.com/the-bunker-code/memo-colores) |
-| Miradas | Atención compartida | [miradas](https://github.com/the-bunker-code/miradas) |
-| Mira y Dime | Lenguaje y sílabas | [mira-dime](https://github.com/the-bunker-code/mira-y-dime) |
+| Juego           | Habilidad           | Repo original                                                                     |
+| --------------- | ------------------- | --------------------------------------------------------------------------------- |
+| Dados y Tapitas | Contar y operar     | [matematicas-con-dados](https://github.com/the-bunker-code/matematicas-con-dados) |
+| Memo Colores    | Memoria visual      | [memo-colores](https://github.com/the-bunker-code/memo-colores)                   |
+| Miradas         | Atención compartida | [miradas](https://github.com/the-bunker-code/miradas)                             |
+| Mira y Dime     | Lenguaje y sílabas  | [mira-dime](https://github.com/the-bunker-code/mira-y-dime)                       |
 
 ## Estado
 
-| Área | Estado |
-|---|---|
-| Cuatro juegos originales | Hecho |
-| Brandbook y tokens | Hecho |
-| Arquitectura | Hecho |
-| Repo y Project de GitHub | Hecho |
-| Fase 0 — snapshot y verificación | Hecho |
-| Marca Pyloncito | En curso |
-| Sitio Astro + hub | Pendiente |
-| Migración de los cuatro juegos | Pendiente |
-| PWA, CSP, 4K y deploy | Pendiente |
+| Área                             | Estado    |
+| -------------------------------- | --------- |
+| Cuatro juegos originales         | Hecho     |
+| Brandbook y tokens               | Hecho     |
+| Arquitectura                     | Hecho     |
+| Repo y Project de GitHub         | Hecho     |
+| Fase 0 — snapshot y verificación | Hecho     |
+| Fase 1A — base Astro + tooling   | Hecho     |
+| Marca Pyloncito                  | En curso  |
+| Fase 1B — hub y sistema visual   | Pendiente |
+| Fase 1C — deploy y preview       | Pendiente |
+| Migración de los cuatro juegos   | Pendiente |
+| PWA, CSP, 4K y deploy final      | Pendiente |
 
 Al 2026-10-28 el tablero tiene 49 issues: 11 hechos, 2 listos, 2 en curso y 34 en
 backlog. El detalle y el orden de trabajo están en [ARQUITECTURA.md](./ARQUITECTURA.md)
@@ -45,8 +48,17 @@ y en [docs/GITHUB.md](./docs/GITHUB.md). El baseline visual y las versiones est�
 
 ## Desarrollo
 
-Todavía no hay aplicación que ejecutar. La Fase 1 crea el proyecto Astro, el hub y los
-componentes compartidos. Los comandos se documentarán cuando exista `package.json`.
+Requisitos: Node >= 22.23.4, pnpm >= 10.
+
+```bash
+pnpm install
+pnpm dev        # servidor local
+pnpm check      # lint, formato, tipos, tests, build y E2E
+pnpm format     # Prettier
+pnpm test       # Vitest
+pnpm test:e2e   # Playwright contra dist/
+pnpm build      # sitio estático en dist/
+```
 
 ## Privacidad
 
@@ -61,7 +73,7 @@ componentes compartidos. Los comandos se documentarán cuando exista `package.js
 - Tipografía Fredoka, SIL Open Font License.
 - Íconos Lucide, ISC.
 - Emojis Fluent, MIT.
-- Juegos originales de Enrique Lazo Bello (ENLABE) y The Bunker Code.
+- Juegos originales de Enrique Lazo Bello (ENLABE), The Bunker Code y contribuidores.
 
 ## Licencia
 

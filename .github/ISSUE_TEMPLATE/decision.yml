@@ -1,6 +1,6 @@
 name: Decisión
 description: Una decisión que cambia el resultado y necesita registro.
-title: "[Decisión] "
+title: '[Decisión] '
 labels:
   - tipo/decision
 body:
