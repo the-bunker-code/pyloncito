@@ -13,6 +13,7 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "new-game": "node scripts/new-game.ts",
     "build": "astro build",
     "preview": "astro preview",
     "lint": "eslint .",
