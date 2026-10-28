@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 4321;
+process.env.PW_PORT ??= String(20000 + Math.floor(Math.random() * 30000));
+const PORT = Number(process.env.PW_PORT);
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -28,7 +29,7 @@ export default defineConfig({
     command: 'node scripts/serve.mjs',
     env: { PORT: String(PORT) },
     url: `http://127.0.0.1:${PORT}`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });
