@@ -12,6 +12,9 @@ test('el hub carga sin errores y sin scroll horizontal', async ({ page }) => {
   await expect(
     page.getByText('Cuatro juegos para mirar, contar, recordar y hablar.'),
   ).toBeVisible();
+  await expect(page.locator('.game-card')).toHaveCount(4);
+  await expect(page.getByText('Próximamente').first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Guía', exact: true })).toBeVisible();
 
   const hasHorizontalScroll = await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,

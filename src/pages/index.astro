@@ -1,18 +1,61 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import GameCard from '../components/hub/GameCard.astro';
+import Icon from '../components/ui/Icon.astro';
+import Mascot from '../components/ui/Mascot.astro';
+import { visibleGames } from '../config/games';
+import { common } from '../content/es/common';
 ---
 
-<BaseLayout title="Pyloncito">
-  <main class="mx-auto flex min-h-dvh max-w-4xl flex-col justify-center px-6 py-12">
-    <p class="text-sm font-semibold tracking-wide text-orange-700 uppercase">
-      Aprender jugando, tapita a tapita
-    </p>
-    <h1 class="mt-3 text-5xl font-bold tracking-tight text-slate-900">Pyloncito</h1>
-    <p class="mt-4 max-w-xl text-lg text-slate-700">
-      Cuatro juegos para mirar, contar, recordar y hablar.
-    </p>
-    <p class="mt-8 rounded-2xl border border-amber-200 bg-white/70 p-4 text-sm text-slate-600">
-      Base en construcción. Los juegos llegan en las próximas fases.
-    </p>
-  </main>
+<BaseLayout>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">{common.hub.eyebrow}</p>
+      <h1 id="hero-title">{common.hub.title}</h1>
+      <p class="hero__subtitle">{common.hub.subtitle}</p>
+      <p class="hero__note">
+        <Icon name="heart" size={18} />
+        <span>{common.hub.adultNote}</span>
+      </p>
+    </div>
+    <div class="hero__art">
+      <Mascot mood="happy" />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="games-title">
+    <div class="section__heading">
+      <h2 id="games-title">{common.hub.gamesTitle}</h2>
+      <p>{common.hub.gamesHint}</p>
+    </div>
+    <div class="game-grid">
+      {visibleGames.map((game) => (
+        <GameCard game={game} />
+      ))}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="adults-title">
+    <div class="section__heading">
+      <h2 id="adults-title">{common.hub.guideTitle}</h2>
+    </div>
+    <div class="adult-grid">
+      <article class="adult-card">
+        <span class="adult-card__icon">
+          <Icon name="book-open" size={22} />
+        </span>
+        <h3>{common.hub.guideTitle}</h3>
+        <p>{common.hub.guideText}</p>
+        <a href="/guia/">{common.hub.guideLink}</a>
+      </article>
+      <article class="adult-card">
+        <span class="adult-card__icon">
+          <Icon name="shield-check" size={22} />
+        </span>
+        <h3>{common.hub.privacyTitle}</h3>
+        <p>{common.hub.privacyText}</p>
+        <a href="/privacidad/">{common.hub.privacyLink}</a>
+      </article>
+    </div>
+  </section>
 </BaseLayout>

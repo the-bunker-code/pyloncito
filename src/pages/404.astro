@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import Mascot from '../components/ui/Mascot.astro';
+---
+
+<BaseLayout title="Página no encontrada" description="La página que buscabas no existe." noindex>
+  <div class="page">
+    <div class="not-found__art">
+      <Mascot mood="think" />
+    </div>
+    <h1>No encontramos esta página</h1>
+    <p class="page__lead">
+      Puede que el enlace esté viejo o que la página todavía no exista. Volvamos al inicio.
+    </p>
+    <p>
+      <a class="button button--primary" href="/">
+        <Icon name="house" size={18} /> Volver al inicio
+      </a>
+    </p>
+  </div>
+</BaseLayout>

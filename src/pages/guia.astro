@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import VoiceTest from '../components/ui/VoiceTest.vue';
+import { games } from '../config/games';
+---
+
+<BaseLayout
+  title="Guía para adultos"
+  description="Cómo acompañar los juegos de Pyloncito: tiempos, voz, pistas y calma."
+>
+  <div class="page">
+    <a class="page__back" href="/">
+      <Icon name="arrow-left" size={16} /> Volver al inicio
+    </a>
+    <h1>Guía para adultos</h1>
+    <p class="page__lead">
+      Pyloncito está pensado para jugar con un adulto cerca. No hay prisa, no se pierde y no hay
+      publicidad. La idea es acompañar, esperar y celebrar el intento.
+    </p>
+
+    <div class="prose">
+      <h2>Cómo acompañar</h2>
+      <ul>
+        <li>Empezá por el juego que más le interese, no por el que parezca “más difícil”.</li>
+        <li>
+          Dejá que toque, se equivoque y vuelva a probar. La ayuda llega sola después de dos
+          intentos.
+        </li>
+        <li>Hablá poco y despacio. La voz del juego ya da la consigna; vos podés repetirla.</li>
+        <li>Si se frustra, paramos. El botón de salir siempre está disponible.</li>
+      </ul>
+
+      <h2>Los cuatro juegos</h2>
+    </div>
+
+    <div class="adult-grid">
+      {games.map((game) => (
+        <article class="adult-card">
+          <span class="adult-card__icon">
+            <Icon name={game.icon} size={22} />
+          </span>
+          <h3>{game.name}</h3>
+          <p>{game.description}</p>
+          <p>
+            <strong>{game.skill}</strong> · {game.age}
+          </p>
+        </article>
+      ))}
+    </div>
+
+    <div class="prose">
+      <h2>Probar la voz</h2>
+      <p>
+        La voz es opcional y se puede silenciar en los ajustes de cada juego. Este botón usa la voz
+        del navegador; si no hay una voz en español, el juego sigue funcionando.
+      </p>
+    </div>
+
+    <div class="mt-4">
+      <VoiceTest client:load />
+    </div>
+  </div>
+</BaseLayout>
