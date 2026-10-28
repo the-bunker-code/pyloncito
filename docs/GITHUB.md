@@ -46,7 +46,8 @@ se puede renombrar o eliminar.
 
 ### Estado inicial
 
-Al 2026-10-28: 49 issues; 7 Done, 5 Ready, 2 In progress y 35 Backlog.
+Al 2026-10-28: 49 issues; 11 Done, 1 Ready, 2 In progress y 35 Backlog.
+El baseline visual y las versiones están en [`docs/baseline/`](./baseline/).
 
 ### Reglas del tablero
 
