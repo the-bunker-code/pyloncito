@@ -44,7 +44,7 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 | IA                 | Fuera de fase 1. Sin Worker, sin OpenRouter, sin fotos                                 |
 | Deploy             | Cloudflare Pages conectado a Git desde la **fase 1**; `*.pages.dev`                    |
 | Idioma             | Solo español; textos centralizados                                                     |
-| Nombre             | **Pyloncito**. Dominio provisional: `pyloncito.pages.dev`                              |
+| Nombre             | **Pyloncito**. Dominio: `pyloncito.app` (apex canónico; `www` redirige)                |
 | Repo               | `code/pyloncito/` → `the-bunker-code/pyloncito`; los 4 actuales quedan como referencia |
 | GitHub             | Project “Pyloncito” como tablero de ejecución; issues en español                       |
 

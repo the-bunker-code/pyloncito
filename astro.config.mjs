@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://pyloncito.pages.dev',
+  site: 'https://pyloncito.app',
   output: 'static',
   integrations: [vue(), sitemap()],
   vite: {

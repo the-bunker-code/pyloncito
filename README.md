@@ -80,11 +80,12 @@ hasta que cambies su estado.
 
 Cloudflare Pages, sin secretos en el repo:
 
-- Producción: rama `main`.
+- Producción: `https://pyloncito.app` (rama `main`).
+- Preview: `https://develop.pyloncito.pages.dev`.
 - Build command: `pnpm build`.
 - Output directory: `dist`.
 - Node: 24 (`NODE_VERSION=24` en el panel).
-- Preview: ramas y PRs de `develop`.
+- `www.pyloncito.app` redirige al apex.
 
 ## Ramas y PRs
 
