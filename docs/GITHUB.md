@@ -10,6 +10,22 @@ en el Project “Pyloncito”. Las decisiones de producto se registran en
 - Público, rama `main`, licencia MIT.
 - Issues y labels en español; código y commits en inglés.
 
+## Ramas
+
+Ramas permanentes: `main` (producción) y `develop` (integración). Las dos están
+protegidas por un ruleset sin bypass.
+
+| Rama             | Sale de   | PR hacia           | Merge        |
+| ---------------- | --------- | ------------------ | ------------ |
+| `feature/<slug>` | `develop` | `develop`          | Squash       |
+| `fix/<slug>`     | `develop` | `develop`          | Squash       |
+| `chore/<slug>`   | `develop` | `develop`          | Squash       |
+| `hotfix/<slug>`  | `main`    | `main` y `develop` | Merge commit |
+| `develop`        | —         | `main`             | Merge commit |
+
+El workflow `Branch policy` valida la rama de origen. El workflow `CI` corre
+`pnpm check`. Los checks requeridos son `check` y `policy`.
+
 ## Project
 
 - https://github.com/orgs/the-bunker-code/projects/2
@@ -42,7 +58,7 @@ en el Project “Pyloncito”. Las decisiones de producto se registran en
 
 La API creó las vistas y los filtros. El agrupamiento y los workflows se terminan en la
 UI porque la API de GitHub no expone todos los ajustes. La vista por defecto “View 1”
-se puede renombrar o eliminar.
+se eliminó.
 
 ### Estado
 

@@ -2,6 +2,12 @@
 
 <!-- Una o dos frases. Enlazá el issue: Closes #123 -->
 
+## Rama base
+
+- [ ] `feature/*`, `fix/*` o `chore/*` → `develop`.
+- [ ] `hotfix/*` → `main` y después `develop`.
+- [ ] `develop` → `main` para un release.
+
 ## Cómo probarlo
 
 <!-- Comandos, URL del preview y pasos manuales. -->
@@ -9,6 +15,7 @@
 ## Checklist
 
 - [ ] El issue está enlazado y actualizado en el Project.
+- [ ] La rama base es la correcta para el tipo de cambio.
 - [ ] `pnpm check` pasa.
 - [ ] Sin errores de consola ni violaciones de CSP.
 - [ ] Sin `console.log`, `debugger`, `var`, `!important` ni `style=""`.

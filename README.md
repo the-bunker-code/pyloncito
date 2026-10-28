@@ -61,6 +61,16 @@ pnpm test:e2e   # Playwright contra dist/
 pnpm build      # sitio estático en dist/
 ```
 
+## Ramas y PRs
+
+- `main`: producción, protegida.
+- `develop`: integración, protegida.
+- `feature/*`, `fix/*`, `chore/*`: salen de `develop` y entran por PR.
+- `hotfix/*`: sale de `main`, entra por PR a `main` y después a `develop`.
+
+Nadie pushea directo a `main` ni `develop`. Todo PR requiere `check` + `policy`.
+El detalle está en [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 ## Privacidad
 
 - Sin cuentas ni perfiles.

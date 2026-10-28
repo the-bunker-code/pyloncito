@@ -385,6 +385,8 @@ manual o en PR a `main`.
 - Repo: https://github.com/the-bunker-code/pyloncito
 - Project: https://github.com/orgs/the-bunker-code/projects/2
 - Issues: trabajo ejecutable, en español.
+- Ramas permanentes: `main` y `develop`; `feature/*`, `fix/*`, `chore/*` y
+  `hotfix/*` son temporales. Todo entra por PR; ver `CONTRIBUTING.md`.
 - `ARQUITECTURA.md` y `docs/GITHUB.md`: diseño y flujo.
 - `docs/knowledge/DECISIONS.md` del workspace: decisiones de producto.
 - Labels, milestones y campos del Project se describen en `docs/GITHUB.md`.

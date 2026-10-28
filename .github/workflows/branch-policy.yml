@@ -1,0 +1,49 @@
+name: Branch policy
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  policy:
+    name: policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate source branch
+        shell: bash
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          case "$BASE" in
+            develop)
+              case "$HEAD" in
+                feature/*|fix/*|chore/*|hotfix/*) ;;
+                *)
+                  echo "::error::develop only accepts feature/*, fix/*, chore/* or hotfix/* (got $HEAD)"
+                  exit 1
+                  ;;
+              esac
+              ;;
+            main)
+              case "$HEAD" in
+                develop|hotfix/*) ;;
+                *)
+                  echo "::error::main only accepts develop or hotfix/* (got $HEAD)"
+                  exit 1
+                  ;;
+              esac
+              ;;
+            *)
+              echo "::error::unsupported base branch: $BASE"
+              exit 1
+              ;;
+          esac
+          echo "Branch policy ok: $HEAD -> $BASE"
