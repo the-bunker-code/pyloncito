@@ -26,6 +26,10 @@ protegidas por un ruleset sin bypass.
 El workflow `Branch policy` valida la rama de origen. El workflow `CI` corre
 `pnpm check`. Los checks requeridos son `check` y `policy`.
 
+Ruleset `Protect main and develop`: 0 approvals, sin bypass, force push y borrado
+bloqueados, conversaciones resueltas y rama actualizada. Permite squash y merge;
+rebase está deshabilitado.
+
 ## Project
 
 - https://github.com/orgs/the-bunker-code/projects/2
