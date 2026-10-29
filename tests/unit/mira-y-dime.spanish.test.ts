@@ -92,6 +92,15 @@ describe('letras y palabras', () => {
     expect(splitWords('   ')).toEqual([]);
   });
 
+  it('todas las frases respetan 2 y 3-4 palabras', () => {
+    for (const object of BUILTIN_OBJECTS) {
+      expect(splitWords(object.shortPhrase), object.id).toHaveLength(2);
+      const long = splitWords(object.longPhrase);
+      expect(long.length, object.id).toBeGreaterThanOrEqual(3);
+      expect(long.length, object.id).toBeLessThanOrEqual(4);
+    }
+  });
+
   it('capitaliza y respeta el vacío', () => {
     expect(capitalize('pelota')).toBe('Pelota');
     expect(capitalize('árbol')).toBe('Árbol');

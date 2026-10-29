@@ -6,7 +6,6 @@ import Icon from '../../ui/Icon.vue';
 import { levelById, modeById } from '../../../games/mira-y-dime/config';
 import { copy } from '../../../games/mira-y-dime/copy';
 import type { MiraState } from '../../../games/mira-y-dime/engine';
-import { resultPhrase } from '../../../games/mira-y-dime/rules';
 import type { GameEntry } from '../../../config/games';
 
 const props = defineProps<{ game: GameEntry; state: MiraState }>();
@@ -48,7 +47,7 @@ const statusText = computed(() => {
     )}`;
   }
   if (props.state.phase === 'saying') return copy.status.saying;
-  return resultPhrase(round.value);
+  return copy.result(round.value.target);
 });
 
 async function choose(value: string): Promise<void> {

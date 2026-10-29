@@ -13,15 +13,7 @@ import { closingNotice, type ClosingNotice } from '../shared/session';
 import { MISSES_BEFORE_HELP, TIMING, type LevelId, type ModeId } from './config';
 import { copy } from './copy';
 import { BUILTIN_OBJECTS, type GameObject } from './objects';
-import {
-  createRound,
-  initialBank,
-  nextBank,
-  planSession,
-  resultPhrase,
-  unitPhrase,
-  type Round,
-} from './rules';
+import { createRound, initialBank, nextBank, planSession, unitPhrase, type Round } from './rules';
 import { loadSettings, normalizeSettings, saveSettings, type MiraSettings } from './storage';
 
 export type Screen = 'home' | 'game' | 'end';
@@ -239,7 +231,7 @@ export function createMiraEngine(dependencies: EngineDependencies = {}) {
       goHome();
       return;
     }
-    const round = createRound(object, state.settings, copy.voice.build);
+    const round = createRound(object, state.settings, copy.question);
     state.round = round;
     state.closing = closingNotice({
       completed: state.roundNumber - 1,
@@ -321,7 +313,7 @@ export function createMiraEngine(dependencies: EngineDependencies = {}) {
 
     let capped = false;
     const praise = (async () => {
-      await say(resultPhrase(round));
+      await say(copy.result(round.target));
       if (capped || isStale(id)) return;
       await Promise.all([say(copy.voice.great), sleep(TIMING.nextRound)]);
     })();

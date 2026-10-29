@@ -103,6 +103,11 @@ export function syllabify(rawWord: string): string[] {
   });
 }
 
+/**
+ * Splits into individual letters, including both letters of ll, rr and ch.
+ * ñ and accented vowels stay as one unit. The rule is documented by tests in
+ * `tests/unit/mira-y-dime.spanish.test.ts`.
+ */
 export function splitLetters(rawWord: string): string[] {
   return [...normalizeWord(rawWord)];
 }

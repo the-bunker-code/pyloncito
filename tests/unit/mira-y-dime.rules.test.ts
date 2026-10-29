@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createRandom } from '../../src/lib/random';
+import { copy } from '../../src/content/es/mira-y-dime';
 import { LEVELS, LEVEL_RULES, MAX_PHRASE_WORDS, MODES } from '../../src/games/mira-y-dime/config';
 import { BUILTIN_OBJECTS, type GameObject } from '../../src/games/mira-y-dime/objects';
 import {
@@ -8,7 +9,6 @@ import {
   initialBank,
   nextBank,
   planSession,
-  resultPhrase,
   shuffle,
   targetOf,
   unitPhrase,
@@ -87,17 +87,45 @@ describe('banco y piezas', () => {
     for (let i = 1; i < plan.length; i++) expect(plan[i]!.id).not.toBe(plan[i - 1]!.id);
   });
 
+  it('300 sesiones por modo y nivel mantienen las invariantes', () => {
+    for (const mode of MODES) {
+      for (const level of LEVELS) {
+        for (let seed = 1; seed <= 300; seed++) {
+          const plan = planSession(
+            BUILTIN_OBJECTS,
+            { mode: mode.id, level: level.id, rounds: 8 },
+            { random: createRandom(seed) },
+          );
+          expect(plan, `${mode.id}/${level.id}/${seed}`).toHaveLength(8);
+          for (let index = 0; index < plan.length; index++) {
+            const object = plan[index]!;
+            const units = unitsOf(object, mode.id);
+            expect(units.length, `${object.id}/${mode.id}`).toBeGreaterThan(0);
+            if (index > 0) expect(object.id).not.toBe(plan[index - 1]!.id);
+            const bank = initialBank(
+              units,
+              LEVEL_RULES[mode.id][level.id].bank,
+              createRandom(seed),
+            );
+            expect(bank).toContain(units[0]);
+            expect(bank.length).toBeLessThanOrEqual(LEVEL_RULES[mode.id][level.id].bank);
+          }
+        }
+      }
+    }
+  });
+
   it('la ronda incluye consigna, guía y banco', () => {
-    const word = createRound(PELOTA, { mode: 'syllables', level: 'medium' }, 'Armemos');
+    const word = createRound(PELOTA, { mode: 'syllables', level: 'medium' }, copy.question);
     expect(word.question).toBe('Armemos pelota.');
     expect(word.guide).toBe(true);
     expect(word.bankSize).toBe(3);
     expect(Object.isFrozen(word)).toBe(true);
-    const phrase = createRound(PELOTA, { mode: 'longPhrase', level: 'hard' }, 'Armemos');
+    const phrase = createRound(PELOTA, { mode: 'longPhrase', level: 'hard' }, copy.question);
     expect(phrase.question).toBe('La pelota es roja.');
     expect(phrase.guide).toBe(false);
-    expect(resultPhrase(phrase)).toBe('¡La pelota es roja!');
-    expect(resultPhrase(word)).toBe('¡Pelota!');
+    expect(copy.result(phrase.target)).toBe('¡La pelota es roja!');
+    expect(copy.result(word.target)).toBe('¡Pelota!');
     expect(unitPhrase('PE')).toBe('pe');
   });
 

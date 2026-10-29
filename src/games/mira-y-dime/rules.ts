@@ -1,7 +1,7 @@
 import { shuffle as shuffleWith, type Random } from '../../lib/random';
 import { LEVEL_RULES, MAX_PHRASE_WORDS, type LevelId, type ModeId } from './config';
 import type { GameObject } from './objects';
-import { capitalize, splitLetters, splitWords, syllabify } from './spanish';
+import { splitLetters, splitWords, syllabify } from './spanish';
 
 export interface Round {
   readonly mode: ModeId;
@@ -85,12 +85,11 @@ export function planSession(
 export function createRound(
   object: GameObject,
   settings: Pick<SessionSettings, 'mode' | 'level'>,
-  buildLabel: string,
+  questionFor: (mode: ModeId, target: string) => string,
 ): Round {
   const { mode, level } = settings;
   const rules = LEVEL_RULES[mode][level];
   const target = targetOf(object, mode);
-  const isPhrase = mode === 'shortPhrase' || mode === 'longPhrase';
   return Object.freeze({
     mode,
     level,
@@ -99,7 +98,7 @@ export function createRound(
     target,
     guide: rules.guide,
     bankSize: rules.bank,
-    question: isPhrase ? `${capitalize(target)}.` : `${buildLabel} ${target}.`,
+    question: questionFor(mode, target),
   });
 }
 
@@ -143,10 +142,6 @@ export function nextBank(
     result[i] = options.length > 0 ? shuffle(options, random)[0]! : null;
   }
   return result.filter((text): text is string => text !== null).slice(0, bankSize);
-}
-
-export function resultPhrase(round: Round): string {
-  return `¡${capitalize(round.target)}!`;
 }
 
 export function unitPhrase(unit: string): string {

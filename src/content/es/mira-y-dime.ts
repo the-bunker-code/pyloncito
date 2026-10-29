@@ -1,5 +1,11 @@
 import { common } from './common';
 
+const buildLabel = 'Armemos';
+
+function capitalize(text: string): string {
+  return text ? text[0]!.toUpperCase() + text.slice(1) : text;
+}
+
 export const copy = {
   title: 'Mira y Dime',
   subtitle: 'Arma palabras y frases con lo que miras.',
@@ -70,9 +76,14 @@ export const copy = {
     note: 'Los cambios se guardan solo en este dispositivo.',
   },
   session: common.session,
+  question: (mode: string, target: string): string =>
+    mode === 'shortPhrase' || mode === 'longPhrase'
+      ? `${capitalize(target)}.`
+      : `${buildLabel} ${target}.`,
+  result: (target: string): string => `¡${capitalize(target)}!`,
   voice: {
     hello: '¡Hola! ¿Jugamos?',
-    build: 'Armemos',
+    build: buildLabel,
     almost: '¡Casi! Otra vez.',
     next: 'Esta sigue.',
     great: '¡Muy bien!',
