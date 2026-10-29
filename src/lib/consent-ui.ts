@@ -20,13 +20,41 @@ export function initConsentUi(): void {
   const analyticsElement = analyticsInput;
   const improvementElement = improvementInput;
 
+  function syncBannerSpace(): void {
+    if (bannerElement.hidden) {
+      document.documentElement.style.removeProperty('--consent-banner-space');
+      return;
+    }
+    const height = Math.ceil(bannerElement.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--consent-banner-space', `${height}px`);
+  }
+
+  function showBanner(): void {
+    bannerElement.hidden = false;
+    document.documentElement.classList.add('has-cookie-banner');
+    requestAnimationFrame(() => {
+      syncBannerSpace();
+      bannerElement.focus({ preventScroll: true });
+    });
+  }
+
+  function hideBanner(): void {
+    bannerElement.hidden = true;
+    document.documentElement.classList.remove('has-cookie-banner');
+    document.documentElement.style.removeProperty('--consent-banner-space');
+  }
+
+  if (typeof ResizeObserver === 'function') {
+    const observer = new ResizeObserver(() => syncBannerSpace());
+    observer.observe(bannerElement);
+  }
+
   current = readConsent();
   if (current) {
-    bannerElement.hidden = true;
+    hideBanner();
     applyConsent(current);
   } else {
-    bannerElement.hidden = false;
-    requestAnimationFrame(() => bannerElement.querySelector<HTMLElement>('button')?.focus());
+    showBanner();
   }
 
   function syncInputs(consent: ConsentState | null): void {
@@ -46,7 +74,7 @@ export function initConsentUi(): void {
   function save(analytics: boolean, improvement: boolean): void {
     current = createConsent({ analytics, improvement });
     writeConsent(current);
-    bannerElement.hidden = true;
+    hideBanner();
     closePreferences();
     applyConsent(current);
   }
