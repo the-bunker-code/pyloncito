@@ -1,6 +1,6 @@
 import {
   expect,
-  openAdultSettings,
+  openSettings,
   openMira,
   playRound,
   runUntil,
@@ -132,10 +132,20 @@ test('“Seguir” avanza sin contar “Lo dijo”', async ({ page }) => {
   expect((await snapshot(page)).said).toBe(0);
 });
 
+test('la flecha de la ronda vuelve al inicio del juego', async ({ page }) => {
+  await openMira(page, { voice: false, sound: false });
+  await startMode(page, 'syllables');
+  await page.getByRole('button', { name: 'Volver al inicio del juego' }).click();
+
+  await expect(page.locator('#mira-screen-home')).toBeVisible();
+  await expect(page.locator('#mira-screen-game')).toBeHidden();
+  expect(page.url()).toContain('/juegos/mira-y-dime/');
+});
+
 test('volver al inicio a mitad de ronda no deja nada colgado', async ({ page }) => {
   await openMira(page, { voice: false, sound: false });
   await startMode(page, 'letters');
-  await openAdultSettings(page, '#mira-screen-game');
+  await openSettings(page, '#mira-screen-game');
   await expect(page.getByRole('dialog', { name: 'Ajustes para adultos' })).toBeVisible();
   await page.getByRole('button', { name: 'Cancelar' }).click();
   await expect(page.locator('#mira-screen-home')).toBeVisible();

@@ -12,7 +12,8 @@ withDefaults(
     progressLabel?: string;
     progressText?: string;
     headingLevel?: 'h1' | 'h2';
-    backHref?: string;
+    backHref?: string | null;
+    backLabel?: string;
   }>(),
   {
     progress: undefined,
@@ -21,13 +22,25 @@ withDefaults(
     progressText: undefined,
     headingLevel: 'h1',
     backHref: '/',
+    backLabel: common.actions.backHome,
   },
 );
+
+defineEmits<{ back: [] }>();
 </script>
 
 <template>
   <header class="game-header" :class="`game-header--${game.theme}`">
-    <a class="icon-button" :href="backHref" :aria-label="common.actions.backHome">
+    <button
+      v-if="backHref === null"
+      class="icon-button"
+      type="button"
+      :aria-label="backLabel"
+      @click="$emit('back')"
+    >
+      <Icon name="arrow-left" :size="20" />
+    </button>
+    <a v-else class="icon-button" :href="backHref" :aria-label="backLabel">
       <Icon name="arrow-left" :size="20" />
     </a>
     <span class="game-header__icon">

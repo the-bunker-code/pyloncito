@@ -1,10 +1,10 @@
-import { expect, openAdultSettings, openMira, runUntil, test } from './mira-y-dime.fixtures';
+import { expect, openSettings, openMira, runUntil, test } from './mira-y-dime.fixtures';
 
 const SETTINGS_KEY = 'juegos:mira-y-dime:settings:v1';
 
 test('guardar cambia las rondas, persiste y empieza la sesión', async ({ page }) => {
   await openMira(page, { rounds: 3, voice: false, sound: false });
-  await openAdultSettings(page);
+  await openSettings(page);
   await expect(page.getByRole('dialog', { name: 'Ajustes para adultos' })).toBeVisible();
 
   await page.locator('label[for="mira-setting-rounds-8"]').click();
@@ -18,30 +18,15 @@ test('guardar cambia las rondas, persiste y empieza la sesión', async ({ page }
   expect(saved).toMatchObject({ rounds: 8, voice: false, sound: false });
 });
 
-test('el engranaje exige mantener presionado tres segundos', async ({ page }) => {
+test('un clic en el engranaje abre los ajustes', async ({ page }) => {
   await openMira(page);
-  const gate = page.locator('#mira-screen-home .mira-gear');
-  const dialog = page.getByRole('dialog', { name: 'Ajustes para adultos' });
-
-  await gate.focus();
-  await page.keyboard.down('Space');
-  await page.clock.runFor(1000);
-  await page.keyboard.up('Space');
-  await expect(dialog).toBeHidden();
-
-  await gate.dispatchEvent('pointerdown');
-  await page.clock.runFor(1000);
-  await gate.dispatchEvent('pointerleave');
-  await page.clock.runFor(3000);
-  await expect(dialog).toBeHidden();
-
-  await openAdultSettings(page);
-  await expect(dialog).toBeVisible();
+  await openSettings(page);
+  await expect(page.getByRole('dialog', { name: 'Ajustes para adultos' })).toBeVisible();
 });
 
 test('cancelar no guarda nada', async ({ page }) => {
   await openMira(page, { rounds: 3, voice: false, sound: false });
-  await openAdultSettings(page);
+  await openSettings(page);
   await page.locator('label[for="mira-setting-rounds-8"]').click();
   await page.getByRole('button', { name: 'Cancelar' }).click();
 
@@ -56,7 +41,7 @@ test('cancelar no guarda nada', async ({ page }) => {
 test('Escape cierra el panel y devuelve el foco al engranaje', async ({ page }) => {
   await openMira(page);
   const gear = page.locator('#mira-screen-home .mira-gear');
-  await openAdultSettings(page);
+  await openSettings(page);
   await expect(page.getByRole('dialog', { name: 'Ajustes para adultos' })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog', { name: 'Ajustes para adultos' })).toBeHidden();

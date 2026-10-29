@@ -132,6 +132,10 @@ function homeFromEnd(): void {
   engine.goHome();
 }
 
+function backToGameHome(): void {
+  engine.goHome('user');
+}
+
 onBeforeUnmount(() => engine.dispose());
 </script>
 
@@ -154,6 +158,7 @@ onBeforeUnmount(() => engine.dispose());
         @said="engine.confirmSaid"
         @repeat="engine.repeatQuestion"
         @settings="openSettings('game')"
+        @home="backToGameHome"
       />
 
       <EndScreen

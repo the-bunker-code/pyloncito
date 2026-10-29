@@ -162,15 +162,11 @@ export async function unitsOfCurrentRound(page: Page): Promise<string[]> {
   return splitWords(target);
 }
 
-export async function openAdultSettings(
+export async function openSettings(
   page: Page,
   scope: '#mira-screen-home' | '#mira-screen-game' = '#mira-screen-home',
 ): Promise<void> {
-  const gate = page.locator(`${scope} .mira-gear`);
-  await gate.focus();
-  await page.keyboard.down('Space');
-  await page.clock.runFor(3100);
-  await page.keyboard.up('Space');
+  await page.locator(`${scope} .mira-gear`).click();
 }
 
 export async function playRound(page: Page): Promise<void> {

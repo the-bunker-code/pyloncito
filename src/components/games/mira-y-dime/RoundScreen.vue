@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue';
-import AdultGate from '../../ui/AdultGate.vue';
 import ClosingNotice from '../../ui/ClosingNotice.vue';
 import GameHeader from '../../ui/GameHeader.vue';
 import Icon from '../../ui/Icon.vue';
@@ -15,6 +14,7 @@ const emit = defineEmits<{
   said: [value: boolean];
   repeat: [];
   settings: [];
+  home: [];
 }>();
 const tray = ref<HTMLElement | null>(null);
 
@@ -81,15 +81,18 @@ async function choose(value: string): Promise<void> {
       :progress-label="copy.progressLabel"
       :progress-text="copy.roundCounter(state.roundNumber, state.totalRounds)"
       heading-level="h2"
+      :back-href="null"
+      :back-label="copy.actions.backGameHome"
+      @back="$emit('home')"
     >
-      <AdultGate
+      <button
         class="mira-gear"
-        :label="copy.actions.settings"
-        icon="settings"
-        :icon-size="24"
-        compact
-        @pass="$emit('settings')"
-      />
+        type="button"
+        :aria-label="copy.actions.settings"
+        @click="$emit('settings')"
+      >
+        <Icon name="settings" :size="24" />
+      </button>
     </GameHeader>
 
     <div v-if="round && mode && level" class="round">

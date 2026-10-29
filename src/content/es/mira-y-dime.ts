@@ -55,6 +55,7 @@ export const copy = {
   },
   actions: {
     backHome: 'Volver al inicio',
+    backGameHome: 'Volver al inicio del juego',
     settings: 'Ajustes para adultos',
     repeat: 'Repetir la consigna',
     said: 'Lo dijo',

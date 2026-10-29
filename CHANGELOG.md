@@ -9,7 +9,6 @@ Todas las fechas usan ISO 8601. El formato sigue [Keep a Changelog](https://keep
 - CSP en dos capas (meta de Astro + `_headers`) y pruebas E2E de violaciones.
 - Precarga del dibujo de la ronda siguiente.
 - Candado de 50 ms contra ráfagas de toques.
-- `AdultGate` de 3 s en los engranajes de inicio y ronda.
 - Nombres accesibles por casilla (“Casilla N, vacía” / “Casilla N, unidad”).
 - Cobertura ampliada a `src/games/**` con umbrales.
 - Proyecto E2E `celular-horizontal-844x390`.
@@ -20,8 +19,9 @@ Todas las fechas usan ISO 8601. El formato sigue [Keep a Changelog](https://keep
 - La consigna de palabra ahora dice “Armemos la palabra gato.”.
 - La voz prioriza `es-PE` → `es-419` → `es-*`, locales primero.
 - “Repetir la consigna” mide 64 px de alto.
+- Los ajustes de Mira y Dime se abren con un clic en el engranaje.
+- La flecha de la barra de ronda vuelve al inicio del juego.
 - `round_said` se eliminó; `said_count` queda agregado en `session_complete`.
-- Los ajustes requieren mantener presionado el engranaje.
 
 ### Corregido
 

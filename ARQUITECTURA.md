@@ -225,6 +225,9 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 | Toque           | Objetivos de al menos 64 px en móvil; sin gestos complejos (arrastrar solo donde el juego lo requiera)                                                     |
 | Voz             | `VoiceTest` en ajustes permite escuchar y elegir la voz                                                                                                    |
 
+Excepción: Mira y Dime abre sus ajustes con un clic directo en el engranaje. El resto de la
+serie mantiene el gate de adultos de 3 s.
+
 ## 7. Diseño, Tailwind y 4K
 
 - Tailwind 4 con `@tailwindcss/vite`; no `@astrojs/tailwind` (deprecado).
@@ -336,6 +339,7 @@ manual o en PR a `main`.
 ### Fase 5 — Mira y Dime
 
 - 4 modos × 3 niveles; 184 objetos; sílabas; frases; "Lo dijo"; ajustes.
+- Ajustes con acceso directo, como excepción al gate de adultos de la serie.
 - Portar `spanish.ts` a `mira-y-dime/rules.ts` o módulo puro equivalente.
 - **No** portar: panel de objetos de casa, fotos, IA, Worker, `server/`,
   `wrangler.jsonc`, `.assetsignore`.

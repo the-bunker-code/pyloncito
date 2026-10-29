@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AdultGate from '../../ui/AdultGate.vue';
 import Icon from '../../ui/Icon.vue';
 import Mascot from '../../ui/Mascot.vue';
 import { LEVELS, MODES } from '../../../games/mira-y-dime/config';
@@ -21,14 +20,14 @@ defineEmits<{
         <p class="mira-eyebrow">{{ copy.subtitle }}</p>
         <h1 class="mira-logo">Mira <span class="mira-logo__accent">y Dime</span></h1>
       </div>
-      <AdultGate
+      <button
         class="mira-gear"
-        :label="copy.actions.settings"
-        icon="settings"
-        :icon-size="26"
-        compact
-        @pass="$emit('settings')"
-      />
+        type="button"
+        :aria-label="copy.actions.settings"
+        @click="$emit('settings')"
+      >
+        <Icon name="settings" :size="26" />
+      </button>
     </header>
 
     <div class="greeting">
