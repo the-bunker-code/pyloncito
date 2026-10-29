@@ -8,6 +8,7 @@ import {
   test,
   unitsOfCurrentRound,
 } from './mira-y-dime.fixtures';
+import { TIMING } from '../../src/games/mira-y-dime/config';
 
 const MODES = ['letters', 'syllables', 'shortPhrase', 'longPhrase'] as const;
 const LEVELS = ['easy', 'medium', 'hard'] as const;
@@ -72,11 +73,34 @@ test('dos errores seguidos muestran la ayuda y la pieza que sigue', async ({ pag
   await expect(page.locator('#mira-screen-game .slot.is-filled')).toHaveCount(1);
 });
 
+test('una ráfaga sobre una pieza incorrecta no adelanta la ayuda', async ({ page }) => {
+  await openMira(page, { level: 'medium', voice: false, sound: false });
+  await startMode(page, 'syllables');
+
+  const units = await unitsOfCurrentRound(page);
+  const values = await page
+    .locator('#mira-screen-game .piece')
+    .evaluateAll((els) => els.map((el) => el.getAttribute('data-value') ?? ''));
+  const wrong = values.find((value) => value !== units[0]);
+  if (wrong === undefined) throw new Error('No hay pieza equivocada');
+
+  await page.getByRole('button', { name: wrong, exact: true }).evaluate((button) => {
+    for (let i = 0; i < 4; i++) button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  });
+  await page.clock.runFor(50);
+  expect((await snapshot(page)).phase).toBe('answering');
+
+  await page.clock.runFor(200);
+  await page.getByRole('button', { name: wrong, exact: true }).click();
+  await runUntil(page, (state) => state.phase === 'helping');
+});
+
 test('toques en ráfaga sobre la última pieza avanzan una sola ronda', async ({ page }) => {
   await openMira(page, { voice: false, sound: false });
   await startMode(page, 'shortPhrase');
   const units = await unitsOfCurrentRound(page);
   await page.getByRole('button', { name: units[0], exact: true }).click();
+  await page.clock.runFor(TIMING.tapLock + 10);
 
   await page.getByRole('button', { name: units[1], exact: true }).evaluate((button) => {
     for (let i = 0; i < 6; i++) button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
@@ -99,6 +123,7 @@ test('“Seguir” avanza sin contar “Lo dijo”', async ({ page }) => {
   const units = await unitsOfCurrentRound(page);
   for (const unit of units) {
     await page.getByRole('button', { name: unit, exact: true }).click();
+    await page.clock.runFor(TIMING.tapLock + 10);
   }
   await runUntil(page, (state) => state.phase === 'saying');
   await page.getByRole('button', { name: 'Seguir', exact: true }).click();

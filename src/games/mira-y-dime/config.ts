@@ -70,6 +70,7 @@ export const TIMING = {
   helpStep: 350,
   helpSettle: 75,
   speechCap: 2000,
+  tapLock: 50,
   endButtons: 2000,
   shake: 175,
   hop: 300,

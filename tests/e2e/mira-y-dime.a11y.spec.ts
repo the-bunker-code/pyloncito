@@ -9,6 +9,7 @@ import {
   test,
   unitsOfCurrentRound,
 } from './mira-y-dime.fixtures';
+import { TIMING } from '../../src/games/mira-y-dime/config';
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
@@ -45,6 +46,7 @@ test('axe: momento “Ahora dilo tú” sin violaciones', async ({ page }) => {
   const units = await unitsOfCurrentRound(page);
   for (const unit of units) {
     await page.getByRole('button', { name: unit, exact: true }).click();
+    await page.clock.runFor(TIMING.tapLock + 10);
   }
   await runUntil(page, (state) => state.phase === 'saying');
   await expect(page.locator('#mira-screen-game .tray')).toHaveCSS('opacity', '1');

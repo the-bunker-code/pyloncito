@@ -1,5 +1,6 @@
 import { test as base, expect, type Page } from '@playwright/test';
 import { splitLetters, splitWords, syllabify } from '../../src/games/mira-y-dime/spanish';
+import { TIMING } from '../../src/games/mira-y-dime/config';
 
 const CONSENT_KEY = 'pyloncito:consent:v1';
 const SETTINGS_KEY = 'juegos:mira-y-dime:settings:v1';
@@ -166,6 +167,7 @@ export async function playRound(page: Page): Promise<void> {
   const units = await unitsOfCurrentRound(page);
   for (const unit of units) {
     await page.getByRole('button', { name: unit, exact: true }).click();
+    await page.clock.runFor(TIMING.tapLock + 10);
   }
   await runUntil(page, (state) => state.phase === 'saying');
   await page.getByRole('button', { name: 'Lo dijo', exact: true }).click();

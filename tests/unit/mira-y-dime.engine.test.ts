@@ -39,10 +39,12 @@ function wrongPiece(engine: MiraEngine): string {
 }
 
 function placeAll(engine: MiraEngine): void {
+  vi.advanceTimersByTime(TIMING.tapLock);
   const total = currentRound(engine).units.length;
   for (let i = 0; i < total; i++) {
     expect(engine.state.bank).toContain(nextPiece(engine));
     engine.choosePiece(nextPiece(engine));
+    vi.advanceTimersByTime(TIMING.tapLock);
   }
 }
 
@@ -259,6 +261,7 @@ describe('errores y ayuda', () => {
     expect(engine.state.shake).not.toBeNull();
     expect(spoken.at(-1)).toBe('¡Casi! Otra vez.');
 
+    vi.advanceTimersByTime(TIMING.tapLock);
     engine.choosePiece(wrongPiece(engine));
     expect(engine.state.phase).toBe('helping');
     expect(engine.state.mood).toBe('think');
@@ -281,19 +284,53 @@ describe('errores y ayuda', () => {
     engine.startGame('letters');
     await until(engine, 'answering');
     engine.choosePiece(wrongPiece(engine));
+    vi.advanceTimersByTime(TIMING.tapLock);
     engine.choosePiece(nextPiece(engine));
     expect(engine.state.misses).toBe(0);
+    vi.advanceTimersByTime(TIMING.tapLock);
     engine.choosePiece(wrongPiece(engine));
     expect(engine.state.phase).toBe('answering');
   });
 });
 
 describe('candados y cancelación', () => {
+  it('una ráfaga sobre una pieza incorrecta cuenta un solo error', async () => {
+    engine = fresh({ mode: 'syllables', level: 'medium' });
+    engine.startGame('syllables');
+    await until(engine, 'answering');
+    const wrong = wrongPiece(engine);
+
+    engine.choosePiece(wrong);
+    engine.choosePiece(wrong);
+    expect(engine.state.misses).toBe(1);
+    expect(engine.state.phase).toBe('answering');
+
+    vi.advanceTimersByTime(TIMING.tapLock);
+    engine.choosePiece(wrong);
+    expect(engine.state.phase).toBe('helping');
+  });
+
+  it('una ráfaga sobre una pieza correcta coloca una sola pieza', async () => {
+    engine = fresh({ mode: 'syllables', level: 'medium' });
+    engine.startGame('syllables');
+    await until(engine, 'answering');
+    const next = nextPiece(engine);
+
+    engine.choosePiece(next);
+    engine.choosePiece(next);
+    expect(engine.state.placed).toBe(1);
+
+    vi.advanceTimersByTime(TIMING.tapLock);
+    engine.choosePiece(nextPiece(engine));
+    expect(engine.state.placed).toBe(2);
+  });
+
   it('toques en ráfaga sobre la última pieza cuentan una vez', async () => {
     engine = fresh({ mode: 'shortPhrase' });
     engine.startGame('shortPhrase');
     await until(engine, 'answering');
     engine.choosePiece(nextPiece(engine));
+    vi.advanceTimersByTime(TIMING.tapLock);
     const last = nextPiece(engine);
     for (let i = 0; i < 6; i++) engine.choosePiece(last);
     expect(engine.state.phase).toBe('solved');
@@ -333,6 +370,7 @@ describe('candados y cancelación', () => {
     engine.startGame('syllables');
     await until(engine, 'answering');
     engine.choosePiece(wrongPiece(engine));
+    vi.advanceTimersByTime(TIMING.tapLock);
     engine.choosePiece(wrongPiece(engine));
     expect(engine.state.phase).toBe('helping');
 

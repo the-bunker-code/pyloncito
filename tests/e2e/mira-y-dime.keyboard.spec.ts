@@ -6,6 +6,7 @@ import {
   test,
   unitsOfCurrentRound,
 } from './mira-y-dime.fixtures';
+import { TIMING } from '../../src/games/mira-y-dime/config';
 
 test('al empezar, el foco pasa a la pantalla del juego', async ({ page }) => {
   await openMira(page);
@@ -31,6 +32,7 @@ test('una ronda completa solo con teclado, hasta “Lo dijo”', async ({ page }
   for (const unit of units) {
     await page.getByRole('button', { name: unit, exact: true }).focus();
     await page.keyboard.press('Enter');
+    await page.clock.runFor(TIMING.tapLock + 10);
   }
   await runUntil(page, (state) => state.phase === 'saying');
   await page.getByRole('button', { name: 'Lo dijo', exact: true }).focus();

@@ -89,12 +89,32 @@ export function createMiraEngine(dependencies: EngineDependencies = {}) {
 
   let roundId = 0;
   let shakeNonce = 0;
+  let inputLocked = false;
+  let inputLockTimer: ReturnType<typeof setTimeout> | undefined;
   let sessionStartedAt = 0;
   let errorCount = 0;
   let helpCount = 0;
   let roundAttempts = 0;
 
   const isStale = (id: number): boolean => id !== roundId;
+
+  function resetInputLock(): void {
+    inputLocked = false;
+    if (inputLockTimer !== undefined) {
+      clearTimeout(inputLockTimer);
+      inputLockTimer = undefined;
+    }
+  }
+
+  function lockInput(): void {
+    inputLocked = true;
+    if (inputLockTimer !== undefined) clearTimeout(inputLockTimer);
+    const id = roundId;
+    inputLockTimer = setTimeout(() => {
+      if (id === roundId) inputLocked = false;
+      inputLockTimer = undefined;
+    }, TIMING.tapLock);
+  }
 
   async function say(text: string): Promise<void> {
     if (!state.settings.voice) return;
@@ -168,6 +188,7 @@ export function createMiraEngine(dependencies: EngineDependencies = {}) {
     }
 
     roundId++;
+    resetInputLock();
     void stopSpeech();
     state.screen = 'home';
     state.plan = [];
@@ -189,11 +210,13 @@ export function createMiraEngine(dependencies: EngineDependencies = {}) {
 
   function pause(): void {
     roundId++;
+    resetInputLock();
     void stopSpeech();
   }
 
   function dispose(): void {
     roundId++;
+    resetInputLock();
     void stopSpeech();
   }
 
@@ -207,10 +230,11 @@ export function createMiraEngine(dependencies: EngineDependencies = {}) {
 
   function choosePiece(value: string): void {
     const { round } = state;
-    if (state.phase !== 'answering' || !round) return;
+    if (state.phase !== 'answering' || !round || inputLocked) return;
     const position = state.bank.indexOf(value);
     if (position === -1) return;
 
+    lockInput();
     roundAttempts += 1;
     if (value === round.units[state.placed]) {
       handleCorrect(round, value, position);
@@ -226,6 +250,7 @@ export function createMiraEngine(dependencies: EngineDependencies = {}) {
 
   async function playRound(): Promise<void> {
     const id = ++roundId;
+    resetInputLock();
     const object = state.plan[state.roundNumber - 1];
     if (!object) {
       goHome();
