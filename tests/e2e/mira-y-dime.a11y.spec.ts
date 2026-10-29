@@ -75,6 +75,21 @@ test('el lector recibe una frase corta por fase', async ({ page }) => {
   await expect(page.locator('#mira-screen-game .table')).not.toHaveAttribute('aria-live', /.+/);
 });
 
+test('las casillas anuncian posición y estado', async ({ page }) => {
+  await openMira(page, { level: 'easy' });
+  await startMode(page, 'syllables');
+  const units = await unitsOfCurrentRound(page);
+  const slots = page.locator('#mira-screen-game .slot');
+
+  await expect(slots.nth(0)).toHaveAttribute('aria-label', 'Casilla 1, vacía');
+  await expect(slots.nth(1)).toHaveAttribute('aria-label', 'Casilla 2, vacía');
+
+  await page.getByRole('button', { name: units[0], exact: true }).click();
+  await page.clock.runFor(TIMING.tapLock + 10);
+  await expect(slots.nth(0)).toHaveAttribute('aria-label', `Casilla 1, ${units[0]}`);
+  await expect(slots.nth(1)).toHaveAttribute('aria-label', 'Casilla 2, vacía');
+});
+
 test('lo que se toca mide 44 px o más; las piezas 52 px', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 740 });
   await openMira(page, { level: 'hard' });

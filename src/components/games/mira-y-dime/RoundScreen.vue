@@ -132,6 +132,8 @@ async function choose(value: string): Promise<void> {
                 v-for="(unit, index) in round.units"
                 :key="`${round.object.id}-${index}`"
                 class="slot"
+                role="group"
+                :aria-label="copy.status.slot(index + 1, index < state.placed ? unit : null)"
                 :class="{
                   'is-filled': index < state.placed,
                   'is-landing': index === state.placed - 1,

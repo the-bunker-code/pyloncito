@@ -96,6 +96,8 @@ export const copy = {
     helping: 'Esta sigue.',
     saying: 'Ahora dilo tú.',
     answering: (placed: number, total: number) => `Van ${placed} de ${total}.`,
+    slot: (position: number, value: string | null) =>
+      value ? `Casilla ${position}, ${value}` : `Casilla ${position}, vacía`,
   },
   end: {
     title: '¡Lo hicimos juntos!',
