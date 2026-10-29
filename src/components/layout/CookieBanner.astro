@@ -1,4 +1,5 @@
 ---
+import AppButton from '../ui/AppButton.astro';
 import Icon from '../ui/Icon.astro';
 ---
 
@@ -8,25 +9,26 @@ import Icon from '../ui/Icon.astro';
   role="dialog"
   aria-labelledby="cookie-banner-title"
   aria-describedby="cookie-banner-text"
+  tabindex="-1"
   hidden
 >
   <div class="cookie-banner__copy">
     <h2 id="cookie-banner-title">Cookies y analítica</h2>
     <p id="cookie-banner-text">
       Usamos analítica opcional para entender cómo se usa el sitio. No cargamos nada hasta que
-      aceptes. Podés rechazar y seguir jugando.
+      aceptes. Puedes rechazar y seguir jugando.
     </p>
   </div>
   <div class="cookie-banner__actions">
-    <button class="button button--primary" type="button" data-consent-action="accept">
+    <AppButton variant="primary" data-consent-action="accept">
       Aceptar todo
-    </button>
-    <button class="button" type="button" data-consent-action="reject">
+    </AppButton>
+    <AppButton variant="primary" data-consent-action="reject">
       Rechazar
-    </button>
-    <button class="button button--ghost" type="button" data-consent-action="preferences">
+    </AppButton>
+    <AppButton variant="secondary" data-consent-action="preferences">
       Preferencias
-    </button>
+    </AppButton>
   </div>
   <a class="cookie-banner__link" href="/cookies/">
     Más información
@@ -78,9 +80,9 @@ import Icon from '../ui/Icon.astro';
     </div>
 
     <footer class="cookie-prefs__footer">
-      <button class="button button--primary" type="button" data-consent-action="save">
+      <AppButton variant="primary" data-consent-action="save">
         Guardar preferencias
-      </button>
+      </AppButton>
     </footer>
   </div>
 </dialog>

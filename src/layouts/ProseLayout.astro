@@ -1,0 +1,39 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import { common } from '../content/es/common';
+
+interface Props {
+  title?: string;
+  description?: string;
+  heading?: string;
+  lead?: string;
+  back?: boolean;
+  noindex?: boolean;
+  showHills?: boolean;
+}
+
+const {
+  title,
+  description,
+  heading = title,
+  lead,
+  back = true,
+  noindex = false,
+  showHills = false,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} noindex={noindex} showHills={showHills}>
+  <div class="page">
+    {back && (
+      <a class="page__back" href="/">
+        <Icon name="arrow-left" size={16} />
+        {common.actions.backHome}
+      </a>
+    )}
+    <h1>{heading}</h1>
+    {lead && <p class="page__lead">{lead}</p>}
+    <slot />
+  </div>
+</BaseLayout>

@@ -1,96 +1,92 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Icon from '../components/ui/Icon.astro';
+import ProseLayout from '../layouts/ProseLayout.astro';
+import AppButton from '../components/ui/AppButton.astro';
 ---
 
-<BaseLayout
-  title="Cookies"
+<ProseLayout
+  title="Cookies y analítica"
+  heading="Cookies y analítica"
   description="Qué cookies usa Pyloncito, para qué sirven y cómo cambiar el consentimiento."
+  lead="Pyloncito funciona sin analítica. Si aceptas, usamos Google Analytics 4 para entender
+  qué páginas se visitan y mejorar el sitio. No usamos publicidad ni vendemos datos."
 >
-  <div class="page">
-    <a class="page__back" href="/">
-      <Icon name="arrow-left" size={16} /> Volver al inicio
-    </a>
-    <h1>Cookies y analítica</h1>
-    <p class="page__lead">
-      Pyloncito funciona sin analítica. Si aceptás, usamos Google Analytics 4 para entender qué
-      páginas se visitan y mejorar el sitio. No usamos publicidad ni vendemos datos.
+  <div class="prose">
+    <h2>Tu decisión</h2>
+    <p>
+      Puedes aceptar, rechazar o cambiar la decisión cuando quieras. Si rechazas, no se cargan las
+      etiquetas de analítica ni se crean cookies de medición.
+    </p>
+    <p>
+      <AppButton variant="secondary" data-consent-action="preferences">
+        Cambiar preferencias
+      </AppButton>
     </p>
 
-    <div class="prose">
-      <h2>Tu decisión</h2>
-      <p>
-        Podés aceptar, rechazar o cambiar la decisión cuando quieras. Si rechazás, no se cargan las
-        etiquetas de analítica ni se crean cookies de medición.
-      </p>
-      <p>
-        <button class="button" type="button" data-consent-action="preferences">
-          Cambiar preferencias
-        </button>
-      </p>
+    <h2>Qué guardamos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Proveedor</th>
+          <th>Para qué</th>
+          <th>Duración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">
+            <code>pyloncito:consent:v1</code>
+          </th>
+          <td data-label="Proveedor">Pyloncito</td>
+          <td data-label="Para qué">
+            Recordar tu decisión de cookies. Se guarda en localStorage, no es una cookie.
+          </td>
+          <td data-label="Duración">Hasta que borres los datos del navegador</td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <code>_ga</code>
+          </th>
+          <td data-label="Proveedor">Google Analytics</td>
+          <td data-label="Para qué">Distinguir navegadores para medir visitas agregadas.</td>
+          <td data-label="Duración">90 días</td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <code>_ga_&lt;id&gt;</code>
+          </th>
+          <td data-label="Proveedor">Google Analytics</td>
+          <td data-label="Para qué">Mantener el estado de la medición.</td>
+          <td data-label="Duración">90 días</td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <code>_hj*</code>
+          </th>
+          <td data-label="Proveedor">Hotjar</td>
+          <td data-label="Para qué">
+            Mapas de calor y grabaciones anónimas, solo si se activa la categoría Mejora.
+          </td>
+          <td data-label="Duración">Se definirá al activarlo</td>
+        </tr>
+      </tbody>
+    </table>
 
-      <h2>Qué guardamos</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Proveedor</th>
-            <th>Para qué</th>
-            <th>Duración</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <code>pyloncito:consent:v1</code>
-            </td>
-            <td>Pyloncito</td>
-            <td>Recordar tu decisión de cookies. Se guarda en localStorage, no es una cookie.</td>
-            <td>Hasta que borres los datos del navegador</td>
-          </tr>
-          <tr>
-            <td>
-              <code>_ga</code>
-            </td>
-            <td>Google Analytics</td>
-            <td>Distinguir navegadores para medir visitas agregadas.</td>
-            <td>90 días</td>
-          </tr>
-          <tr>
-            <td>
-              <code>_ga_&lt;id&gt;</code>
-            </td>
-            <td>Google Analytics</td>
-            <td>Mantener el estado de la medición.</td>
-            <td>90 días</td>
-          </tr>
-          <tr>
-            <td>
-              <code>_hj*</code>
-            </td>
-            <td>Hotjar</td>
-            <td>Mapas de calor y grabaciones anónimas, solo si se activa la categoría Mejora.</td>
-            <td>Se definirá al activarlo</td>
-          </tr>
-        </tbody>
-      </table>
+    <h2>Servicios de terceros</h2>
+    <p>
+      Google Tag Manager y Google Analytics son servicios de Google. Puedes consultar{' '}
+      <a href="https://policies.google.com/privacy">la política de privacidad de Google</a> y usar
+      el{' '}
+      <a href="https://tools.google.com/dlpage/gaoptout">
+        complemento de inhabilitación de Google Analytics
+      </a>
+      .
+    </p>
 
-      <h2>Servicios de terceros</h2>
-      <p>
-        Google Tag Manager y Google Analytics son servicios de Google. Podés consultar
-        <a href="https://policies.google.com/privacy">la política de privacidad de Google</a>y usar
-        el
-        <a href="https://tools.google.com/dlpage/gaoptout">
-          complemento de inhabilitación de Google Analytics
-        </a>
-        .
-      </p>
-
-      <h2>Más información</h2>
-      <p>
-        La página de <a href="/privacidad/">privacidad</a> explica qué datos se guardan y cuáles no.
-        Si tenés una duda, escribinos desde el repositorio del proyecto.
-      </p>
-    </div>
+    <h2>Más información</h2>
+    <p>
+      La página de <a href="/privacidad/">privacidad</a> explica qué datos se guardan y cuáles no.
+      Si tienes una duda, escríbenos desde el repositorio del proyecto.
+    </p>
   </div>
-</BaseLayout>
+</ProseLayout>

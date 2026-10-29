@@ -12,6 +12,7 @@
   --font-kid:
     'Fredoka', ui-rounded, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --font-adult: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
 
   --color-ink: #2b2d42;
   --color-on-theme: #1a1b29;
@@ -30,6 +31,7 @@
   --color-orange: #ffa23a;
   --color-orange-dark: #e07f12;
   --color-focus: #1e3a8a;
+  --color-link: #1f55b0;
 
   --color-sky-top: #ffe7b8;
   --color-sky-bottom: #fff8ea;
@@ -70,7 +72,6 @@ body {
   margin: 0;
   overflow-x: clip;
   background: linear-gradient(180deg, var(--color-sky-top), var(--color-sky-bottom));
-  background-attachment: fixed;
   color: var(--color-ink);
   font-family: var(--font-kid);
   text-rendering: optimizeLegibility;

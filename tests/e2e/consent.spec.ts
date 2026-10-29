@@ -12,6 +12,19 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
+test('el banner recibe el foco sin robarlo al botón de aceptar', async ({ page }) => {
+  await page.goto('/?gtm_debug=1');
+  await expect(page.locator('[data-consent-banner]')).toBeVisible();
+  await expect(page.locator('[data-consent-banner]')).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Aceptar todo' })).not.toBeFocused();
+});
+
+test('aceptar no cambia las categorías ni rompe el consentimiento', async ({ page }) => {
+  await page.goto('/?gtm_debug=1');
+  await page.locator('[data-consent-banner]').getByRole('button', { name: 'Aceptar todo' }).click();
+  await expect(page.locator('[data-consent-banner]')).toBeHidden();
+});
+
 test('no carga GTM hasta aceptar y lo carga al aceptar', async ({ page }) => {
   const requests: string[] = [];
   page.on('request', (request) => {

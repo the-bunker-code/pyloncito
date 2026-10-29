@@ -1,7 +1,7 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    variant?: 'white' | 'primary' | 'ghost';
+    variant?: 'white' | 'primary' | 'secondary' | 'ghost';
     size?: 'normal' | 'small' | 'kid';
     type?: 'button' | 'submit' | 'reset';
   }>(),
@@ -19,6 +19,7 @@ withDefaults(
     class="button"
     :class="[
       variant === 'primary' && 'button--primary',
+      variant === 'secondary' && 'button--secondary',
       variant === 'ghost' && 'button--ghost',
       size === 'small' && 'button--small',
       size === 'kid' && 'button--kid',
