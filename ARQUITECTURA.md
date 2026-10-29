@@ -40,7 +40,7 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 | 4K                 | Monitor de cerca: ancho máximo + `3xl: 2560px`; sin UI de 10 pies                      |
 | Público            | Sí; sin cuentas ni perfiles; analytics opcional con consentimiento                     |
 | Progreso           | `localStorage`, validado y con claves por juego                                        |
-| Voz                | Web Speech; voz local primero; preferencia `es-419` → `es-PE` → `es-*`; silenciable    |
+| Voz                | Web Speech; voz local primero; preferencia `es-PE` → `es-419` → `es-*`; silenciable    |
 | IA                 | Fuera de fase 1. Sin Worker, sin OpenRouter, sin fotos                                 |
 | Deploy             | Cloudflare Workers (static assets) conectado a Git; producción en `pyloncito.app`      |
 | Idioma             | Solo español; textos centralizados                                                     |
@@ -77,7 +77,7 @@ code/pyloncito/
 ├── src/
 │   ├── config/
 │   │   ├── site.ts
-│   │   ├── analytics.ts          # GTM ID y hosts
+│   │   ├── analytics.ts          # GTM/GA IDs y hosts
 │   │   └── games.ts             # registro único de juegos
 │   ├── layouts/BaseLayout.astro
 │   ├── pages/
@@ -127,7 +127,8 @@ code/pyloncito/
 │   │   ├── consent-ui.ts
 │   │   ├── random.ts
 │   │   ├── speech.ts
-│   │   └── storage.ts
+│   │   ├── storage.ts
+│   │   └── web-vitals.ts
 │   ├── content/es/
 │   │   ├── common.ts
 │   │   ├── dados.ts
@@ -224,6 +225,9 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 | Toque           | Objetivos de al menos 64 px en móvil; sin gestos complejos (arrastrar solo donde el juego lo requiera)                                                     |
 | Voz             | `VoiceTest` en ajustes permite escuchar y elegir la voz                                                                                                    |
 
+Excepción: Mira y Dime abre sus ajustes con un clic directo en el engranaje. El resto de la
+serie mantiene el gate de adultos de 3 s.
+
 ## 7. Diseño, Tailwind y 4K
 
 - Tailwind 4 con `@tailwindcss/vite`; no `@astrojs/tailwind` (deprecado).
@@ -255,9 +259,10 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 - `/juegos/<slug>/`: juego.
 - `/guia/`: cómo acompañar, qué entrena cada juego, sugerencias.
 - `/privacidad/`: qué se guarda, qué no, voz, localStorage, sin cuentas.
-- `/cookies/`: consentimiento, cookies de GA4 y cómo cambiar la decisión.
+- `/cookies/`: consentimiento, cookies de GA y cómo cambiar la decisión.
 - `/creditos/`: Fredoka OFL, Lucide ISC, Fluent Emoji MIT.
-- Analítica solo opt-in con GTM/GA4; sin publicidad, sin login.
+- Analítica solo opt-in con GTM y GA; sin publicidad, sin login.
+- Web Vitals (`LCP`, `CLS`, `INP`, `FCP`, `TTFB`) solo con consentimiento de Analítica.
 - SEO: canonical, OG, sitemap, robots. `site` configurable en `src/config/site.ts`.
 
 ## 9. Testing y calidad
@@ -334,6 +339,7 @@ manual o en PR a `main`.
 ### Fase 5 — Mira y Dime
 
 - 4 modos × 3 niveles; 184 objetos; sílabas; frases; "Lo dijo"; ajustes.
+- Ajustes con acceso directo, como excepción al gate de adultos de la serie.
 - Portar `spanish.ts` a `mira-y-dime/rules.ts` o módulo puro equivalente.
 - **No** portar: panel de objetos de casa, fotos, IA, Worker, `server/`,
   `wrangler.jsonc`, `.assetsignore`.

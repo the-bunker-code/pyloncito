@@ -16,7 +16,7 @@ onMounted(() => {
 function testVoice(): void {
   const played = speak(common.voice.sample);
   status.value = played ? common.voice.played : common.voice.unavailable;
-  trackEvent('voice_test');
+  trackEvent('voice_test', { surface: 'guide' });
 }
 </script>
 

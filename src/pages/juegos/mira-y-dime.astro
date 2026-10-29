@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Game from '../../components/games/mira-y-dime/Game.vue';
+import { findGame } from '../../config/games';
+import '../../styles/mira-y-dime.css';
+
+const game = findGame('mira-y-dime');
+if (!game) throw new Error('Juego no encontrado: mira-y-dime');
+---
+
+<BaseLayout title={game.name} description={game.description} noindex>
+  <Game client:load game={game} />
+</BaseLayout>

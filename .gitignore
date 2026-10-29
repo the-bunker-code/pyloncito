@@ -5,6 +5,7 @@ node_modules/
 # Build and generated output
 dist/
 .astro/
+.wrangler/
 coverage/
 playwright-report/
 test-results/

@@ -23,6 +23,7 @@ const parts = computed(() => icons[props.name]);
   <svg
     :width="size"
     :height="size"
+    class="icon"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
