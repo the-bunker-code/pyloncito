@@ -256,7 +256,7 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 - `/juegos/<slug>/`: juego.
 - `/guia/`: cómo acompañar, qué entrena cada juego, sugerencias.
 - `/privacidad/`: qué se guarda, qué no, voz, localStorage, sin cuentas.
-- `/cookies/`: consentimiento, cookies de GA4 y cómo cambiar la decisión.
+- `/cookies/`: consentimiento, cookies de GA y cómo cambiar la decisión.
 - `/creditos/`: Fredoka OFL, Lucide ISC, Fluent Emoji MIT.
 - Analítica solo opt-in con GTM y GA; sin publicidad, sin login.
 - Web Vitals (`LCP`, `CLS`, `INP`, `FCP`, `TTFB`) solo con consentimiento de Analítica.

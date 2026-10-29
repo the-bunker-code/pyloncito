@@ -128,7 +128,7 @@ El detalle está en [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 - Sin cuentas ni perfiles.
 - Analítica opcional con consentimiento; sin publicidad.
-- Cookies de GA4 solo después de aceptar.
+- Cookies de GA solo después de aceptar.
 - Progreso local, validado.
 - Voz del navegador, silenciable.
 - Sin backend ni secretos en el cliente.
@@ -162,12 +162,12 @@ Checklist del contenedor GTM:
 - `debug_mode` = variable de capa de datos, solo en debug.
 - `app_version` = variable de capa de datos desde `package.json`.
 - `traffic_type` = variable de capa de datos (`internal` en debug; `external` en producción).
-- Un tag GA4 Event con `event_name = {{Event}}` para los eventos permitidos.
+- Un tag GA Event con `event_name = {{Event}}` para los eventos permitidos.
 - Enhanced Measurement: páginas, scroll y clics salientes. Sin site search, video, descargas ni
   formularios.
 - Sin tags de Ads, remarketing ni Floodlight.
-- Google Signals, personalización de anuncios y data sharing desactivados en GA4.
-- Retención de datos GA4: 2 meses.
+- Google Signals, personalización de anuncios y data sharing desactivados en GA.
+- Retención de datos GA: 2 meses.
 - Filtros de tráfico developer (`debug_mode`) e interno.
 - Hotjar futuro bajo la categoría Mejora y con CSP actualizada.
 

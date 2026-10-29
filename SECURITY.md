@@ -29,7 +29,7 @@ Incluí:
 ## Prácticas del proyecto
 
 - Sin secretos versionados.
-- Terceros solo después del consentimiento: GTM y GA4. Sin publicidad ni otros scripts.
+- Terceros solo después del consentimiento: GTM y GA. Sin publicidad ni otros scripts.
 - Dependencias fijadas y revisadas.
 - Datos de `localStorage` validados al leer.
 
@@ -52,11 +52,11 @@ Decisiones conscientes:
 - `style-src-attr 'unsafe-inline'` solo cubre las custom properties dinámicas de
   `AdultGate` y `ProgressBar`; el resto de estilos usa hashes de Astro.
 - `Referrer-Policy: strict-origin-when-cross-origin` evita filtrar rutas completas y
-  conserva el origen que GA4 necesita para atribución.
+  conserva el origen que GA necesita para atribución.
 - `_headers` lo aplica Cloudflare Workers static assets. El servidor local
   `scripts/serve.mjs` no aplica cabeceras HTTP; en local solo se prueba el meta CSP.
 - Caché: `/_astro/*` y `/fonts/*` inmutables; `/objects/*` un día con
   `stale-while-revalidate` de siete días.
 - HSTS, CORP, COOP y `Permissions-Policy` restrictiva completan las cabeceras.
 
-Los IDs de GTM y GA4 son públicos por naturaleza; no son secretos.
+Los IDs de GTM y GA son públicos por naturaleza; no son secretos.

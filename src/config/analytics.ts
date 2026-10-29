@@ -1,6 +1,6 @@
 export const analyticsConfig = {
   gtmId: 'GTM-5947XBGG',
-  ga4Id: 'G-F1JL8LRPQT',
+  GAId: 'G-F1JL8LRPQT',
   consentKey: 'pyloncito:consent:v1',
   productionHosts: ['pyloncito.app', 'www.pyloncito.app'],
   debugHosts: ['localhost', '127.0.0.1', 'dev.pyloncito.app'],
