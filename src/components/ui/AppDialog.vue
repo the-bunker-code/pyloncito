@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, useId, watch } from 'vue';
 import { common } from '../../content/es/common';
 import Icon from './Icon.vue';
 
@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{ close: [] }>();
 const dialog = ref<HTMLDialogElement | null>(null);
+const titleId = useId();
 
 function sync(open: boolean): void {
   const element = dialog.value;
@@ -27,10 +28,16 @@ onMounted(() => sync(props.open));
 </script>
 
 <template>
-  <dialog ref="dialog" class="dialog" @cancel.prevent="requestClose" @close="emit('close')">
+  <dialog
+    ref="dialog"
+    class="dialog"
+    :aria-labelledby="titleId"
+    @cancel.prevent="requestClose"
+    @close="emit('close')"
+  >
     <div class="dialog__panel">
       <header class="dialog__header">
-        <h2>{{ title }}</h2>
+        <h2 :id="titleId">{{ title }}</h2>
         <button
           class="icon-button"
           type="button"

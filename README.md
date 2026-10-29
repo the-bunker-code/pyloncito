@@ -9,8 +9,7 @@ con un adulto cerca. El sitio es público, estático, sin cuentas y sin publicid
 analítica es opcional y solo se activa con consentimiento. El progreso queda en el
 dispositivo.
 
-> Estado: Fase 1B lista. El generador de juegos y el deploy de preview se están cerrando
-> en 1C.
+> Estado: Mira y Dime está en beta y ya se puede jugar en `/juegos/mira-y-dime/`.
 
 [Repo](https://github.com/the-bunker-code/pyloncito) ·
 [Project](https://github.com/orgs/the-bunker-code/projects/2) ·
@@ -28,20 +27,21 @@ dispositivo.
 
 ## Estado
 
-| Área                             | Estado    |
-| -------------------------------- | --------- |
-| Cuatro juegos originales         | Hecho     |
-| Brandbook y tokens               | Hecho     |
-| Arquitectura                     | Hecho     |
-| Repo y Project de GitHub         | Hecho     |
-| Fase 0 — snapshot y verificación | Hecho     |
-| Fase 1A — base Astro + tooling   | Hecho     |
-| Ramas y protección               | Hecho     |
-| Marca Pyloncito                  | En curso  |
-| Fase 1B — hub y sistema visual   | Hecho     |
-| Fase 1C — deploy y preview       | En curso  |
-| Migración de los cuatro juegos   | Pendiente |
-| PWA, CSP, 4K y deploy final      | Pendiente |
+| Área                             | Estado       |
+| -------------------------------- | ------------ |
+| Cuatro juegos originales         | Hecho        |
+| Brandbook y tokens               | Hecho        |
+| Arquitectura                     | Hecho        |
+| Repo y Project de GitHub         | Hecho        |
+| Fase 0 — snapshot y verificación | Hecho        |
+| Fase 1A — base Astro + tooling   | Hecho        |
+| Ramas y protección               | Hecho        |
+| Marca Pyloncito                  | En curso     |
+| Fase 1B — hub y sistema visual   | Hecho        |
+| Fase 1C — deploy y preview       | En curso     |
+| Fase 5 — Mira y Dime             | Hecho (beta) |
+| Migración de los cuatro juegos   | Pendiente    |
+| PWA, CSP, 4K y deploy final      | Pendiente    |
 
 El tablero muestra el estado actual:
 [Project Pyloncito](https://github.com/orgs/the-bunker-code/projects/2). El detalle y el
@@ -135,19 +135,40 @@ El detalle está en [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Analítica y cookies
 
-- GTM `GTM-5947XBGG` con GA4 dentro del contenedor.
-- Sin GTM hasta que la persona acepte Analítica o Mejora.
+- GTM con el destino GA.
+- Sin GTM hasta que la persona acepte **Analítica**. Aceptar solo Mejora no carga GTM ni GA.
+- Consent Mode v2 arranca con todo `denied`; al aceptar solo cambia `analytics_storage` a
+  `granted`. Las señales de publicidad quedan siempre en `denied`.
 - Categorías: Necesarias, Analítica y Mejora.
 - Solo en `pyloncito.app`; en `dev` únicamente con `?gtm_debug=1`.
+- Web Vitals (`LCP`, `CLS`, `INP`, `FCP`, `TTFB`) con la librería `web-vitals`; se envían solo
+  con consentimiento de Analítica.
+- Eventos: `game_card_click`, `game_start`, `level_select`, `answer`, `round_complete`,
+  `help_used`, `round_said`, `session_complete`, `game_replay`, `game_home`, `game_exit`,
+  `settings_open`, `settings_cancel`, `settings_saved`, `voice_test`, `guide_open` y
+  `web_vitals`. Sin nombres, fotos, texto libre ni identificadores de usuario.
 - Detalle en [cookies](/cookies/) y en la página de privacidad.
 
 Checklist del contenedor GTM:
 
-- GA4 tag con consentimiento requerido para `analytics_storage`.
+- Google Tag.
+- Consent required para `analytics_storage`; `ad_storage`, `ad_user_data` y
+  `ad_personalization` siempre denegados.
 - Fields to set: `cookie_expires = 7776000` (90 días).
-- Google Signals y personalización de anuncios desactivados.
-- Data sharing desactivado.
+- `allow_google_signals = false`.
+- `allow_ad_personalization_signals = false`.
+- `send_page_view = true`.
+- `page_location` = variable de capa de datos `page_location` (sin `gtm_debug`).
+- `debug_mode` = variable de capa de datos, solo en debug.
+- `app_version` = variable de capa de datos desde `package.json`.
+- `traffic_type` = variable de capa de datos (`internal` en debug; `external` en producción).
+- Un tag GA4 Event con `event_name = {{Event}}` para los eventos permitidos.
+- Enhanced Measurement: páginas, scroll y clics salientes. Sin site search, video, descargas ni
+  formularios.
+- Sin tags de Ads, remarketing ni Floodlight.
+- Google Signals, personalización de anuncios y data sharing desactivados en GA4.
 - Retención de datos GA4: 2 meses.
+- Filtros de tráfico developer (`debug_mode`) e interno.
 - Hotjar futuro bajo la categoría Mejora y con CSP actualizada.
 
 ## Créditos

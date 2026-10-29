@@ -55,8 +55,10 @@ const pageTitle = title === site.name ? site.name : `${title} · ${site.name}`;
     <script>
       import { initAnalytics } from '../lib/analytics';
       import { initConsentUi } from '../lib/consent-ui';
+      import { initWebVitals } from '../lib/web-vitals';
 
       initAnalytics();
+      initWebVitals();
       initConsentUi();
     </script>
   </body>

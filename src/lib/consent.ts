@@ -82,5 +82,5 @@ export function writeConsent(
 }
 
 export function shouldLoadGtm(consent: ConsentState): boolean {
-  return consent.analytics || consent.improvement;
+  return consent.analytics;
 }

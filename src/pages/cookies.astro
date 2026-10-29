@@ -7,14 +7,15 @@ import AppButton from '../components/ui/AppButton.astro';
   title="Cookies y analítica"
   heading="Cookies y analítica"
   description="Qué cookies usa Pyloncito, para qué sirven y cómo cambiar el consentimiento."
-  lead="Pyloncito funciona sin analítica. Si aceptas, usamos Google Analytics 4 para entender
-  qué páginas se visitan y mejorar el sitio. No usamos publicidad ni vendemos datos."
+  lead="Pyloncito funciona sin analítica. Si aceptas, usamos Google Tag Manager y Google Analytics 4
+  para entender qué páginas se visitan y mejorar el sitio. No usamos publicidad ni vendemos datos."
 >
   <div class="prose">
     <h2>Tu decisión</h2>
     <p>
       Puedes aceptar, rechazar o cambiar la decisión cuando quieras. Si rechazas, no se cargan las
-      etiquetas de analítica ni se crean cookies de medición.
+      etiquetas de analítica ni se crean cookies de medición. Aceptar solo <strong>Mejora</strong>
+      no activa Google Analytics; esa categoría queda para mapas de calor cuando se implementen.
     </p>
     <p>
       <AppButton variant="secondary" data-consent-action="preferences">
@@ -71,6 +72,12 @@ import AppButton from '../components/ui/AppButton.astro';
         </tr>
       </tbody>
     </table>
+
+    <h2>Rendimiento</h2>
+    <p>
+      Con consentimiento de Analítica enviamos métricas agregadas de rendimiento (LCP, CLS, INP, FCP
+      y TTFB) a Google Analytics. No incluyen URLs, texto del juego ni datos personales.
+    </p>
 
     <h2>Servicios de terceros</h2>
     <p>

@@ -184,6 +184,9 @@ importers:
       vue:
         specifier: 3.5.44
         version: 3.5.44(typescript@6.0.3)
+      web-vitals:
+        specifier: 6.2.3
+        version: 6.2.3
     devDependencies:
       '@astrojs/check':
         specifier: 0.9.12
@@ -3399,6 +3402,9 @@ packages:
       typescript:
         optional: true
 
+  web-vitals@6.2.3:
+    resolution: {integrity: sha512-Dmy+vdO1UPMqXiAtZSNayhl4f794Bxfd94W4HIj2HlYtczEQfEOon969memlcpcHrTuOKLa5baFjX7WbgmOq+A==}
+
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
     engines: {node: '>=12'}
@@ -6548,6 +6554,8 @@ snapshots:
       '@vue/shared': 3.5.44
     optionalDependencies:
       typescript: 6.0.3
+
+  web-vitals@6.2.3: {}
 
   whatwg-mimetype@3.0.0: {}
 

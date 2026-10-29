@@ -57,7 +57,7 @@ export const games: readonly GameEntry[] = [
     age: '3–7 años',
     skill: 'Lenguaje y sílabas',
     minutes: [5, 10],
-    status: 'coming',
+    status: 'beta',
     description: 'Arma sílabas, palabras y frases con lo que ves.',
   },
 ];

@@ -77,7 +77,7 @@ code/pyloncito/
 ├── src/
 │   ├── config/
 │   │   ├── site.ts
-│   │   ├── analytics.ts          # GTM ID y hosts
+│   │   ├── analytics.ts          # GTM/GA IDs y hosts
 │   │   └── games.ts             # registro único de juegos
 │   ├── layouts/BaseLayout.astro
 │   ├── pages/
@@ -127,7 +127,8 @@ code/pyloncito/
 │   │   ├── consent-ui.ts
 │   │   ├── random.ts
 │   │   ├── speech.ts
-│   │   └── storage.ts
+│   │   ├── storage.ts
+│   │   └── web-vitals.ts
 │   ├── content/es/
 │   │   ├── common.ts
 │   │   ├── dados.ts
@@ -257,7 +258,8 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 - `/privacidad/`: qué se guarda, qué no, voz, localStorage, sin cuentas.
 - `/cookies/`: consentimiento, cookies de GA4 y cómo cambiar la decisión.
 - `/creditos/`: Fredoka OFL, Lucide ISC, Fluent Emoji MIT.
-- Analítica solo opt-in con GTM/GA4; sin publicidad, sin login.
+- Analítica solo opt-in con GTM y GA; sin publicidad, sin login.
+- Web Vitals (`LCP`, `CLS`, `INP`, `FCP`, `TTFB`) solo con consentimiento de Analítica.
 - SEO: canonical, OG, sitemap, robots. `site` configurable en `src/config/site.ts`.
 
 ## 9. Testing y calidad

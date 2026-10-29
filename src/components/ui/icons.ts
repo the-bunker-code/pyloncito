@@ -163,6 +163,51 @@ export const icons = {
     { tag: 'rect', attrs: { x: 3, y: 11, width: 18, height: 11, rx: 2 } },
     { tag: 'path', attrs: { d: 'M7 11V7a5 5 0 0 1 10 0v4' } },
   ],
+  pencil: [
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z',
+      },
+    },
+    { tag: 'path', attrs: { d: 'm15 5 4 4' } },
+  ],
+  'message-circle-heart': [
+    { tag: 'path', attrs: { d: 'M7.9 20A9 9 0 1 0 4 16.1L2 22Z' } },
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M15.8 9.2a2.5 2.5 0 0 0-3.5 0l-.3.4-.35-.3a2.42 2.42 0 1 0-3.2 3.6l3.6 3.5 3.6-3.5c1.2-1.2 1.1-2.7.2-3.7',
+      },
+    },
+  ],
+  book: [
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20',
+      },
+    },
+  ],
+  'signal-low': [
+    { tag: 'path', attrs: { d: 'M2 20h.01' } },
+    { tag: 'path', attrs: { d: 'M7 20v-4' } },
+  ],
+  'signal-medium': [
+    { tag: 'path', attrs: { d: 'M2 20h.01' } },
+    { tag: 'path', attrs: { d: 'M7 20v-4' } },
+    { tag: 'path', attrs: { d: 'M12 20v-8' } },
+  ],
+  'signal-high': [
+    { tag: 'path', attrs: { d: 'M2 20h.01' } },
+    { tag: 'path', attrs: { d: 'M7 20v-4' } },
+    { tag: 'path', attrs: { d: 'M12 20v-8' } },
+    { tag: 'path', attrs: { d: 'M17 20V8' } },
+  ],
+  'rotate-ccw': [
+    { tag: 'path', attrs: { d: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' } },
+    { tag: 'path', attrs: { d: 'M3 3v5h5' } },
+  ],
 } as const satisfies Record<string, readonly IconPart[]>;
 
 export type IconName = keyof typeof icons;

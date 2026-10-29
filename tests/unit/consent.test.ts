@@ -58,9 +58,9 @@ describe('consent', () => {
     );
   });
 
-  it('loads GTM when any optional category is accepted', () => {
+  it('loads GTM only when analytics is accepted', () => {
     expect(shouldLoadGtm(createConsent({ analytics: false, improvement: false }))).toBe(false);
     expect(shouldLoadGtm(createConsent({ analytics: true, improvement: false }))).toBe(true);
-    expect(shouldLoadGtm(createConsent({ analytics: false, improvement: true }))).toBe(true);
+    expect(shouldLoadGtm(createConsent({ analytics: false, improvement: true }))).toBe(false);
   });
 });
