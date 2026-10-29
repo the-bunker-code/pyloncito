@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue';
+import AdultGate from '../../ui/AdultGate.vue';
 import ClosingNotice from '../../ui/ClosingNotice.vue';
 import GameHeader from '../../ui/GameHeader.vue';
 import Icon from '../../ui/Icon.vue';
@@ -81,14 +82,14 @@ async function choose(value: string): Promise<void> {
       :progress-text="copy.roundCounter(state.roundNumber, state.totalRounds)"
       heading-level="h2"
     >
-      <button
+      <AdultGate
         class="mira-gear"
-        type="button"
-        :aria-label="copy.actions.settings"
-        @click="$emit('settings')"
-      >
-        <Icon name="settings" :size="24" />
-      </button>
+        :label="copy.actions.settings"
+        icon="settings"
+        :icon-size="24"
+        compact
+        @pass="$emit('settings')"
+      />
     </GameHeader>
 
     <div v-if="round && mode && level" class="round">

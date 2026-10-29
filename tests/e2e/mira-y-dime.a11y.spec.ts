@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import type { Page } from '@playwright/test';
 import {
   expect,
+  openAdultSettings,
   openMira,
   playRound,
   runUntil,
@@ -63,7 +64,7 @@ test('axe: final y ajustes sin violaciones', async ({ page }) => {
   expect(await violations(page)).toEqual([]);
 
   await page.getByRole('button', { name: 'Inicio', exact: true }).click();
-  await page.locator('#mira-screen-home .mira-gear').click();
+  await openAdultSettings(page);
   expect(await violations(page)).toEqual([]);
 });
 

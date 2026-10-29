@@ -2,15 +2,22 @@
 import { onBeforeUnmount, ref } from 'vue';
 import { common } from '../../content/es/common';
 import Icon from './Icon.vue';
+import type { IconName } from './icons';
 
 const props = withDefaults(
   defineProps<{
     label?: string;
     duration?: number;
+    icon?: IconName;
+    iconSize?: number;
+    compact?: boolean;
   }>(),
   {
     label: common.settings.adultGate,
     duration: 3000,
+    icon: 'lock',
+    iconSize: 18,
+    compact: false,
   },
 );
 
@@ -57,6 +64,7 @@ onBeforeUnmount(stop);
   <button
     type="button"
     class="adult-gate"
+    :class="{ 'adult-gate--compact': compact }"
     :aria-label="label"
     @pointerdown.prevent="start"
     @pointerup="stop"
@@ -69,7 +77,7 @@ onBeforeUnmount(stop);
     @blur="stop"
   >
     <span class="adult-gate__label">
-      <Icon name="lock" :size="18" />
+      <Icon :name="icon" :size="iconSize" />
       {{ label }}
     </span>
     <span class="adult-gate__track" aria-hidden="true">

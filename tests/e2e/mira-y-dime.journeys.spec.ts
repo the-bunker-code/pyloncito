@@ -1,5 +1,6 @@
 import {
   expect,
+  openAdultSettings,
   openMira,
   playRound,
   runUntil,
@@ -134,7 +135,7 @@ test('“Seguir” avanza sin contar “Lo dijo”', async ({ page }) => {
 test('volver al inicio a mitad de ronda no deja nada colgado', async ({ page }) => {
   await openMira(page, { voice: false, sound: false });
   await startMode(page, 'letters');
-  await page.locator('#mira-screen-game [aria-label="Ajustes para adultos"]').click();
+  await openAdultSettings(page, '#mira-screen-game');
   await expect(page.getByRole('dialog', { name: 'Ajustes para adultos' })).toBeVisible();
   await page.getByRole('button', { name: 'Cancelar' }).click();
   await expect(page.locator('#mira-screen-home')).toBeVisible();

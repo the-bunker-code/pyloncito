@@ -1,4 +1,11 @@
-import { expect, openMira, playRound, startMode, test } from './mira-y-dime.fixtures';
+import {
+  expect,
+  openAdultSettings,
+  openMira,
+  playRound,
+  startMode,
+  test,
+} from './mira-y-dime.fixtures';
 
 test('los eventos de juego llegan sin datos personales', async ({ page }) => {
   await page.route('**/gtm.js**', (route) =>
@@ -119,7 +126,7 @@ test('nivel y ajustes emiten sus eventos y la salida de partida', async ({ page 
   await openMira(page, { voice: false }, { analytics: true, debug: true });
   await page.locator('#mira-screen-home .level').nth(1).click();
   await startMode(page, 'syllables');
-  await page.locator('#mira-screen-game [aria-label="Ajustes para adultos"]').click();
+  await openAdultSettings(page, '#mira-screen-game');
   await expect(page.getByRole('dialog', { name: 'Ajustes para adultos' })).toBeVisible();
   await page.getByRole('button', { name: 'Cancelar' }).click();
 
