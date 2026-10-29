@@ -56,7 +56,7 @@ test('los eventos de juego llegan sin datos personales', async ({ page }) => {
       total: 3,
     }),
   );
-  expect(afterRound).toContainEqual(expect.objectContaining({ event: 'round_said', said: 'yes' }));
+  expect(afterRound.some((event) => event.event === 'round_said')).toBe(false);
   expect(afterRound).toContainEqual(
     expect.objectContaining({ event: 'answer', result: 'correct', attempt: 1 }),
   );
@@ -66,6 +66,21 @@ test('los eventos de juego llegan sin datos personales', async ({ page }) => {
       expect(event).not.toHaveProperty(key);
     }
   }
+
+  await playRound(page);
+  await playRound(page);
+
+  const sessionEvents = await page.evaluate(() =>
+    (window.dataLayer ?? []).filter(
+      (entry): entry is Record<string, unknown> =>
+        typeof entry === 'object' && entry !== null && !Array.isArray(entry) && 'event' in entry,
+    ),
+  );
+
+  expect(sessionEvents.some((event) => event.event === 'round_said')).toBe(false);
+  expect(sessionEvents).toContainEqual(
+    expect.objectContaining({ event: 'session_complete', said_count: 3 }),
+  );
 });
 
 test('sin consentimiento no envía eventos de juego', async ({ page }) => {

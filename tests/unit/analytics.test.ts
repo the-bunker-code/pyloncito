@@ -34,6 +34,7 @@ describe('analytics events', () => {
     expect(isAnalyticsEventName('settings_open')).toBe(true);
     expect(isAnalyticsEventName('settings_cancel')).toBe(true);
     expect(isAnalyticsEventName('web_vitals')).toBe(true);
+    expect(isAnalyticsEventName('round_said')).toBe(false);
     expect(isAnalyticsEventName('not_allowed')).toBe(false);
     expect(isAnalyticsEventName('toString')).toBe(false);
   });

@@ -25,7 +25,6 @@ const EVENT_PARAMS = {
   ],
   round_complete: ['game', 'mode', 'level', 'round', 'total'],
   help_used: ['game', 'mode', 'level', 'round', 'help_count', 'error_count'],
-  round_said: ['game', 'mode', 'level', 'said'],
   session_complete: [
     'game',
     'mode',

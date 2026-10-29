@@ -148,9 +148,7 @@ describe('sesión completa', () => {
     await until(engine, 'saying');
     engine.confirmSaid(true);
     await advance(TIMING.saidPause + 100);
-    expect(events.some((event) => event.name === 'round_said' && event.params.said === 'yes')).toBe(
-      true,
-    );
+    expect(events.some((event) => event.name === 'round_said')).toBe(false);
 
     engine.goHome('user');
     expect(
@@ -164,7 +162,6 @@ describe('sesión completa', () => {
       'rounds',
       'round',
       'total',
-      'said',
       'said_count',
       'duration_seconds',
       'result',
@@ -179,6 +176,39 @@ describe('sesión completa', () => {
     for (const event of events) {
       expect(Object.keys(event.params).every((key) => allowed.has(key))).toBe(true);
     }
+  });
+
+  it('solo envía el total agregado de “Lo dijo”', async () => {
+    const events: { name: string; params: Record<string, unknown> }[] = [];
+    engine = createMiraEngine({
+      initialSettings: { ...DEFAULT_SETTINGS, voice: false },
+      speak: async () => undefined,
+      wait: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+      random: createRandom(7),
+      playCount: () => undefined,
+      playSuccess: () => undefined,
+      playError: () => undefined,
+      unlock: () => undefined,
+      persistSettings: () => undefined,
+      track: (name, params) => events.push({ name, params }),
+    });
+    engine.updateSettings({ ...engine.state.settings, rounds: 3, level: 'easy' });
+    engine.startGame('syllables');
+
+    for (let round = 1; round <= 3; round++) {
+      await until(engine, 'answering');
+      placeAll(engine);
+      await until(engine, 'saying');
+      engine.confirmSaid(round !== 2);
+      await advance(TIMING.saidPause + 100);
+    }
+
+    expect(engine.state.screen).toBe('end');
+    expect(events.some((event) => event.name === 'round_said')).toBe(false);
+    expect(events).toContainEqual({
+      name: 'session_complete',
+      params: expect.objectContaining({ said_count: 2 }),
+    });
   });
 
   it('una voz que no termina no frena la ronda', async () => {

@@ -341,15 +341,6 @@ export function createMiraEngine(dependencies: EngineDependencies = {}) {
       if (state.settings.sound) playSuccess();
     }
 
-    if (state.round) {
-      track('round_said', {
-        game: 'mira-y-dime',
-        mode: state.round.mode,
-        level: state.round.level,
-        said: said ? 'yes' : 'skip',
-      });
-    }
-
     await Promise.all([
       said ? sayWithin(copy.voice.saidIt, TIMING.speechCap) : Promise.resolve(),
       sleep(TIMING.saidPause),
