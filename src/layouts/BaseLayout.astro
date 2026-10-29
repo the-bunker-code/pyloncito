@@ -1,25 +1,65 @@
 ---
 import '../styles/global.css';
+import '../styles/components.css';
+import CookieBanner from '../components/layout/CookieBanner.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import { site } from '../config/site';
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
+  noindex?: boolean;
+  showHills?: boolean;
 }
 
-const { title, description = 'Juegos para aprender jugando.' } = Astro.props;
+const {
+  title = site.name,
+  description = site.description,
+  noindex = false,
+  showHills = false,
+} = Astro.props;
+const pageTitle = title === site.name ? site.name : `${title} · ${site.name}`;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={site.locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#ffe7b8" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, site.url)} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>{title}</title>
+    <link rel="canonical" href={new URL(Astro.url.pathname, site.url)} />
+    <title>{pageTitle}</title>
   </head>
-  <body class="min-h-dvh bg-amber-50 font-[var(--font-kid)] text-slate-900">
-    <slot />
+  <body>
+    <a class="skip-link" href="#main">
+      Saltar al contenido
+    </a>
+    <div class="app-shell">
+      <SiteHeader />
+      <main id="main" tabindex="-1">
+        <slot />
+      </main>
+      <SiteFooter />
+    </div>
+    <CookieBanner />
+    {showHills && <div class="hills" aria-hidden="true"></div>}
+    <script>
+      import { initAnalytics } from '../lib/analytics';
+      import { initConsentUi } from '../lib/consent-ui';
+      import { initWebVitals } from '../lib/web-vitals';
+
+      initAnalytics();
+      initWebVitals();
+      initConsentUi();
+    </script>
   </body>
 </html>

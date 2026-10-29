@@ -1,0 +1,29 @@
+---
+interface Props {
+  variant?: 'white' | 'primary' | 'secondary' | 'ghost';
+  size?: 'normal' | 'small' | 'kid';
+  type?: 'button' | 'submit' | 'reset';
+}
+
+const {
+  variant = 'white',
+  size = 'normal',
+  type = 'button',
+  ...rest
+} = Astro.props as Props & Record<string, unknown>;
+---
+
+<button
+  :type={type}
+  class:list={[
+    'button',
+    variant === 'primary' && 'button--primary',
+    variant === 'secondary' && 'button--secondary',
+    variant === 'ghost' && 'button--ghost',
+    size === 'small' && 'button--small',
+    size === 'kid' && 'button--kid',
+  ]}
+  {...rest}
+>
+  <slot />
+</button>

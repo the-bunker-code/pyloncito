@@ -1,0 +1,64 @@
+---
+import ProseLayout from '../layouts/ProseLayout.astro';
+---
+
+<ProseLayout
+  title="Privacidad"
+  heading="Privacidad"
+  description="Qué guarda Pyloncito, qué no guarda y cómo funciona la voz del navegador."
+  lead="Pyloncito es un sitio estático. No hay cuentas, no hay servidor propio y no hay
+  publicidad. La analítica es opcional y solo se activa si la aceptas."
+>
+  <div class="prose">
+    <h2>Qué se guarda</h2>
+    <p>
+      Algunos ajustes y el progreso pueden guardarse en el almacenamiento local del navegador, en
+      este dispositivo. Sirven para recordar rondas, nivel o preferencias.
+    </p>
+    <p>Si el navegador bloquea ese almacenamiento, el juego sigue funcionando sin guardar.</p>
+
+    <h2>Qué no se guarda</h2>
+    <ul>
+      <li>No hay cuentas ni perfiles.</li>
+      <li>No hay cookies de publicidad.</li>
+      <li>No se suben fotos, nombres ni progreso a un servidor.</li>
+      <li>No hay inteligencia artificial ni modelos externos.</li>
+    </ul>
+
+    <h2>Analítica opcional</h2>
+    <p>
+      Si aceptas la categoría Analítica, cargamos Google Tag Manager y Google Analytics 4. Sirven
+      para medir visitas, páginas vistas, dispositivo aproximado, país, referencias y métricas
+      agregadas de rendimiento. No usamos anuncios, Google Signals, datos demográficos ni
+      identificadores de niños.
+    </p>
+    <p>
+      Los eventos de juego no llevan la palabra mostrada, el dibujo, la voz ni el audio. Incluyen
+      modo, nivel, número de ronda, aciertos, errores y ayudas. Al terminar la sesión se envía
+      también el total agregado de rondas en las que el adulto marcó “Lo dijo”; no se envía ronda
+      por ronda. No hay micrófono ni grabación.
+    </p>
+    <p>
+      Las cookies de Google Analytics duran 90 días y la retención de datos en GA está configurada
+      en 2 meses. Puedes rechazar o cambiar la decisión desde la página de{' '}
+      <a href="/cookies/">cookies</a>.
+    </p>
+    <p>
+      Si rechazas, no se carga ninguna etiqueta de analítica ni se crean cookies de medición.
+      Aceptar solo <strong>Mejora</strong> tampoco activa Google Analytics.
+    </p>
+
+    <h2>La voz</h2>
+    <p>
+      La voz se genera con el navegador. Pyloncito prefiere voces locales y en español; si el
+      dispositivo solo ofrece voces de red, el texto podría enviarse al proveedor de esa voz. Puedes
+      silenciarla desde los ajustes del juego.
+    </p>
+
+    <h2>Contacto</h2>
+    <p>
+      Si encuentras un problema de privacidad, escríbenos desde el repositorio del proyecto o abre
+      un aviso privado de seguridad.
+    </p>
+  </div>
+</ProseLayout>

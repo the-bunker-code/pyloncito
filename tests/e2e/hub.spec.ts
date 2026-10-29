@@ -1,5 +1,20 @@
 import { expect, test } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      'pyloncito:consent:v1',
+      JSON.stringify({
+        version: 1,
+        analytics: false,
+        improvement: false,
+        marketing: false,
+        updatedAt: new Date().toISOString(),
+      }),
+    );
+  });
+});
+
 test('el hub carga sin errores y sin scroll horizontal', async ({ page }) => {
   const problems: string[] = [];
   page.on('console', (message) => {
@@ -12,6 +27,9 @@ test('el hub carga sin errores y sin scroll horizontal', async ({ page }) => {
   await expect(
     page.getByText('Cuatro juegos para mirar, contar, recordar y hablar.'),
   ).toBeVisible();
+  await expect(page.locator('.game-card')).toHaveCount(4);
+  await expect(page.getByText('Próximamente').first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Guía', exact: true })).toBeVisible();
 
   const hasHorizontalScroll = await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,

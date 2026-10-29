@@ -1,0 +1,89 @@
+---
+import ProseLayout from '../layouts/ProseLayout.astro';
+import AppButton from '../components/ui/AppButton.astro';
+---
+
+<ProseLayout
+  title="Cookies y analítica"
+  heading="Cookies y analítica"
+  description="Qué cookies usa Pyloncito, para qué sirven y cómo cambiar el consentimiento."
+  lead="Pyloncito funciona sin analítica. Si aceptas, usamos Google Tag Manager y Google Analytics 4
+  para entender qué páginas se visitan y mejorar el sitio. No usamos publicidad ni vendemos datos."
+>
+  <div class="prose">
+    <h2>Tu decisión</h2>
+    <p>
+      Puedes aceptar, rechazar o cambiar la decisión cuando quieras. Si rechazas, no se cargan las
+      etiquetas de analítica ni se crean cookies de medición. Aceptar solo <strong>Mejora</strong>
+      no activa Google Analytics; esa categoría queda para mapas de calor cuando se implementen.
+    </p>
+    <p>
+      <AppButton variant="secondary" data-consent-action="preferences">
+        Cambiar preferencias
+      </AppButton>
+    </p>
+
+    <h2>Qué guardamos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Proveedor</th>
+          <th>Para qué</th>
+          <th>Duración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">
+            <code>pyloncito:consent:v1</code>
+          </th>
+          <td data-label="Proveedor">Pyloncito</td>
+          <td data-label="Para qué">
+            Recordar tu decisión de cookies. Se guarda en localStorage, no es una cookie.
+          </td>
+          <td data-label="Duración">Hasta que borres los datos del navegador</td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <code>_ga</code>
+          </th>
+          <td data-label="Proveedor">Google Analytics</td>
+          <td data-label="Para qué">Distinguir navegadores para medir visitas agregadas.</td>
+          <td data-label="Duración">90 días</td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <code>_ga_&lt;id&gt;</code>
+          </th>
+          <td data-label="Proveedor">Google Analytics</td>
+          <td data-label="Para qué">Mantener el estado de la medición.</td>
+          <td data-label="Duración">90 días</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Rendimiento</h2>
+    <p>
+      Con consentimiento de Analítica enviamos métricas agregadas de rendimiento (LCP, CLS, INP, FCP
+      y TTFB) a Google Analytics. No incluyen URLs, texto del juego ni datos personales.
+    </p>
+
+    <h2>Servicios de terceros</h2>
+    <p>
+      Google Tag Manager y Google Analytics son servicios de Google. Puedes consultar{' '}
+      <a href="https://policies.google.com/privacy">la política de privacidad de Google</a> y usar
+      el{' '}
+      <a href="https://tools.google.com/dlpage/gaoptout">
+        complemento de inhabilitación de Google Analytics
+      </a>
+      .
+    </p>
+
+    <h2>Más información</h2>
+    <p>
+      La página de <a href="/privacidad/">privacidad</a> explica qué datos se guardan y cuáles no.
+      Si tienes una duda, escríbenos desde el repositorio del proyecto.
+    </p>
+  </div>
+</ProseLayout>

@@ -13,6 +13,8 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "new-game": "node scripts/new-game.ts",
+    "cloudflare:branching": "node scripts/configure-cloudflare-builds.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "lint": "eslint .",
@@ -31,7 +33,8 @@
     "@tailwindcss/vite": "4.3.3",
     "astro": "7.4.2",
     "tailwindcss": "4.3.3",
-    "vue": "3.5.44"
+    "vue": "3.5.44",
+    "web-vitals": "6.2.3"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
@@ -48,6 +51,7 @@
     "eslint-plugin-vue": "10.12.0",
     "globals": "17.13.0",
     "happy-dom": "21.0.4",
+    "lighthouse": "^13.6.0",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.2",
     "prettier-plugin-tailwindcss": "0.8.1",
@@ -55,6 +59,7 @@
     "typescript-eslint": "8.72.1",
     "vitest": "5.0.5",
     "vue-eslint-parser": "10.4.1",
-    "vue-tsc": "3.3.13"
+    "vue-tsc": "3.3.13",
+    "wrangler": "4.154.0"
   }
 }

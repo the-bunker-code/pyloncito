@@ -38,13 +38,13 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 | Calidad            | ESLint 10.13.0 · Prettier 3.9.10 · `astro check` 0.9.12 · `vue-tsc` 3.3.13             |
 | Estilos            | Tailwind para layout/hub; CSS semántico para piezas custom. **Sin SCSS**               |
 | 4K                 | Monitor de cerca: ancho máximo + `3xl: 2560px`; sin UI de 10 pies                      |
-| Público            | Sí; sin cuentas, perfiles, cookies ni analytics                                        |
+| Público            | Sí; sin cuentas ni perfiles; analytics opcional con consentimiento                     |
 | Progreso           | `localStorage`, validado y con claves por juego                                        |
-| Voz                | Web Speech; voz local primero; preferencia `es-419` → `es-PE` → `es-*`; silenciable    |
+| Voz                | Web Speech; voz local primero; preferencia `es-PE` → `es-419` → `es-*`; silenciable    |
 | IA                 | Fuera de fase 1. Sin Worker, sin OpenRouter, sin fotos                                 |
-| Deploy             | Cloudflare Pages conectado a Git desde la **fase 1**; `*.pages.dev`                    |
+| Deploy             | Cloudflare Workers (static assets) conectado a Git; producción en `pyloncito.app`      |
 | Idioma             | Solo español; textos centralizados                                                     |
-| Nombre             | **Pyloncito**. Dominio provisional: `pyloncito.pages.dev`                              |
+| Nombre             | **Pyloncito**. Dominio: `pyloncito.app` (apex canónico; `www` redirige)                |
 | Repo               | `code/pyloncito/` → `the-bunker-code/pyloncito`; los 4 actuales quedan como referencia |
 | GitHub             | Project “Pyloncito” como tablero de ejecución; issues en español                       |
 
@@ -53,6 +53,7 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 ```text
 code/pyloncito/
 ├── astro.config.mjs
+├── wrangler.jsonc
 ├── package.json
 ├── pnpm-lock.yaml
 ├── tsconfig.json
@@ -76,12 +77,14 @@ code/pyloncito/
 ├── src/
 │   ├── config/
 │   │   ├── site.ts
+│   │   ├── analytics.ts          # GTM/GA IDs y hosts
 │   │   └── games.ts             # registro único de juegos
 │   ├── layouts/BaseLayout.astro
 │   ├── pages/
 │   │   ├── index.astro          # hub, generado desde games.ts
 │   │   ├── guia.astro
 │   │   ├── privacidad.astro
+│   │   ├── cookies.astro
 │   │   ├── creditos.astro
 │   │   ├── 404.astro
 │   │   ├── manifest.webmanifest.ts   # generado desde games.ts
@@ -92,6 +95,7 @@ code/pyloncito/
 │   │       └── mira-y-dime.astro
 │   ├── components/
 │   │   ├── hub/GameCard.astro
+│   │   ├── layout/{SiteHeader,SiteFooter,CookieBanner}.astro
 │   │   ├── ui/
 │   │   │   ├── AppButton.vue
 │   │   │   ├── AppDialog.vue
@@ -111,16 +115,20 @@ code/pyloncito/
 │   │       ├── miradas/Game.vue
 │   │       └── mira-y-dime/Game.vue
 │   ├── games/
-│   │   ├── shared/{types,timers,focus,session}.ts
+│   │   ├── shared/{timers,focus,session}.ts
 │   │   ├── dados/{rules,engine,config,copy,storage}.ts
 │   │   ├── memoria/{rules,engine,config,copy,storage}.ts
 │   │   ├── miradas/{rules,engine,config,copy,storage}.ts
 │   │   └── mira-y-dime/{rules,engine,config,copy,storage}.ts
 │   ├── lib/
+│   │   ├── analytics.ts
 │   │   ├── audio.ts
+│   │   ├── consent.ts
+│   │   ├── consent-ui.ts
 │   │   ├── random.ts
 │   │   ├── speech.ts
-│   │   └── storage.ts
+│   │   ├── storage.ts
+│   │   └── web-vitals.ts
 │   ├── content/es/
 │   │   ├── common.ts
 │   │   ├── dados.ts
@@ -146,14 +154,18 @@ code/pyloncito/
 export interface GameEntry {
   slug: string; // kebab-case, estable para siempre
   name: string; // nombre visible
-  icon: string; // ruta en /icons/, fija para siempre
-  theme: { main: string; dark: string; soft: string }; // tokens, no hex sueltos
+  icon: IconName; // nombre del mapa de íconos del proyecto
+  theme: 'dados' | 'memoria' | 'miradas' | 'mira-y-dime';
   age: string; // "3–6 años"
   skill: string; // "Contar y sumar"
-  minutes: [number, number]; // duración sugerida, dentro de 5–15
-  status: 'ready' | 'beta' | 'hidden';
+  minutes: readonly [number, number]; // duración sugerida, dentro de 3–15
+  status: 'ready' | 'beta' | 'coming' | 'hidden';
+  description: string; // una frase para el hub y la guía
 }
 ```
+
+`coming` muestra la tarjeta como “Próximamente”; `hidden` no aparece en el hub.
+El tema se resuelve con la clase `game-card--<theme>`; no se usan estilos inline.
 
 Desde el registro se generan: tarjetas del hub, sitemap, manifiesto, accesos directos
 de la PWA y el índice de la guía. Ninguna otra parte del código repite la lista de
@@ -213,6 +225,9 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 | Toque           | Objetivos de al menos 64 px en móvil; sin gestos complejos (arrastrar solo donde el juego lo requiera)                                                     |
 | Voz             | `VoiceTest` en ajustes permite escuchar y elegir la voz                                                                                                    |
 
+Excepción: Mira y Dime abre sus ajustes con un clic directo en el engranaje. El resto de la
+serie mantiene el gate de adultos de 3 s.
+
 ## 7. Diseño, Tailwind y 4K
 
 - Tailwind 4 con `@tailwindcss/vite`; no `@astrojs/tailwind` (deprecado).
@@ -244,8 +259,10 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 - `/juegos/<slug>/`: juego.
 - `/guia/`: cómo acompañar, qué entrena cada juego, sugerencias.
 - `/privacidad/`: qué se guarda, qué no, voz, localStorage, sin cuentas.
+- `/cookies/`: consentimiento, cookies de GA y cómo cambiar la decisión.
 - `/creditos/`: Fredoka OFL, Lucide ISC, Fluent Emoji MIT.
-- Sin analytics, sin cookies, sin publicidad, sin login.
+- Analítica solo opt-in con GTM y GA; sin publicidad, sin login.
+- Web Vitals (`LCP`, `CLS`, `INP`, `FCP`, `TTFB`) solo con consentimiento de Analítica.
 - SEO: canonical, OG, sitemap, robots. `site` configurable en `src/config/site.ts`.
 
 ## 9. Testing y calidad
@@ -291,12 +308,12 @@ manual o en PR a `main`.
 
 - Crear `code/pyloncito/` con Astro, Vue, Tailwind, TS, Vitest, Playwright, ESLint,
   Prettier, pnpm.
-- `games.ts` con los 4 juegos en `status: 'hidden'`.
+- `games.ts` con los 4 juegos en `status: 'coming'` (tarjetas “Próximamente”).
 - Layout, tokens, componentes UI (incluye `GameHeader`, `ClosingNotice`, `AdultGate`,
   `VoiceTest`), hub, guía, privacidad, créditos, 404.
 - `audio`, `speech`, `random`, `storage`, `timers`, `focus`, `session`.
 - `scripts/new-game.ts` y sección "Cómo agregar un juego" en el README.
-- Conectar Cloudflare Pages al repo; preview funcionando.
+- Conectar Workers `pyloncito`; configurar preview de `develop` y verificar `dev.pyloncito.app`.
 - `pnpm check` verde.
 
 ### Fase 2 — Memo Colores
@@ -322,6 +339,7 @@ manual o en PR a `main`.
 ### Fase 5 — Mira y Dime
 
 - 4 modos × 3 niveles; 184 objetos; sílabas; frases; "Lo dijo"; ajustes.
+- Ajustes con acceso directo, como excepción al gate de adultos de la serie.
 - Portar `spanish.ts` a `mira-y-dime/rules.ts` o módulo puro equivalente.
 - **No** portar: panel de objetos de casa, fotos, IA, Worker, `server/`,
   `wrangler.jsonc`, `.assetsignore`.
@@ -345,7 +363,7 @@ manual o en PR a `main`.
 
 - Panel "Objetos de casa", fotos, IA, Worker y OpenRouter.
 - Cuentas, perfiles, sincronización, backend.
-- Analytics, cookies, publicidad.
+- Publicidad y analytics sin consentimiento.
 - Otros idiomas.
 - Mando de juego.
 - Rediseño visual: se mantiene el brandbook.
@@ -377,7 +395,7 @@ manual o en PR a `main`.
 - 390×844, 844×390, 1366×900, 2560×1440 y 3840×2160 revisados.
 - axe sin violaciones graves.
 - Privacidad y créditos publicados.
-- Preview de Pages aprobado.
+- Preview `dev.pyloncito.app` aprobado.
 - Nada de los juegos viejos borrado.
 
 ## 14. GitHub
