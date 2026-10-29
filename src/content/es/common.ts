@@ -4,6 +4,7 @@ export const common = {
     guide: 'Guía para adultos',
     guideShort: 'Guía',
     privacy: 'Privacidad',
+    cookies: 'Cookies',
     credits: 'Créditos',
   },
   hub: {
@@ -18,7 +19,7 @@ export const common = {
     guideText: 'Ideas, tiempos y sugerencias para jugar sin apuro.',
     guideLink: 'Ver la guía',
     privacyTitle: 'Sin cuentas ni vueltas',
-    privacyText: 'El progreso queda en este dispositivo. Sin publicidad ni analytics.',
+    privacyText: 'El progreso queda en este dispositivo. Analítica opcional con consentimiento.',
     privacyLink: 'Cómo cuidamos los datos',
   },
   footer: {

@@ -5,8 +5,9 @@ Sistema de juegos educativos para aprender jugando.
 **Aprender jugando, tapita a tapita.**
 
 Pyloncito reúne cuatro juegos para niñas y niños de 3 a 7 años, pensados para jugar
-con un adulto cerca. El sitio es público, estático, sin cuentas, sin analytics y sin
-publicidad. El progreso queda en el dispositivo.
+con un adulto cerca. El sitio es público, estático, sin cuentas y sin publicidad. La
+analítica es opcional y solo se activa con consentimiento. El progreso queda en el
+dispositivo.
 
 > Estado: Fase 1B lista. El generador de juegos y el deploy de preview se están cerrando
 > en 1C.
@@ -126,10 +127,28 @@ El detalle está en [CONTRIBUTING.md](./CONTRIBUTING.md).
 ## Privacidad
 
 - Sin cuentas ni perfiles.
-- Sin cookies, analytics ni publicidad.
+- Analítica opcional con consentimiento; sin publicidad.
+- Cookies de GA4 solo después de aceptar.
 - Progreso local, validado.
 - Voz del navegador, silenciable.
 - Sin backend ni secretos en el cliente.
+
+## Analítica y cookies
+
+- GTM `GTM-5947XBGG` con GA4 dentro del contenedor.
+- Sin GTM hasta que la persona acepte Analítica o Mejora.
+- Categorías: Necesarias, Analítica y Mejora.
+- Solo en `pyloncito.app`; en `dev` únicamente con `?gtm_debug=1`.
+- Detalle en [cookies](/cookies/) y en la página de privacidad.
+
+Checklist del contenedor GTM:
+
+- GA4 tag con consentimiento requerido para `analytics_storage`.
+- Fields to set: `cookie_expires = 7776000` (90 días).
+- Google Signals y personalización de anuncios desactivados.
+- Data sharing desactivado.
+- Retención de datos GA4: 2 meses.
+- Hotjar futuro bajo la categoría Mejora y con CSP actualizada.
 
 ## Créditos
 

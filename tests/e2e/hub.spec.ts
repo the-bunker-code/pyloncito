@@ -1,5 +1,20 @@
 import { expect, test } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      'pyloncito:consent:v1',
+      JSON.stringify({
+        version: 1,
+        analytics: false,
+        improvement: false,
+        marketing: false,
+        updatedAt: new Date().toISOString(),
+      }),
+    );
+  });
+});
+
 test('el hub carga sin errores y sin scroll horizontal', async ({ page }) => {
   const problems: string[] = [];
   page.on('console', (message) => {

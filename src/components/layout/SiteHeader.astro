@@ -10,7 +10,9 @@ import Mascot from '../ui/Mascot.astro';
       <span>Pyloncito</span>
     </a>
     <nav class="site-nav" aria-label="Principal">
-      <a href="/guia/">{common.nav.guideShort}</a>
+      <a href="/guia/" data-analytics-event="guide_open">
+        {common.nav.guideShort}
+      </a>
       <a href="/privacidad/">{common.nav.privacy}</a>
     </nav>
   </div>

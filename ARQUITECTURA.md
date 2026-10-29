@@ -38,7 +38,7 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 | Calidad            | ESLint 10.13.0 · Prettier 3.9.10 · `astro check` 0.9.12 · `vue-tsc` 3.3.13             |
 | Estilos            | Tailwind para layout/hub; CSS semántico para piezas custom. **Sin SCSS**               |
 | 4K                 | Monitor de cerca: ancho máximo + `3xl: 2560px`; sin UI de 10 pies                      |
-| Público            | Sí; sin cuentas, perfiles, cookies ni analytics                                        |
+| Público            | Sí; sin cuentas ni perfiles; analytics opcional con consentimiento                     |
 | Progreso           | `localStorage`, validado y con claves por juego                                        |
 | Voz                | Web Speech; voz local primero; preferencia `es-419` → `es-PE` → `es-*`; silenciable    |
 | IA                 | Fuera de fase 1. Sin Worker, sin OpenRouter, sin fotos                                 |
@@ -77,12 +77,14 @@ code/pyloncito/
 ├── src/
 │   ├── config/
 │   │   ├── site.ts
+│   │   ├── analytics.ts          # GTM ID y hosts
 │   │   └── games.ts             # registro único de juegos
 │   ├── layouts/BaseLayout.astro
 │   ├── pages/
 │   │   ├── index.astro          # hub, generado desde games.ts
 │   │   ├── guia.astro
 │   │   ├── privacidad.astro
+│   │   ├── cookies.astro
 │   │   ├── creditos.astro
 │   │   ├── 404.astro
 │   │   ├── manifest.webmanifest.ts   # generado desde games.ts
@@ -93,7 +95,7 @@ code/pyloncito/
 │   │       └── mira-y-dime.astro
 │   ├── components/
 │   │   ├── hub/GameCard.astro
-│   │   ├── layout/{SiteHeader,SiteFooter}.astro
+│   │   ├── layout/{SiteHeader,SiteFooter,CookieBanner}.astro
 │   │   ├── ui/
 │   │   │   ├── AppButton.vue
 │   │   │   ├── AppDialog.vue
@@ -119,7 +121,10 @@ code/pyloncito/
 │   │   ├── miradas/{rules,engine,config,copy,storage}.ts
 │   │   └── mira-y-dime/{rules,engine,config,copy,storage}.ts
 │   ├── lib/
+│   │   ├── analytics.ts
 │   │   ├── audio.ts
+│   │   ├── consent.ts
+│   │   ├── consent-ui.ts
 │   │   ├── random.ts
 │   │   ├── speech.ts
 │   │   └── storage.ts
@@ -250,8 +255,9 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 - `/juegos/<slug>/`: juego.
 - `/guia/`: cómo acompañar, qué entrena cada juego, sugerencias.
 - `/privacidad/`: qué se guarda, qué no, voz, localStorage, sin cuentas.
+- `/cookies/`: consentimiento, cookies de GA4 y cómo cambiar la decisión.
 - `/creditos/`: Fredoka OFL, Lucide ISC, Fluent Emoji MIT.
-- Sin analytics, sin cookies, sin publicidad, sin login.
+- Analítica solo opt-in con GTM/GA4; sin publicidad, sin login.
 - SEO: canonical, OG, sitemap, robots. `site` configurable en `src/config/site.ts`.
 
 ## 9. Testing y calidad
@@ -351,7 +357,7 @@ manual o en PR a `main`.
 
 - Panel "Objetos de casa", fotos, IA, Worker y OpenRouter.
 - Cuentas, perfiles, sincronización, backend.
-- Analytics, cookies, publicidad.
+- Publicidad y analytics sin consentimiento.
 - Otros idiomas.
 - Mando de juego.
 - Rediseño visual: se mantiene el brandbook.

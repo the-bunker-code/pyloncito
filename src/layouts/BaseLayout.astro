@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/components.css';
+import CookieBanner from '../components/layout/CookieBanner.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import { site } from '../config/site';
@@ -43,6 +44,14 @@ const pageTitle = title === site.name ? site.name : `${title} · ${site.name}`;
       </main>
       <SiteFooter />
     </div>
+    <CookieBanner />
     <div class="hills" aria-hidden="true"></div>
+    <script>
+      import { initAnalytics } from '../lib/analytics';
+      import { initConsentUi } from '../lib/consent-ui';
+
+      initAnalytics();
+      initConsentUi();
+    </script>
   </body>
 </html>

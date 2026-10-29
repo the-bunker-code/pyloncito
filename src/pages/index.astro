@@ -46,7 +46,9 @@ import { common } from '../content/es/common';
         </span>
         <h3>{common.hub.guideTitle}</h3>
         <p>{common.hub.guideText}</p>
-        <a href="/guia/">{common.hub.guideLink}</a>
+        <a href="/guia/" data-analytics-event="guide_open">
+          {common.hub.guideLink}
+        </a>
       </article>
       <article class="adult-card">
         <span class="adult-card__icon">
