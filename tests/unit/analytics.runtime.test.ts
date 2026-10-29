@@ -141,12 +141,8 @@ describe('analytics runtime', () => {
     button.dataset.analyticsEvent = 'not_allowed';
     document.body.append(button);
     button.click();
-    const layer = (window as AnalyticsWindow).dataLayer ?? [];
-    expect(
-      layer.some(
-        (entry) => typeof entry === 'object' && entry !== null && entry.event === 'not_allowed',
-      ),
-    ).toBe(false);
+    const layer = ((window as AnalyticsWindow).dataLayer ?? []) as Array<Record<string, unknown>>;
+    expect(layer.some((entry) => entry.event === 'not_allowed')).toBe(false);
   });
 
   it('builds consent signals and rejects invalid page URLs', async () => {
