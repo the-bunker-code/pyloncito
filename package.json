@@ -14,6 +14,7 @@
   "scripts": {
     "dev": "astro dev",
     "new-game": "node scripts/new-game.ts",
+    "cloudflare:branching": "node scripts/configure-cloudflare-builds.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "lint": "eslint .",

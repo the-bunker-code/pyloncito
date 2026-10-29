@@ -78,17 +78,40 @@ hasta que cambies su estado.
 
 ## Deploy
 
-Cloudflare Workers con static assets, dos Workers y sin secretos en el repo:
+Cloudflare Workers con static assets y un solo Worker `pyloncito`:
 
-- `pyloncito`: rama `main` → `https://pyloncito.app`.
-- `pyloncito-dev`: rama `develop` → `https://dev.pyloncito.app`.
-- Preview Builds desactivado: las ramas `feature/*`, `fix/*` y `chore/*` no generan builds de Cloudflare.
+- Producción: `main` → `https://pyloncito.app`.
+- Preview de `develop`: `https://dev.pyloncito.app` (preview name `dev`).
+- Los previews se limitan a `develop` con la API de Workers Builds; las ramas `feature/*`, `fix/*` y `chore/*` no generan builds de Cloudflare.
 - Build command: `pnpm build`.
-- Deploy command: `npx wrangler deploy`.
-- Deploy command del Worker dev: `npx wrangler deploy --name pyloncito-dev`.
+- Deploy command de producción: `npx wrangler deploy`.
+- Preview command: `npx wrangler preview --name dev`.
 - `wrangler.jsonc` sirve `./dist` y `_headers`.
 - Node: 24 (`NODE_VERSION=24` en el panel).
 - `www.pyloncito.app` redirige al apex.
+
+### Configurar el preview de `develop` (una vez)
+
+1. En el Worker `pyloncito` → **Domains**, dejá `pyloncito.app` en
+   **Production and Preview** y quitá `dev.pyloncito.app` como Custom Domain.
+2. En **Settings → Build → Branch control**, activá **Preview Builds**.
+3. Creá un token **user-scoped** en Cloudflare con:
+   - `Workers Builds Configuration: Edit`
+   - `Workers Scripts: Read`
+4. Exportá las variables en tu terminal. No las guardes en el repo:
+
+```bash
+export CLOUDFLARE_ACCOUNT_ID="..."
+export CLOUDFLARE_API_TOKEN="..."
+pnpm cloudflare:branching
+```
+
+El script deja producción limitada a `main` y previews limitados a `develop`,
+con `npx wrangler preview --name dev`. Verificá antes con:
+
+```bash
+DRY_RUN=1 pnpm cloudflare:branching
+```
 
 ## Ramas y PRs
 

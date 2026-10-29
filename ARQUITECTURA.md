@@ -302,7 +302,7 @@ manual o en PR a `main`.
   `VoiceTest`), hub, guía, privacidad, créditos, 404.
 - `audio`, `speech`, `random`, `storage`, `timers`, `focus`, `session`.
 - `scripts/new-game.ts` y sección "Cómo agregar un juego" en el README.
-- Conectar Workers `pyloncito` (main) y `pyloncito-dev` (develop); verificar `dev.pyloncito.app`.
+- Conectar Workers `pyloncito`; configurar preview de `develop` y verificar `dev.pyloncito.app`.
 - `pnpm check` verde.
 
 ### Fase 2 — Memo Colores
