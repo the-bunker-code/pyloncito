@@ -19,6 +19,8 @@ const savingSettings = ref(false);
 const settingsSource = ref<'home' | 'game'>('home');
 const draft = ref<MiraSettings>({ ...engine.state.settings });
 
+const preloaded = new Map<string, HTMLImageElement>();
+
 const screenIds: Record<Screen, string> = {
   home: 'mira-screen-home',
   game: 'mira-screen-game',
@@ -36,6 +38,19 @@ watch(
     await nextTick();
     document.getElementById(screenIds[screen])?.focus({ preventScroll: true });
   },
+);
+
+watch(
+  () => engine.state.roundNumber,
+  () => {
+    if (typeof window === 'undefined') return;
+    const next = engine.state.plan[engine.state.roundNumber];
+    if (!next || preloaded.has(next.drawing)) return;
+    const image = new Image();
+    image.src = next.drawing;
+    preloaded.set(next.drawing, image);
+  },
+  { immediate: true },
 );
 
 function openSettings(source: 'home' | 'game'): void {

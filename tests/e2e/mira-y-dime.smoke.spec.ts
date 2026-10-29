@@ -21,6 +21,18 @@ test('el inicio carga con 4 modos y 3 niveles, sin terceros', async ({ page }) =
   expect(external).toEqual([]);
 });
 
+test('precarga el dibujo de la ronda siguiente', async ({ page }) => {
+  const drawings: string[] = [];
+  page.on('request', (request) => {
+    const url = new URL(request.url());
+    if (url.pathname.startsWith('/objects/')) drawings.push(url.pathname);
+  });
+
+  await openMira(page);
+  await startMode(page, 'syllables');
+  await expect.poll(() => drawings.length).toBeGreaterThanOrEqual(2);
+});
+
 test('el primer modo dibuja casillas, guía y banco', async ({ page }) => {
   await openMira(page);
   await expect(page.locator('#mira-screen-home .mode-card').first()).toHaveAttribute(
