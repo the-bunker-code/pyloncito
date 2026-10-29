@@ -1,4 +1,4 @@
-import { createStorage, type GameStorage } from '../../lib/storage';
+import { createStorage, isPlainRecord, type GameStorage } from '../../lib/storage';
 import {
   LEVELS,
   MODES,
@@ -29,7 +29,7 @@ export const DEFAULT_SETTINGS: MiraSettings = Object.freeze({
 const gameStorage = createStorage('mira-y-dime');
 
 export function normalizeSettings(raw: unknown): MiraSettings {
-  const input = raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : {};
+  const input = isPlainRecord(raw) ? raw : {};
   const pick = <T>(value: unknown, allowed: readonly T[], fallback: T): T =>
     allowed.includes(value as T) ? (value as T) : fallback;
 

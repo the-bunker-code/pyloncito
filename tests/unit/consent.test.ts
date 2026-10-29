@@ -35,6 +35,14 @@ describe('consent', () => {
     expect(parseConsent({ ...valid, updatedAt: '' })).toBeNull();
   });
 
+  it('rejects prototype-polluting keys', () => {
+    const evil = JSON.parse(
+      '{"version":1,"analytics":true,"improvement":false,"marketing":false,"updatedAt":"2026-01-01","__proto__":{"polluted":true}}',
+    );
+    expect(parseConsent(evil)).toBeNull();
+    expect(({} as { polluted?: boolean }).polluted).toBeUndefined();
+  });
+
   it('reads and writes namespaced consent', () => {
     const storage = memoryStorage();
     const consent = createConsent({ analytics: true, improvement: true });

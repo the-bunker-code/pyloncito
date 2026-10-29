@@ -1,5 +1,5 @@
 import { analyticsConfig } from '../config/analytics';
-import type { StorageLike } from './storage';
+import { isSafeStoredValue, type StorageLike } from './storage';
 
 export const CONSENT_VERSION = 1;
 
@@ -32,6 +32,7 @@ export function createConsent(
 }
 
 export function parseConsent(value: unknown): ConsentState | null {
+  if (!isSafeStoredValue(value)) return null;
   if (typeof value !== 'object' || value === null) return null;
   const candidate = value as Partial<ConsentState>;
   if (candidate.version !== CONSENT_VERSION) return null;

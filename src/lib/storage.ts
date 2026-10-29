@@ -18,6 +18,24 @@ export interface GameStorage {
   remove(key: string): void;
 }
 
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+export function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+export function isSafeStoredValue(value: unknown): boolean {
+  if (Array.isArray(value)) return value.every(isSafeStoredValue);
+  if (typeof value !== 'object' || value === null) return true;
+  if (!isPlainRecord(value)) return false;
+
+  return Object.entries(value).every(
+    ([key, child]) => !UNSAFE_KEYS.has(key) && isSafeStoredValue(child),
+  );
+}
+
 export function createStorage(
   slug: string,
   storage: StorageLike | null = safeStorage(),
@@ -31,6 +49,7 @@ export function createStorage(
         const raw = storage.getItem(`${prefix}${key}`);
         if (raw === null) return null;
         const parsed: unknown = JSON.parse(raw);
+        if (!isSafeStoredValue(parsed)) return null;
         return validate(parsed) ? parsed : null;
       } catch {
         return null;

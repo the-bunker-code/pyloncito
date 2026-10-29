@@ -32,6 +32,11 @@ describe('ajustes de Mira y Dime', () => {
     expect(normalizeSettings({ rounds: Infinity }).rounds).toBe(DEFAULT_SETTINGS.rounds);
   });
 
+  it('rechaza objetos con prototipo heredado', () => {
+    const inherited = Object.create({ mode: 'letters' });
+    expect(normalizeSettings(inherited)).toEqual(DEFAULT_SETTINGS);
+  });
+
   it('no se contamina con __proto__ ni constructor', () => {
     const evil = JSON.parse(
       '{"__proto__":{"polluted":true},"constructor":{"x":1},"mode":"shortPhrase"}',

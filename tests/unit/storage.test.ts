@@ -29,6 +29,33 @@ describe('storage', () => {
     expect(storage.read('settings', isSettings)).toBeNull();
   });
 
+  it('rejects prototype-polluting keys even when the validator accepts them', () => {
+    const storage = createStorage('memoria', window.localStorage);
+    window.localStorage.setItem(
+      'juegos:memoria:settings',
+      '{"rounds":3,"__proto__":{"polluted":true}}',
+    );
+    expect(storage.read('settings', isSettings)).toBeNull();
+    window.localStorage.setItem(
+      'juegos:memoria:settings',
+      '{"rounds":3,"constructor":{"prototype":{"polluted":true}}}',
+    );
+    expect(storage.read('settings', isSettings)).toBeNull();
+    expect(({} as { polluted?: boolean }).polluted).toBeUndefined();
+  });
+
+  it('returns false when writing fails', () => {
+    const broken = {
+      getItem: () => null,
+      setItem: () => {
+        throw new Error('quota');
+      },
+      removeItem: () => {},
+    };
+    const storage = createStorage('memoria', broken);
+    expect(storage.write('settings', { rounds: 3 })).toBe(false);
+  });
+
   it('does not throw when storage is unavailable', () => {
     const storage = createStorage('memoria', null);
     expect(storage.write('settings', { rounds: 3 })).toBe(false);
