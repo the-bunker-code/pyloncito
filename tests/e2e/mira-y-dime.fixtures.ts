@@ -148,7 +148,7 @@ export async function startMode(
 export function targetFromQuestion(question: string, mode: string): string {
   const clean = question.trim().replace(/\.$/, '');
   if (mode === 'letters' || mode === 'syllables') {
-    return clean.replace(/^Armemos\s+/, '');
+    return clean.replace(/^Armemos(?: la palabra)?\s+/, '');
   }
   return clean;
 }

@@ -1,4 +1,4 @@
-const PREFERRED_LANGUAGES = ['es-pe', 'es-mx', 'es-us', 'es-419', 'es-co', 'es-ar', 'es-es'];
+const PREFERRED_LANGUAGES = ['es-pe', 'es-419'];
 const DEFAULT_LANGUAGE = 'es-PE';
 const SPEECH_SETTLE_MS = 80;
 const DEFAULT_TIMEOUT_MS = 2000;

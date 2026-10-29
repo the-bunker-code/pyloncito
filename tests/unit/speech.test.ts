@@ -70,6 +70,11 @@ describe('speech', () => {
     expect(chooseSpanishVoice([latin, peru])).toBe(peru);
   });
 
+  it('falls back to es-419 when es-PE is not available', () => {
+    const latin = voice('es-419', true, 'Latin');
+    expect(chooseSpanishVoice([latin])).toBe(latin);
+  });
+
   it('falls back to any Spanish voice', () => {
     const spanish = voice('es-ES', false, 'Spain');
     expect(chooseSpanishVoice([voice('en-US', true, 'English'), spanish])).toBe(spanish);

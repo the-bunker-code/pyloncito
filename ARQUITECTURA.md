@@ -40,7 +40,7 @@ página y tests base) debe tomar una sola sesión de trabajo nocturna.
 | 4K                 | Monitor de cerca: ancho máximo + `3xl: 2560px`; sin UI de 10 pies                      |
 | Público            | Sí; sin cuentas ni perfiles; analytics opcional con consentimiento                     |
 | Progreso           | `localStorage`, validado y con claves por juego                                        |
-| Voz                | Web Speech; voz local primero; preferencia `es-419` → `es-PE` → `es-*`; silenciable    |
+| Voz                | Web Speech; voz local primero; preferencia `es-PE` → `es-419` → `es-*`; silenciable    |
 | IA                 | Fuera de fase 1. Sin Worker, sin OpenRouter, sin fotos                                 |
 | Deploy             | Cloudflare Workers (static assets) conectado a Git; producción en `pyloncito.app`      |
 | Idioma             | Solo español; textos centralizados                                                     |

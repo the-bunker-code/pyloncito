@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createRandom } from '../../src/lib/random';
+import { splitWords } from '../../src/games/mira-y-dime/spanish';
 import { copy } from '../../src/content/es/mira-y-dime';
 import { LEVELS, LEVEL_RULES, MAX_PHRASE_WORDS, MODES } from '../../src/games/mira-y-dime/config';
 import { BUILTIN_OBJECTS, type GameObject } from '../../src/games/mira-y-dime/objects';
@@ -115,9 +116,30 @@ describe('banco y piezas', () => {
     }
   });
 
+  it('las frases de voz son cortas y no usan “no” tras un error', () => {
+    const phrases = [
+      copy.voice.hello,
+      copy.voice.almost,
+      copy.voice.next,
+      copy.voice.great,
+      copy.voice.sayIt,
+      copy.voice.saidIt,
+      copy.voice.end,
+      copy.session.two,
+      copy.session.one,
+      copy.status.look,
+      copy.status.helping,
+      copy.status.saying,
+      copy.status.answering(0, 3),
+    ];
+    for (const phrase of phrases) expect(splitWords(phrase).length, phrase).toBeLessThanOrEqual(4);
+    expect(splitWords(copy.voice.almost)).not.toContain('no');
+    expect(splitWords(copy.voice.next)).not.toContain('no');
+  });
+
   it('la ronda incluye consigna, guía y banco', () => {
     const word = createRound(PELOTA, { mode: 'syllables', level: 'medium' }, copy.question);
-    expect(word.question).toBe('Armemos pelota.');
+    expect(word.question).toBe('Armemos la palabra pelota.');
     expect(word.guide).toBe(true);
     expect(word.bankSize).toBe(3);
     expect(Object.isFrozen(word)).toBe(true);

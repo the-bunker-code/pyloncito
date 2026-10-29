@@ -1,6 +1,6 @@
 import { common } from './common';
 
-const buildLabel = 'Armemos';
+const buildLabel = 'Armemos la palabra';
 
 function capitalize(text: string): string {
   return text ? text[0]!.toUpperCase() + text.slice(1) : text;
