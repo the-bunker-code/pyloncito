@@ -939,3 +939,129 @@
     transition: none;
   }
 }
+
+.cookie-banner {
+  position: fixed;
+  z-index: 40;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  display: grid;
+  gap: 0.8rem;
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-large);
+  background: var(--color-white);
+  box-shadow: var(--shadow-card);
+}
+
+.cookie-banner__copy h2 {
+  font-size: 1.2rem;
+  line-height: 1.1;
+}
+
+.cookie-banner__copy p {
+  margin-top: 0.35rem;
+  color: var(--color-muted);
+  font-family: var(--font-adult);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cookie-banner__link {
+  justify-self: start;
+  color: var(--color-blue-dark);
+  font-family: var(--font-adult);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.cookie-preferences {
+  max-width: min(620px, calc(100vw - 2rem));
+}
+
+.cookie-prefs__intro {
+  margin-bottom: 1rem;
+  color: var(--color-muted);
+  font-family: var(--font-adult);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.cookie-prefs {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.cookie-prefs__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  font-family: var(--font-adult);
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.cookie-prefs__row > span:first-child {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.cookie-prefs__row input {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  accent-color: var(--color-blue);
+}
+
+.cookie-prefs__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.prose table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.prose th,
+.prose td {
+  padding: 0.55rem 0.4rem;
+  border-bottom: 1px solid var(--color-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+@media (max-width: 639px) {
+  .cookie-banner {
+    right: 0.5rem;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    padding: 0.85rem;
+  }
+
+  .cookie-banner__actions .button {
+    flex: 1 1 auto;
+  }
+}

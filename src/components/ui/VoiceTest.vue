@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { common } from '../../content/es/common';
+import { trackEvent } from '../../lib/analytics';
 import { speak } from '../../lib/speech';
 import AppButton from './AppButton.vue';
 import Icon from './Icon.vue';
@@ -15,6 +16,7 @@ onMounted(() => {
 function testVoice(): void {
   const played = speak(common.voice.sample);
   status.value = played ? common.voice.played : common.voice.unavailable;
+  trackEvent('voice_test');
 }
 </script>
 

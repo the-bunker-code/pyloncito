@@ -17,6 +17,8 @@ const minutes = `${game.minutes[0]}–${game.minutes[1]} ${common.units.minutes}
 <Tag
   class:list={['game-card', `game-card--${game.theme}`, !isAvailable && 'game-card--soon']}
   href={href}
+  data-analytics-event={isAvailable ? 'game_card_click' : undefined}
+  data-game={isAvailable ? game.slug : undefined}
   aria-label={!isAvailable ? `${game.name}: ${common.hub.soon}` : undefined}
 >
   <span class="game-card__icon">

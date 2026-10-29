@@ -1,0 +1,86 @@
+---
+import Icon from '../ui/Icon.astro';
+---
+
+<section
+  class="cookie-banner"
+  data-consent-banner
+  role="dialog"
+  aria-labelledby="cookie-banner-title"
+  aria-describedby="cookie-banner-text"
+  hidden
+>
+  <div class="cookie-banner__copy">
+    <h2 id="cookie-banner-title">Cookies y analítica</h2>
+    <p id="cookie-banner-text">
+      Usamos analítica opcional para entender cómo se usa el sitio. No cargamos nada hasta que
+      aceptes. Podés rechazar y seguir jugando.
+    </p>
+  </div>
+  <div class="cookie-banner__actions">
+    <button class="button button--primary" type="button" data-consent-action="accept">
+      Aceptar todo
+    </button>
+    <button class="button" type="button" data-consent-action="reject">
+      Rechazar
+    </button>
+    <button class="button button--ghost" type="button" data-consent-action="preferences">
+      Preferencias
+    </button>
+  </div>
+  <a class="cookie-banner__link" href="/cookies/">
+    Más información
+  </a>
+</section>
+
+<dialog class="dialog cookie-preferences" data-consent-dialog aria-labelledby="cookie-prefs-title">
+  <div class="dialog__panel">
+    <header class="dialog__header">
+      <h2 id="cookie-prefs-title">Preferencias de cookies</h2>
+      <button
+        class="icon-button"
+        type="button"
+        data-consent-action="close"
+        aria-label="Cerrar preferencias"
+      >
+        <Icon name="x" size={20} />
+      </button>
+    </header>
+
+    <p class="cookie-prefs__intro">
+      Las cookies necesarias mantienen el juego y tus preferencias. Las demás son opcionales.
+    </p>
+
+    <div class="cookie-prefs">
+      <div class="cookie-prefs__row">
+        <span>
+          <strong>Necesarias</strong>
+          <span>Guardan ajustes y progreso en este dispositivo.</span>
+        </span>
+        <span class="chip">Siempre activas</span>
+      </div>
+
+      <label class="cookie-prefs__row">
+        <span>
+          <strong>Analítica</strong>
+          <span>Google Analytics para saber qué páginas se usan.</span>
+        </span>
+        <input type="checkbox" data-consent-category="analytics" />
+      </label>
+
+      <label class="cookie-prefs__row">
+        <span>
+          <strong>Mejora</strong>
+          <span>Mapas de calor y grabaciones anónimas, cuando se activen.</span>
+        </span>
+        <input type="checkbox" data-consent-category="improvement" />
+      </label>
+    </div>
+
+    <footer class="cookie-prefs__footer">
+      <button class="button button--primary" type="button" data-consent-action="save">
+        Guardar preferencias
+      </button>
+    </footer>
+  </div>
+</dialog>
