@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_SETTINGS, normalizeSettings } from '../../src/games/mira-y-dime/storage';
+import { createStorage } from '../../src/lib/storage';
+import {
+  DEFAULT_SETTINGS,
+  loadSettings,
+  normalizeSettings,
+  saveSettings,
+} from '../../src/games/mira-y-dime/storage';
 
 describe('ajustes de Mira y Dime', () => {
   it('usa los valores por defecto con datos inválidos', () => {
@@ -30,6 +36,22 @@ describe('ajustes de Mira y Dime', () => {
     expect(normalizeSettings({ rounds: '3' }).rounds).toBe(3);
     expect(normalizeSettings({ rounds: 'tres' }).rounds).toBe(DEFAULT_SETTINGS.rounds);
     expect(normalizeSettings({ rounds: Infinity }).rounds).toBe(DEFAULT_SETTINGS.rounds);
+  });
+
+  it('carga los valores por defecto y guarda ajustes válidos', () => {
+    const storage = createStorage('mira-y-dime', window.localStorage);
+    window.localStorage.clear();
+    expect(loadSettings(storage)).toEqual(DEFAULT_SETTINGS);
+
+    const settings = { ...DEFAULT_SETTINGS, mode: 'longPhrase' as const, rounds: 8 as const };
+    expect(saveSettings(settings, storage)).toBe(true);
+    expect(loadSettings(storage)).toEqual(settings);
+  });
+
+  it('ignora ajustes corruptos guardados', () => {
+    const storage = createStorage('mira-y-dime', window.localStorage);
+    window.localStorage.setItem('juegos:mira-y-dime:settings:v1', '{"mode":"volar"}');
+    expect(loadSettings(storage)).toEqual(DEFAULT_SETTINGS);
   });
 
   it('rechaza objetos con prototipo heredado', () => {

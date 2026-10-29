@@ -137,6 +137,32 @@ describe('banco y piezas', () => {
     expect(splitWords(copy.voice.next)).not.toContain('no');
   });
 
+  it('cae al objeto más cercano cuando el nivel no tiene pool', () => {
+    const plan = planSession(
+      [PELOTA],
+      { mode: 'syllables', level: 'hard', rounds: 1 },
+      { random: createRandom(1) },
+    );
+    expect(plan).toEqual([PELOTA]);
+  });
+
+  it('devuelve un plan vacío si ningún objeto sirve', () => {
+    const empty = { ...PELOTA, word: '' };
+    expect(
+      planSession(
+        [empty],
+        { mode: 'syllables', level: 'easy', rounds: 1 },
+        { random: createRandom(1) },
+      ),
+    ).toEqual([]);
+  });
+
+  it('los bancos vacíos no rompen', () => {
+    expect(initialBank([], 2, createRandom(1))).toEqual([]);
+    expect(nextBank([], 0, [], 2, createRandom(1))).toEqual([]);
+    expect(unitPhrase('PE')).toBe('pe');
+  });
+
   it('la ronda incluye consigna, guía y banco', () => {
     const word = createRound(PELOTA, { mode: 'syllables', level: 'medium' }, copy.question);
     expect(word.question).toBe('Armemos la palabra pelota.');

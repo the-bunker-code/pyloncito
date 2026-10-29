@@ -21,6 +21,10 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 }, hasTouch: true },
     },
     {
+      name: 'celular-horizontal-844x390',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 844, height: 390 }, hasTouch: true },
+    },
+    {
       name: 'escritorio-1366x900',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 900 } },
     },

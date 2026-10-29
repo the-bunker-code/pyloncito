@@ -14,8 +14,14 @@ export default defineConfig({
     include: ['tests/unit/**/*.test.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/lib/**/*.ts'],
+      include: ['src/lib/**/*.ts', 'src/games/**/*.ts'],
       reporter: ['text', 'html'],
+      thresholds: {
+        lines: 90,
+        statements: 90,
+        functions: 90,
+        branches: 80,
+      },
     },
   },
 });
