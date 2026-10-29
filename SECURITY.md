@@ -6,6 +6,20 @@ Pyloncito es un sitio estático. No tiene backend, cuentas, base de datos ni cla
 el cliente. El riesgo principal está en dependencias, contenido publicado y manejo de
 `localStorage` y voz del navegador.
 
+## Modelo de amenazas
+
+- **Activos:** el sitio publicado, los ajustes locales, la decisión de consentimiento y la
+  reputación del proyecto. No hay cuentas, pagos, backend ni datos personales en un servidor.
+- **Superficies:** dependencias de build, scripts de Astro/Vue, contenido de `public/`, datos
+  leídos de `localStorage`, voces de red de Web Speech API y GTM/GA4 solo tras consentimiento.
+- **Riesgos principales:** XSS por HTML inyectado, dependencia comprometida, datos corruptos en
+  `localStorage`, fuga de texto a un proveedor de voz de red y analítica que describa al niño.
+- **Mitigaciones:** CSP en dos capas, escape por defecto de Vue/Astro, validación de
+  almacenamiento, consentimiento explícito, eventos con lista blanca y sin texto libre, y
+  dependencias fijadas con `pnpm install --frozen-lockfile`.
+- **Riesgo aceptado:** `script-src 'unsafe-inline'` por GTM. Se revisa en cada cambio de
+  analítica y se documenta en la sección de CSP.
+
 ## Cómo reportar
 
 No abras un issue público con detalles explotables. Usá un

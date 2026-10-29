@@ -77,6 +77,46 @@ pnpm build      # sitio estático en dist/
 El generador crea la página `/juegos/<slug>/` con `noindex` y no la muestra en el hub
 hasta que cambies su estado.
 
+## Cómo funciona Mira y Dime
+
+El flujo es siempre el mismo:
+
+```text
+acción del usuario → engine → estado reactivo → render
+```
+
+- `src/games/mira-y-dime/rules.ts` es puro: recibe objetos, modo, nivel y azar inyectable.
+- `src/games/mira-y-dime/engine.ts` guarda el estado, controla fases y esperas, y no toca el DOM.
+- `src/components/games/mira-y-dime/*.vue` dibujan desde `state` y emiten acciones.
+- `src/content/es/mira-y-dime.ts` concentra los textos; `rules.ts` no arma frases.
+
+### Ejercicio guiado: agregar un objeto
+
+1. Copiá un SVG nuevo a `public/objects/` y anotá su licencia en `public/objects/LICENSE`.
+2. Agregá una entrada a `BUILTIN_OBJECTS` en `src/games/mira-y-dime/objects.ts`:
+
+```ts
+{
+  id: 'sandia',
+  word: 'sandía',
+  shortPhrase: 'la sandía',
+  longPhrase: 'la sandía es grande',
+  drawing: '/objects/sandia.svg',
+}
+```
+
+3. Verificá la separación silábica:
+
+```bash
+node --experimental-strip-types --input-type=module -e "
+  import { syllabify } from './src/games/mira-y-dime/spanish.ts';
+  console.log(syllabify('sandía'));
+"
+```
+
+Debe devolver `[ 'san', 'dí', 'a' ]`. La frase corta debe tener 2 palabras y la larga 3 o 4. 4. Agregá o ajustá una prueba en `tests/unit/mira-y-dime.spanish.test.ts` si el caso es nuevo. 5. Ejecutá `pnpm test` y después `pnpm check`. Revisá el objeto en el navegador en los 4 modos y
+en Principiante antes de darlo por bueno.
+
 ## Deploy
 
 Cloudflare Workers con static assets y un solo Worker `pyloncito`:
