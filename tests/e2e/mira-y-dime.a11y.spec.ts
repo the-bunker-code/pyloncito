@@ -91,7 +91,7 @@ test('las casillas anuncian posición y estado', async ({ page }) => {
   await expect(slots.nth(1)).toHaveAttribute('aria-label', 'Casilla 2, vacía');
 });
 
-test('lo que se toca mide 44 px o más; las piezas 52 px', async ({ page }) => {
+test('lo que se toca mide 44 px o más; las piezas 64 px', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 740 });
   await openMira(page, { level: 'hard' });
   const small: string[] = [];
@@ -120,7 +120,7 @@ test('lo que se toca mide 44 px o más; las piezas 52 px', async ({ page }) => {
     await page.goto('/juegos/mira-y-dime/');
     await startMode(page, mode);
     await measure('#mira-screen-game button:visible', 44);
-    await measure('#mira-screen-game .piece', 52);
+    await measure('#mira-screen-game .piece', 64);
   }
   expect(small).toEqual([]);
 });
