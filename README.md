@@ -10,6 +10,7 @@ analítica es opcional y solo se activa con consentimiento. El progreso queda en
 dispositivo.
 
 > Estado: Mira y Dime y Miradas están en beta. Se juegan en `/juegos/mira-y-dime/` y `/juegos/miradas/`.
+> Estado: Mira y Dime está en beta y ya se puede jugar en `/juegos/mira-y-dime/`.
 
 [Repo](https://github.com/the-bunker-code/pyloncito) ·
 [Project](https://github.com/orgs/the-bunker-code/projects/2) ·

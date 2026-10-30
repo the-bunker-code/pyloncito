@@ -228,6 +228,9 @@ compartidos para que ningún juego tenga que resolverlos por su cuenta.
 Excepción: Mira y Dime y Miradas abren sus ajustes con un clic directo en el engranaje.
 El resto de la serie mantiene el gate de adultos de 3 s.
 
+Excepción: Mira y Dime abre sus ajustes con un clic directo en el engranaje. El resto de la
+serie mantiene el gate de adultos de 3 s.
+
 ## 7. Diseño, Tailwind y 4K
 
 - Tailwind 4 con `@tailwindcss/vite`; no `@astrojs/tailwind` (deprecado).
