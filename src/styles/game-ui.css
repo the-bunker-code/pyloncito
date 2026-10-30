@@ -1,0 +1,140 @@
+/* Shared game UI: settings, pills and small status primitives. */
+
+.settings__form {
+  display: grid;
+  gap: 1rem;
+  font-family: var(--font-adult);
+}
+
+.settings__section {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.settings__legend {
+  margin-bottom: 0.5rem;
+  padding: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.settings__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min);
+  padding: 0 1rem;
+  border: 2px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.pill__input:checked + .pill {
+  border-color: var(--color-blue-dark);
+  background: var(--color-blue);
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+.pill__input:focus-visible + .pill {
+  outline: 4px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.settings__note {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.settings__actions {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  padding-block: 0.5rem;
+  background: var(--color-white);
+}
+
+.settings__actions .button {
+  width: 100%;
+}
+
+.star-pill,
+.session-clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: var(--color-white);
+  box-shadow: 0 3px 0 var(--color-edge-soft);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.star-pill {
+  font-size: 1.25rem;
+}
+
+.star-pill .icon {
+  color: var(--color-gold-dark);
+  fill: var(--color-gold);
+}
+
+.session-clock {
+  color: var(--color-muted);
+  font-family: var(--font-adult);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.confirm-dialog__message {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-adult);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.dialog__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.dialog__actions .button {
+  width: 100%;
+}
+
+@media (max-width: 519px) {
+  .settings__actions,
+  .dialog__actions {
+    grid-template-columns: 1fr;
+  }
+}

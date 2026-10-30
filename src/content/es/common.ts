@@ -13,7 +13,7 @@ export const common = {
     subtitle: 'Cuatro juegos para mirar, contar, recordar y hablar.',
     adultNote: 'Juegos tranquilos para disfrutar con un adulto cerca.',
     gamesTitle: 'Elige un juego',
-    gamesHint: 'Mira y Dime ya está para jugar. Los demás vuelven pronto.',
+    gamesHint: 'Mira y Dime y Miradas ya están para jugar. Los demás vuelven pronto.',
     soon: 'Próximamente',
     guideTitle: 'Para acompañar',
     guideText: 'Ideas, tiempos y sugerencias para jugar sin apuro.',

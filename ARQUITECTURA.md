@@ -215,15 +215,18 @@ juegos.
 Aplican a todos los juegos, actuales y futuros. Se implementan en componentes
 compartidos para que ningún juego tenga que resolverlos por su cuenta.
 
-| Requisito       | Implementación                                                                                                                                             |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Ancla visual    | Cada juego tiene un ícono y un color fijos, idénticos en hub, `GameHeader`, PWA y guía. No cambian entre versiones                                         |
-| Aviso de cierre | `ClosingNotice` anuncia el final antes de que llegue ("dos rondas más", "una más", "terminamos"), con voz y visual. Nunca se corta de golpe                |
-| Duración        | Sesiones configurables de 3 a 15 minutos. `session.ts` controla rondas y tiempo; cada juego conserva su duración actual (Memo 3/5/8 rondas, Miradas 5 min) |
-| Gate de adultos | Pulsación sostenida de 3 s sobre un botón, con barra de progreso. No usar sumas: los juegos enseñan a sumar                                                |
-| Carga sensorial | Sin destellos, sin sonidos fuertes, animaciones de premio cortas; `prefers-reduced-motion` obligatorio                                                     |
-| Toque           | Objetivos de al menos 64 px en móvil; sin gestos complejos (arrastrar solo donde el juego lo requiera)                                                     |
-| Voz             | `VoiceTest` en ajustes permite escuchar y elegir la voz                                                                                                    |
+| Requisito       | Implementación                                                                                                                              |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ancla visual    | Cada juego tiene un ícono y un color fijos, idénticos en hub, `GameHeader`, PWA y guía. No cambian entre versiones                          |
+| Aviso de cierre | `ClosingNotice` anuncia el final antes de que llegue ("dos rondas más", "una más", "terminamos"), con voz y visual. Nunca se corta de golpe |
+| Duración        | Cada juego conserva su duración actual: Memo 3/5/8 rondas, Miradas 5 minutos. Los juegos por rondas usan `session.ts`                       |
+| Gate de adultos | Pulsación sostenida de 3 s sobre un botón, con barra de progreso. No usar sumas: los juegos enseñan a sumar                                 |
+| Carga sensorial | Sin destellos, sin sonidos fuertes, animaciones de premio cortas; `prefers-reduced-motion` obligatorio                                      |
+| Toque           | Objetivos de al menos 64 px en móvil; sin gestos complejos (arrastrar solo donde el juego lo requiera)                                      |
+| Voz             | `VoiceTest` en ajustes permite escuchar y elegir la voz                                                                                     |
+
+Excepción: Mira y Dime y Miradas abren sus ajustes con un clic directo en el engranaje.
+El resto de la serie mantiene el gate de adultos de 3 s.
 
 Excepción: Mira y Dime abre sus ajustes con un clic directo en el engranaje. El resto de la
 serie mantiene el gate de adultos de 3 s.
