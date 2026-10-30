@@ -208,6 +208,21 @@ export const icons = {
     { tag: 'path', attrs: { d: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' } },
     { tag: 'path', attrs: { d: 'M3 3v5h5' } },
   ],
+  'trash-2': [
+    { tag: 'path', attrs: { d: 'M10 11v6' } },
+    { tag: 'path', attrs: { d: 'M14 11v6' } },
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6',
+      },
+    },
+    { tag: 'path', attrs: { d: 'M3 6h18' } },
+    {
+      tag: 'path',
+      attrs: { d: 'M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' },
+    },
+  ],
 } as const satisfies Record<string, readonly IconPart[]>;
 
 export type IconName = keyof typeof icons;

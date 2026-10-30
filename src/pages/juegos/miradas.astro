@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Game from '../../components/games/miradas/Game.vue';
+import { findGame } from '../../config/games';
+import '../../styles/game-ui.css';
+import '../../styles/miradas.css';
+
+const game = findGame('miradas');
+if (!game) throw new Error('Juego no encontrado: miradas');
+---
+
+<BaseLayout title={game.name} description={game.description} noindex>
+  <Game client:load game={game} />
+</BaseLayout>

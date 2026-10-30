@@ -23,6 +23,18 @@ async function violations(page: Page): Promise<unknown[]> {
 
 test('el hub y el juego cargan sin violaciones de CSP', async ({ page }) => {
   await trackViolations(page);
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      'pyloncito:consent:v1',
+      JSON.stringify({
+        version: 1,
+        analytics: false,
+        improvement: false,
+        marketing: false,
+        updatedAt: new Date().toISOString(),
+      }),
+    );
+  });
 
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Pyloncito' })).toBeVisible();
@@ -30,6 +42,10 @@ test('el hub y el juego cargan sin violaciones de CSP', async ({ page }) => {
   await page.goto('/juegos/mira-y-dime/');
   await page.locator('#mira-screen-home [data-mode="syllables"]').click();
   await expect(page.locator('#mira-screen-game')).toBeVisible();
+
+  await page.goto('/juegos/miradas/');
+  await page.getByRole('button', { name: 'Empezar', exact: true }).click();
+  await expect(page.locator('#miradas-screen-round')).toBeVisible();
 
   expect(await violations(page)).toEqual([]);
 });

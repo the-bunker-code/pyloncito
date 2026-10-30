@@ -6,6 +6,12 @@ Todas las fechas usan ISO 8601. El formato sigue [Keep a Changelog](https://keep
 
 ### Agregado
 
+- Miradas migrado a Pyloncito en beta: 3 niveles, 1–3 adultos, sesión de 5 minutos y progreso local.
+- Componentes compartidos `StarPill`, `SessionClock` y `ConfirmDialog`, con estilos comunes de juego en `game-ui.css`.
+- Espera de mirada ajustable (3–30 s) desde ajustes y con `−`/`+` durante la ronda.
+- Ilustraciones Fluent Emoji de Microsoft para las tarjetas y los avatares de Miradas.
+- Aro circular de espera que se detiene en cero y espera el toque del niño para elegir quién lo miró.
+
 - CSP en dos capas (meta de Astro + `_headers`) y pruebas E2E de violaciones.
 - Precarga del dibujo de la ronda siguiente.
 - Candado de 50 ms contra ráfagas de toques.
@@ -15,6 +21,9 @@ Todas las fechas usan ISO 8601. El formato sigue [Keep a Changelog](https://keep
 - Job `check-full` para PR a `main` con Lighthouse móvil.
 
 ### Cambiado
+
+- Miradas y Mira y Dime comparten ajustes, iconos y primitivas de juego.
+- El conteo de Miradas es regresivo: «tres… dos… uno…» antes de la espera.
 
 - La consigna de palabra ahora dice “Armemos la palabra gato.”.
 - La voz prioriza `es-PE` → `es-419` → `es-*`, locales primero.

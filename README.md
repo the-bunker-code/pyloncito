@@ -9,7 +9,7 @@ con un adulto cerca. El sitio es público, estático, sin cuentas y sin publicid
 analítica es opcional y solo se activa con consentimiento. El progreso queda en el
 dispositivo.
 
-> Estado: Mira y Dime está en beta y ya se puede jugar en `/juegos/mira-y-dime/`.
+> Estado: Mira y Dime y Miradas están en beta. Se juegan en `/juegos/mira-y-dime/` y `/juegos/miradas/`.
 
 [Repo](https://github.com/the-bunker-code/pyloncito) ·
 [Project](https://github.com/orgs/the-bunker-code/projects/2) ·
@@ -39,8 +39,9 @@ dispositivo.
 | Marca Pyloncito                  | En curso     |
 | Fase 1B — hub y sistema visual   | Hecho        |
 | Fase 1C — deploy y preview       | En curso     |
+| Fase 4 — Miradas                 | Hecho (beta) |
 | Fase 5 — Mira y Dime             | Hecho (beta) |
-| Migración de los cuatro juegos   | Pendiente    |
+| Migración de los cuatro juegos   | En curso     |
 | PWA, CSP, 4K y deploy final      | Pendiente    |
 
 El tablero muestra el estado actual:
@@ -76,6 +77,26 @@ pnpm build      # sitio estático en dist/
 
 El generador crea la página `/juegos/<slug>/` con `noindex` y no la muestra en el hub
 hasta que cambies su estado.
+
+## Cómo funciona Miradas
+
+Juego de atención compartida para niñas y niños de 3 a 5 años. El adulto cuenta
+“tres… dos… uno…”; aparece un aro con la espera y el niño toca la cara/color de quien lo
+miró. La voz dice el nombre del adulto elegido. Una sesión dura 5 minutos y no hay
+fracaso: sin sonido de error ni mensajes de falla. El adulto maneja el conteo; durante la
+espera, el niño ve el aro y toca quién lo miró.
+
+- Tres niveles: premio junto a la cara, muecas y emociones.
+- De 1 a 3 adultos, cada uno con su color, su nombre y una cara Fluent Emoji.
+- Espera de mirada ajustable entre 3 y 30 segundos, desde **Ajustes para adultos** o con
+  los botones `−` y `+` de la ronda.
+- Cuando el aro llega a 0, la pantalla se detiene en «¿Quién me miró?» y espera el toque;
+  no pasa sola a la siguiente tarjeta.
+- Progreso local: sesiones, estrellas y tiempo promedio hasta la mirada.
+- Voz y sonidos se activan desde **Ajustes para adultos**.
+- Tarjetas y avatares con ilustraciones Fluent Emoji de Microsoft, en `public/miradas/`.
+- Reglas puras en `src/games/miradas/rules.ts`; motor con esperas cancelables en
+  `engine.ts`; textos en `src/content/es/miradas.ts`.
 
 ## Cómo funciona Mira y Dime
 
@@ -215,7 +236,7 @@ Checklist del contenedor GTM:
 
 - Tipografía Fredoka, SIL Open Font License.
 - Íconos Lucide, ISC.
-- Emojis Fluent, MIT.
+- Emojis Fluent de Microsoft, MIT (`public/miradas/LICENSE`).
 - Juegos originales de Enrique Lazo Bello (ENLABE), The Bunker Code y contribuidores.
 
 ## Licencia

@@ -46,7 +46,7 @@ export const games: readonly GameEntry[] = [
     age: '3–5 años',
     skill: 'Atención compartida',
     minutes: [5, 5],
-    status: 'coming',
+    status: 'beta',
     description: 'Un juego tranquilo para mirar y compartir.',
   },
   {
