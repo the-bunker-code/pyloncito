@@ -1,7 +1,7 @@
 export const site = {
   name: 'Pyloncito',
   tagline: 'Aprender jugando, tapita a tapita.',
-  description: 'Cuatro juegos para mirar, contar, recordar y hablar.',
+  description: 'Juegos para mirar, contar, recordar, hablar y tocar música.',
   url: 'https://pyloncito.app',
   locale: 'es',
 } as const;

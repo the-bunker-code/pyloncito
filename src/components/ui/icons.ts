@@ -223,6 +223,28 @@ export const icons = {
       attrs: { d: 'M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' },
     },
   ],
+  link: [
+    { tag: 'path', attrs: { d: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' } },
+    { tag: 'path', attrs: { d: 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' } },
+  ],
+  square: [{ tag: 'rect', attrs: { x: 5, y: 5, width: 14, height: 14, rx: 2 } }],
+  target: [
+    { tag: 'circle', attrs: { cx: 12, cy: 12, r: 10 } },
+    { tag: 'circle', attrs: { cx: 12, cy: 12, r: 6 } },
+    { tag: 'circle', attrs: { cx: 12, cy: 12, r: 2 } },
+  ],
+  'share-2': [
+    { tag: 'circle', attrs: { cx: 18, cy: 5, r: 3 } },
+    { tag: 'circle', attrs: { cx: 6, cy: 12, r: 3 } },
+    { tag: 'circle', attrs: { cx: 18, cy: 19, r: 3 } },
+    { tag: 'path', attrs: { d: 'm8.59 13.51 6.83 3.98' } },
+    { tag: 'path', attrs: { d: 'm15.41 6.51-6.82 3.98' } },
+  ],
+  music: [
+    { tag: 'path', attrs: { d: 'M9 18V5l12-2v13' } },
+    { tag: 'circle', attrs: { cx: 6, cy: 18, r: 3 } },
+    { tag: 'circle', attrs: { cx: 18, cy: 16, r: 3 } },
+  ],
 } as const satisfies Record<string, readonly IconPart[]>;
 
 export type IconName = keyof typeof icons;

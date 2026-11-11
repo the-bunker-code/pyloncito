@@ -9,6 +9,17 @@ export function isMuted(): boolean {
   return muted;
 }
 
+/** Shared context for games that synthesize their own sounds. Null when audio is unavailable. */
+export function getAudioContext(): AudioContext | null {
+  try {
+    context ??= new AudioContext();
+    return context;
+  } catch {
+    context = null;
+    return null;
+  }
+}
+
 export function unlockAudio(): void {
   try {
     context ??= new AudioContext();

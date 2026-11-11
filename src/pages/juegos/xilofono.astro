@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Game from '../../components/games/xilofono/Game.vue';
+import { findGame } from '../../config/games';
+import '../../styles/game-ui.css';
+import '../../styles/xilofono.css';
+
+const game = findGame('xilofono');
+if (!game) throw new Error('Juego no encontrado: xilofono');
+
+// Songs can be loaded from any https address the adult types in, so only this page
+// opens connect-src beyond the site's own origin and analytics.
+Astro.csp?.insertDirective(
+  "connect-src 'self' https: https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com",
+);
+---
+
+<BaseLayout title={game.name} description={game.description} noindex>
+  <Game client:load />
+</BaseLayout>

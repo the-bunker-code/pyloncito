@@ -286,6 +286,13 @@ html.has-cookie-banner .app-shell {
   --on-theme: #ffffff;
 }
 
+.game-card--xilofono {
+  --theme-main: #6d28d9;
+  --theme-dark: #5b21b6;
+  --theme-soft: #ede9fe;
+  --on-theme: #ffffff;
+}
+
 .game-card__icon {
   position: relative;
   display: grid;
@@ -811,6 +818,10 @@ html.has-cookie-banner .app-shell {
 
 .game-header--mira-y-dime .game-header__icon {
   color: #1e5a22;
+}
+
+.game-header--xilofono .game-header__icon {
+  color: #5b21b6;
 }
 
 .progress-bar {

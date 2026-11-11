@@ -47,6 +47,12 @@ test('el hub y el juego cargan sin violaciones de CSP', async ({ page }) => {
   await page.getByRole('button', { name: 'Empezar', exact: true }).click();
   await expect(page.locator('#miradas-screen-round')).toBeVisible();
 
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.goto('/juegos/xilofono/');
+  await page.getByRole('button', { name: 'Cargar canción' }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Estrellita', exact: true }).click();
+  await expect(page.getByText('Canción cargada: Estrellita')).toBeVisible();
+
   expect(await violations(page)).toEqual([]);
 });
 

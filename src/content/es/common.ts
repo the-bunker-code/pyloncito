@@ -10,10 +10,10 @@ export const common = {
   hub: {
     eyebrow: 'Aprender jugando, tapita a tapita',
     title: 'Pyloncito',
-    subtitle: 'Cuatro juegos para mirar, contar, recordar y hablar.',
+    subtitle: 'Juegos para mirar, contar, recordar, hablar y tocar música.',
     adultNote: 'Juegos tranquilos para disfrutar con un adulto cerca.',
     gamesTitle: 'Elige un juego',
-    gamesHint: 'Mira y Dime y Miradas ya están para jugar. Los demás vuelven pronto.',
+    gamesHint: 'Mira y Dime, Miradas y Xilófono ya están para jugar. Los demás vuelven pronto.',
     soon: 'Próximamente',
     guideTitle: 'Para acompañar',
     guideText: 'Ideas, tiempos y sugerencias para jugar sin apuro.',

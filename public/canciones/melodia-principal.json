@@ -1,0 +1,63 @@
+{
+  "title": "Melodía principal",
+  "tempo": 80,
+  "beats_per_bar": 4,
+  "notes": [
+    "Mi",
+    "Sol",
+    "La",
+    "Do2",
+    "Si",
+    "Sol",
+    "Mi:2",
+
+    "Re",
+    "Fa",
+    "La",
+    "Sol",
+    "Mi",
+    "Re",
+    "Do:2",
+
+    "Mi",
+    "Sol",
+    "La",
+    "Do2",
+    "Re2",
+    "Mi2",
+    "Re2",
+    "Do2",
+    "Si:4",
+
+    "La",
+    "Do2",
+    "Si",
+    "Sol",
+    "La:4",
+
+    "Do2",
+    "Re2",
+    "Mi2",
+    "Sol2",
+    "Mi2",
+    "Re2",
+    "Do2",
+    "La",
+
+    "Fa",
+    "La",
+    "Do2",
+    "Si",
+    "Sol",
+    "Mi:3",
+
+    "Re",
+    "Mi",
+    "Sol",
+    "La",
+    "Sol",
+    "Mi",
+    "Re:2",
+    "Do:4"
+  ]
+}
