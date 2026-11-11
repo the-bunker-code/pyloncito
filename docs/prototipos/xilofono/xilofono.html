@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffe7b8">
+<meta name="robots" content="noindex">
+<title>Xilófono · Pyloncito (prototipo)</title>
+
+<!--
+  FORMATO DEL JSON DE CANCIÓN
+  ---------------------------
+  {
+    "title": "Estrellita",          // opcional
+    "tempo": 100,                   // pulsos por minuto (30-240). Por defecto 90
+    "notes": [
+      "Do",                         // atajo: nombre de la nota (octava 1, 1 pulso)
+      "Sol2",                       // atajo: el número es la octava (1 o 2)
+      "Mi:2",                       // atajo: ":N" son los pulsos que dura
+      "Re2:0.5",                    // octava 2, medio pulso
+      "La#", "Solb", "Do#2:2",      // sostenidos (#) y bemoles (b): aparecen teclas extra
+      "-",                          // silencio (también "silencio"); admite ":N"
+      { "note": "La", "octave": 1, "beats": 2, "lyric": "es-tás" }   // forma larga
+    ],
+    "octave": 2,                    // opcional: octava de las notas que no indican una (1 o 2; por defecto 1)
+    "auto_octave": true,            // opcional: las notas sin octava eligen la más cercana a la nota anterior
+    "beats_per_bar": 4              // opcional: pulsos por compás, para las barras de la partitura (por defecto 4; alias "compas")
+  }
+  Notas válidas: Do Re Mi Fa Sol La Si (también C D E F G A B), con # o b.
+  Octava 1 = las 7 primeras teclas, octava 2 = las 7 últimas. No hay notas más graves que el Do 1.
+  También se aceptan claves en español: titulo, notas, nota, octava, tiempos, letra.
+  El JSON puede ser directamente una lista de notas.
+-->
+
+<style>
+  /* ===== Tokens (reemplazar por los de Pyloncito al integrar) ===== */
+  :root{
+    --bg:#ffe7b8;          /* theme-color de Pyloncito */
+    --bg2:#ffd596;
+    --ink:#4a3320;
+    --panel:#fff8ea;
+    --line:#e7b873;
+    --accent:#ffb84d;
+    --rail:#d9a86c;
+    --error:#b3261e;
+    --radius:22px;
+    --font:"Nunito","Baloo 2",ui-rounded,"Segoe UI Rounded","Trebuchet MS",system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    height:100dvh;
+    display:flex;flex-direction:column;gap:clamp(6px,1.2vh,12px);
+    padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right))
+            max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+    font-family:var(--font);color:var(--ink);
+    background:linear-gradient(180deg,var(--bg),var(--bg2));
+    overflow:hidden;touch-action:manipulation;
+    -webkit-user-select:none;user-select:none;
+  }
+
+  header{display:flex;align-items:baseline;gap:.6em;font-weight:800}
+  header strong{font-size:1.25rem}
+  header span{opacity:.7;font-weight:700}
+
+  /* ===== Fila superior: partitura 70% + botones 30% ===== */
+  .top{
+    flex:0 0 clamp(140px,38vh,250px);min-height:0;display:grid;
+    grid-template-columns:minmax(0,7fr) minmax(0,3fr);grid-template-rows:minmax(0,1fr);
+    gap:clamp(8px,1.6vw,16px);
+  }
+
+  /* ===== Partitura ===== */
+  .score{
+    position:relative;min-width:0;min-height:0;overflow:hidden;isolation:isolate;
+    border:3px solid var(--line);border-radius:var(--radius);background:var(--panel);
+    box-shadow:0 5px 0 var(--line);
+  }
+  .scroller{
+    position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;
+    scrollbar-width:none;touch-action:pan-x;overscroll-behavior-x:contain;
+  }
+  .scroller::-webkit-scrollbar{display:none}
+  .scroller > svg{flex:none;display:block}
+  body:not([data-mode="idle"]) .scroller{overflow-x:hidden;pointer-events:none}   /* en Escuchar y Guía la partitura avanza sola */
+  .clef{position:sticky;left:0;z-index:2;background:var(--panel);box-shadow:8px 0 10px -6px rgba(74,51,32,.28)}
+  .playhead{                                      /* línea de lectura: la nota se toca al llegar aquí */
+    position:absolute;top:6px;bottom:6px;width:4px;margin-left:-2px;z-index:3;
+    border-radius:2px;background:var(--accent);opacity:.85;pointer-events:none;
+  }
+
+  .staff-line{stroke:var(--ink);stroke-width:1.2;opacity:.6}
+  .bar-line{stroke:var(--ink);stroke-width:1.4;opacity:.7}
+  .bar-end{stroke:var(--ink);stroke-width:5;opacity:.8}
+  .ledger{stroke:var(--ink);stroke-width:1.3;opacity:.7}
+  .ts{font:800 34px var(--font);fill:var(--ink);text-anchor:middle}
+  .clef-glyph{fill:var(--ink);opacity:.85}
+
+  .note .halo{fill:var(--accent);opacity:0;transition:opacity .15s}
+  .note.now .halo,.note.hit .halo{opacity:.4}
+  .note .head{fill:var(--c);stroke:var(--d);stroke-width:1.3}
+  .note .head.hollow{fill:var(--panel);stroke:var(--c);stroke-width:3.4}
+  .note.now .head,.note.hit .head{stroke:var(--ink);stroke-width:2.4}
+  .note .head.hollow{paint-order:stroke}
+  .note .stem{stroke:var(--ink);stroke-width:1.6;opacity:.85}
+  .note .flag{fill:none;stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;opacity:.85}
+  .note .dot{fill:var(--ink);opacity:.85}
+  .note .tail{stroke:var(--c);stroke-width:2.6;stroke-linecap:round;opacity:.55}
+  .note .sharp-v{stroke:var(--ink);stroke-width:1.5;opacity:.9}
+  .note .sharp-h{stroke:var(--ink);stroke-width:3.2;opacity:.9}
+  .note .nm{font:800 15px var(--font);fill:var(--ink);text-anchor:middle}
+  .note .ly{font:italic 700 11px var(--font);fill:var(--ink);opacity:.8;text-anchor:middle}
+  .note .rest{fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
+  .note .rest-fill{fill:var(--ink);opacity:.55}
+
+  /* ===== Botones ===== */
+  .controls{display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:0}
+  .controls .btn{flex:1 1 0;width:100%;min-height:32px;max-height:76px;padding:.2em .8em}
+
+  .btn{
+    font:inherit;font-weight:800;font-size:clamp(.95rem,2vw,1.25rem);color:var(--ink);line-height:1.1;
+    display:inline-flex;align-items:center;justify-content:center;gap:.5em;text-align:center;
+    min-height:56px;padding:.5em 1em;border-radius:999px;cursor:pointer;
+    background:var(--panel);border:3px solid var(--line);box-shadow:0 5px 0 var(--line);
+    -webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;
+  }
+  .btn svg{width:1.4em;height:1.4em;flex:none}
+  .btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+  .btn[aria-pressed="true"],.btn[aria-expanded="true"]{background:var(--accent)}
+  .btn:focus-visible,.key:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+  .btn.small{min-height:44px;font-size:1rem;padding:.3em 1em}
+  .i-stop{display:none}
+  body[data-mode="play"] .i-play{display:none}
+  body[data-mode="play"] .i-stop{display:block}
+
+  /* ===== Título y mensajes ===== */
+  .info{display:flex;align-items:baseline;gap:10px;min-height:1.4em}
+  .info h2{margin:0;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
+  .info .meta{opacity:.65;font-weight:700;font-size:.8rem;white-space:nowrap}
+  #status{margin:0 0 0 auto;text-align:right;font-weight:700;font-size:.92rem;overflow-wrap:anywhere}
+  #status.error,.pmsg.error{color:var(--error)}
+
+  /* ===== Ventana para cargar la canción ===== */
+  .scrim{position:fixed;inset:0;z-index:19;background:rgba(74,51,32,.45)}
+  .scrim[hidden],.urlpanel[hidden]{display:none}
+  .urlpanel{
+    position:fixed;z-index:20;left:10px;right:10px;top:max(10px,env(safe-area-inset-top));
+    max-width:640px;margin:0 auto;max-height:calc(100dvh - 20px);overflow:auto;
+    background:var(--panel);border:3px solid var(--line);border-radius:var(--radius);
+    box-shadow:0 14px 40px rgba(0,0,0,.35);padding:12px 14px;
+    display:flex;flex-direction:column;gap:8px;-webkit-user-select:text;user-select:text;
+  }
+  .urlpanel .ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .urlpanel label{font-weight:800}
+  .urlpanel .row{display:flex;gap:8px}
+  .urlpanel input,.urlpanel textarea{
+    font:inherit;font-size:1rem;color:var(--ink);width:100%;padding:.55em .8em;
+    border:3px solid var(--line);border-radius:14px;background:#fff;
+  }
+  .urlpanel summary{cursor:pointer;font-weight:700;margin:2px 0 6px}
+  .urlpanel textarea{font-family:ui-monospace,Consolas,monospace;font-size:.85rem;margin-bottom:6px;resize:vertical}
+  .pmsg{margin:0;min-height:1.2em;font-weight:700;font-size:.9rem;overflow-wrap:anywhere}
+
+  /* ===== Xilófono ===== */
+  .xylo{
+    --gap:clamp(4px,1vw,12px);
+    flex:1 1 0;min-height:110px;position:relative;
+    display:grid;grid-template-columns:repeat(14,minmax(0,1fr));grid-template-rows:minmax(0,1fr);
+    gap:var(--gap);align-items:center;padding:0 var(--gap);
+  }
+  /* Si la canción usa sostenidos, aparece una fila extra arriba (las teclas negras) */
+  body.has-sharps .xylo{grid-template-rows:minmax(0,.55fr) minmax(0,1.45fr)}
+  body.has-sharps .xylo::before,body.has-sharps .xylo::after{display:none}
+  .xylo::before,.xylo::after{
+    content:"";position:absolute;left:0;right:0;height:clamp(10px,2.4vh,18px);
+    background:var(--rail);border-radius:10px;box-shadow:0 3px 0 rgba(0,0,0,.12);
+  }
+  .xylo::before{top:20%}
+  .xylo::after{bottom:20%}
+
+  .key{
+    position:relative;z-index:1;height:calc(100% - var(--i) * 2.2%);
+    border:0;border-radius:14px;background:var(--c);color:var(--on);
+    font:inherit;font-weight:800;font-size:clamp(.8rem,2.2vw,1.5rem);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15em;
+    box-shadow:0 7px 0 var(--d),0 12px 14px rgba(0,0,0,.18);
+    -webkit-tap-highlight-color:transparent;transition:transform .08s,filter .08s,opacity .2s;
+  }
+  .key::before,.key::after{
+    content:"";position:absolute;left:50%;width:34%;aspect-ratio:.7;background:#fff;
+    border-radius:50%;transform:translateX(-50%);box-shadow:2px 2px 0 rgba(0,0,0,.18);
+  }
+  .key::before{top:6%}
+  .key::after{bottom:6%}
+  .key small{font-size:.55em;font-weight:700;opacity:.85}
+  .key.lit,.key:active{
+    transform:translateY(5px);filter:brightness(1.12);
+    box-shadow:0 2px 0 var(--d),0 4px 8px rgba(0,0,0,.2);
+  }
+  .key.nat{grid-column:var(--col);grid-row:1}
+  body.has-sharps .key.nat{grid-row:2}
+  .key.sharp{
+    display:none;grid-column:var(--col);grid-row:1;height:100%;
+    translate:calc(50% + var(--gap) / 2) 0;           /* queda entre dos teclas naturales */
+    font-size:clamp(.65rem,1.6vw,1.1rem);
+  }
+  body.has-sharps .key.sharp{display:flex}
+  .key.sharp::before,.key.sharp::after{display:none}
+
+  /* Guía interactiva: se apaga todo menos la tecla que toca */
+  body[data-mode="guide"] .key:not(.target){opacity:.35;filter:saturate(.55)}
+  .key.target{
+    animation:pulse 1.1s ease-in-out infinite;
+    box-shadow:0 0 0 6px #fff,0 0 30px 12px rgba(255,255,255,.95),0 7px 0 var(--d);
+  }
+  .key.target.lit{animation:none}
+  @keyframes pulse{50%{transform:scale(1.06)}}
+  .key.miss{animation:wob .25s}
+  @keyframes wob{25%{rotate:-2deg}75%{rotate:2deg}}
+
+  /* ===== Aviso: girar el dispositivo (solo celulares en vertical) ===== */
+  .rotate{
+    display:none;position:fixed;inset:0;z-index:50;padding:24px;text-align:center;
+    flex-direction:column;align-items:center;justify-content:center;gap:14px;
+    background:linear-gradient(180deg,var(--bg),var(--bg2));font-weight:800;
+  }
+  .rotate svg{width:min(52vw,220px);height:auto}
+  .rotate .phone{transform-box:fill-box;transform-origin:center;animation:turn 2.8s ease-in-out infinite}
+  .rotate .arrow{animation:nudge 2.8s ease-in-out infinite}
+  .rotate p{margin:0;font-size:1.35rem}
+  .rotate p + p{font-size:1rem;font-weight:700;opacity:.75}
+  @keyframes turn{0%,18%{transform:rotate(0)}58%,100%{transform:rotate(-90deg)}}
+  @keyframes nudge{0%,18%{opacity:0}30%,70%{opacity:1}100%{opacity:0}}
+  @media (orientation:portrait) and (max-width:600px) and (pointer:coarse),
+         (orientation:portrait) and (max-width:520px){
+    .rotate{display:flex}
+  }
+
+  /* Celular horizontal / pantallas bajas: compactar */
+  @media (max-height:520px) and (orientation:landscape){
+    body{gap:5px;padding-top:6px;padding-bottom:8px}
+    header{display:none}
+    .top{flex-basis:clamp(128px,40vh,200px)}
+    .controls{gap:6px}
+    .btn{font-size:1rem}
+    .info{font-size:.85rem}
+    .info h2{font-size:.9rem}
+    #status{font-size:.82rem}
+    .xylo{min-height:96px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .rotate .phone{transform:rotate(-90deg)}
+  }
+</style>
+</head>
+
+<body data-mode="idle">
+  <header><strong>Pyloncito</strong><span>Xilófono · prototipo</span></header>
+
+  <section class="top">
+    <div class="score" id="score" aria-hidden="true">
+      <div class="scroller" id="scroller">
+        <svg class="clef" id="clefSvg"></svg>
+        <svg class="staff" id="staffSvg"></svg>
+      </div>
+      <div class="playhead" id="playhead"></div>
+    </div>
+
+    <nav class="controls" aria-label="Controles">
+      <button class="btn" id="btnUrl" type="button" aria-expanded="false" aria-controls="urlPanel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+        <span class="lbl">Cargar URL</span>
+      </button>
+      <button class="btn" id="btnPlay" type="button" aria-pressed="false">
+        <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+        <svg class="i-stop" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        <span class="lbl">Escuchar</span>
+      </button>
+      <button class="btn" id="btnGuide" type="button" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/></svg>
+        <span class="lbl">Guía</span>
+      </button>
+      <button class="btn" id="btnShare" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.7l7.4-4.4M8.3 13.3l7.4 4.4"/></svg>
+        <span class="lbl">Compartir</span>
+      </button>
+    </nav>
+  </section>
+
+  <div class="info">
+    <h2 id="songTitle">Canción</h2>
+    <span class="meta" id="songMeta"></span>
+    <p id="status" role="status" aria-live="polite"></p>
+  </div>
+
+  <main class="xylo" id="xylo" aria-label="Xilófono"></main>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <form class="urlpanel" id="urlPanel" hidden>
+    <div class="ph">
+      <label for="urlInput">Dirección (URL) del JSON de la canción</label>
+      <button class="btn small" id="btnClose" type="button" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="row">
+      <input id="urlInput" type="text" inputmode="url" autocomplete="off" placeholder="https://…/cancion.json  o  canciones/estrellita.json">
+      <button class="btn small" type="submit">Cargar</button>
+    </div>
+    <details>
+      <summary>O pega el JSON aquí</summary>
+      <textarea id="jsonInput" rows="5" placeholder='{"title":"Mi canción","tempo":90,"notes":["Do","Re","Mi"]}'></textarea>
+      <button class="btn small" id="btnPaste" type="button">Usar este JSON</button>
+    </details>
+    <p class="pmsg" id="panelMsg" role="status"></p>
+  </form>
+
+  <!-- Se muestra solo en celulares en vertical -->
+  <div class="rotate" role="alert">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <g class="phone">
+        <rect x="33" y="12" width="34" height="76" rx="7" fill="#fff8ea" stroke="#4a3320" stroke-width="4"/>
+        <line x1="44" y1="21" x2="56" y2="21" stroke="#4a3320" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="50" cy="79" r="3" fill="#4a3320"/>
+      </g>
+      <g class="arrow" fill="none" stroke="#4a3320" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M82 70 A34 34 0 0 0 82 30"/>
+        <path d="M74 31 L82 29 L84 37"/>
+      </g>
+    </svg>
+    <p>Gira el dispositivo</p>
+    <p>El xilófono se juega con la pantalla de lado.</p>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ================= Datos ================= */
+  const NOTES = [
+    { name:'Do',  c:'#e5202e', d:'#9f1520', on:'#fff',    f:261.63 },
+    { name:'Re',  c:'#e8590c', d:'#a33f08', on:'#fff',    f:293.66 },
+    { name:'Mi',  c:'#f6c90e', d:'#b08f08', on:'#4a3320', f:329.63 },
+    { name:'Fa',  c:'#1e9e43', d:'#146b2d', on:'#fff',    f:349.23 },
+    { name:'Sol', c:'#19d3d3', d:'#0f9494', on:'#0d3b3b', f:392.00 },
+    { name:'La',  c:'#2f4fb3', d:'#1f3480', on:'#fff',    f:440.00 },
+    { name:'Si',  c:'#8e44c9', d:'#62298f', on:'#fff',    f:493.88 },
+  ];
+  const DEG = new Map(Object.entries({ do:0, re:1, mi:2, fa:3, sol:4, la:5, si:6, c:0, d:1, e:2, f:3, g:4, a:5, b:6 }));
+  const REST = new Set(['-', '_', 'silencio', 'rest']);
+  const SEMI = [0, 2, 4, 5, 7, 9, 11];            // semitonos de Do a cada nota natural
+  const SHARP_DEGS = [0, 1, 3, 4, 5];             // Do# Re# Fa# Sol# La# (Mi y Si no tienen sostenido)
+  // ids 0-13: teclas naturales · ids 14-23: sostenidos (5 por octava)
+  const KEYS = [
+    ...Array.from({ length: 14 }, (_, i) => ({ id: i, deg: i % 7, oct: i < 7 ? 1 : 2, sharp: false })),
+    ...[1, 2].flatMap(oct => SHARP_DEGS.map((deg, j) => ({ id: 14 + (oct - 1) * 5 + j, deg, oct, sharp: true }))),
+  ];
+  const keyId = (deg, oct, sharp) => sharp ? 14 + (oct - 1) * 5 + SHARP_DEGS.indexOf(deg) : (oct - 1) * 7 + deg;
+  const freq  = k => { const t = KEYS[k]; return NOTES[t.deg].f * (t.oct === 1 ? 1 : 2) * (t.sharp ? 2 ** (1 / 12) : 1); };
+  const noteLabel = n => NOTES[n.deg].name + (n.sharp ? '♯' : '');
+  // Teclado de computador: fila "asdfghj" = octava 1, fila "qwertyu" = octava 2
+  const KBD = Object.fromEntries([...'asdfghj'].map((c, i) => [c, i]).concat([...'qwertyu'].map((c, i) => [c, i + 7])));
+
+  const DEFAULT_SONG = {
+    title: 'Estrellita', tempo: 100,
+    notes: ['Do','Do','Sol','Sol','La','La','Sol:2','Fa','Fa','Mi','Mi','Re','Re','Do:2',
+            'Sol','Sol','Fa','Fa','Mi','Mi','Re:2','Sol','Sol','Fa','Fa','Mi','Mi','Re:2',
+            'Do','Do','Sol','Sol','La','La','Sol:2','Fa','Fa','Mi','Mi','Re','Re','Do:2'],
+  };
+
+  /* ================= Utilidades ================= */
+  const $ = id => document.getElementById(id);
+  const els = {
+    score: $('score'), scroller: $('scroller'), clefSvg: $('clefSvg'), staffSvg: $('staffSvg'), playhead: $('playhead'),
+    title: $('songTitle'), meta: $('songMeta'), status: $('status'), pmsg: $('panelMsg'),
+    xylo: $('xylo'), btnUrl: $('btnUrl'), btnPlay: $('btnPlay'), btnGuide: $('btnGuide'), btnShare: $('btnShare'),
+    panel: $('urlPanel'), scrim: $('scrim'), close: $('btnClose'),
+    url: $('urlInput'), json: $('jsonInput'), paste: $('btnPaste'),
+  };
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const norm  = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
+  // El mensaje se muestra junto a los botones y también dentro de la ventana de carga
+  const say = (msg, isError = false) => {
+    for (const el of [els.status, els.pmsg]) { el.textContent = msg; el.classList.toggle('error', isError); }
+  };
+
+  /* ================= Parser del JSON ================= */
+  const HAS_SHARP = new Set(SHARP_DEGS);
+  const TOKEN = /^([a-z_-]+?)([#b])?([12])?(?::(\d*\.?\d+))?$/;   // nombre, alteración, octava, pulsos
+  const prep = s => norm(s).replace(/♯/g, '#').replace(/♭/g, 'b');
+
+  // Alteración → [grado natural, ¿tecla de sostenido?, desplazamiento de octava]
+  function accidental(deg, acc) {
+    if (!acc) return [deg, false, 0];
+    if (acc === '#') {
+      if (HAS_SHARP.has(deg)) return [deg, true, 0];
+      return deg === 2 ? [3, false, 0] : [0, false, 1];     // Mi# = Fa · Si# = Do de la octava siguiente
+    }
+    if (deg === 0) return [6, false, -1];                    // Dob = Si de la octava anterior
+    if (deg === 3) return [2, false, 0];                     // Fab = Mi
+    return [deg - 1, true, 0];                               // Reb = Do# · Mib = Re# · Solb = Fa# · Lab = Sol# · Sib = La#
+  }
+  const pitch = (n, oct) => (oct + n.shift - 1) * 12 + SEMI[n.deg] + (n.sharp ? 1 : 0);
+
+  function parseNote(raw, i) {
+    const fail = m => new Error(`Nota ${i + 1}: ${m}`);
+    let src = raw, octRaw, beatsRaw, lyric = '';
+    if (raw && typeof raw === 'object') {
+      src = raw.note ?? raw.nota ?? '';
+      octRaw = raw.octave ?? raw.octava;
+      beatsRaw = raw.beats ?? raw.tiempos;
+      lyric = String(raw.lyric ?? raw.letra ?? '').slice(0, 20);
+    } else if (typeof raw !== 'string') {
+      throw fail('formato no válido.');
+    }
+    const m = prep(src).match(TOKEN);
+    if (!m) throw fail(`no entiendo "${src}". Usa por ejemplo "Do", "La#", "Sol2" o "Mi:2".`);
+    const [, name, acc, o, b] = m;
+    let beats = Number(beatsRaw ?? b ?? 1);
+    if (!(beats > 0)) throw fail('los pulsos deben ser mayores que 0.');
+    beats = clamp(beats, 0.25, 8);
+    if (REST.has(name)) return { rest: true, beats, lyric };
+    if (!DEG.has(name)) throw fail(`la nota "${name}" no existe. Usa Do, Re, Mi, Fa, Sol, La o Si.`);
+    const octGiven = octRaw !== undefined || o !== undefined;
+    const oct = Number(octRaw ?? o);
+    if (octGiven && oct !== 1 && oct !== 2) throw fail('la octava debe ser 1 o 2.');
+    const [deg, sharp, shift] = accidental(DEG.get(name), acc);
+    return { rest: false, deg, sharp, shift, beats, lyric, octGiven, oct };
+  }
+
+  function parseSong(data) {
+    const obj = Array.isArray(data) ? { notes: data } : data;
+    if (!obj || typeof obj !== 'object') throw new Error('El JSON debe ser un objeto con "notes".');
+    const list = obj.notes ?? obj.notas;
+    if (!Array.isArray(list) || !list.length) throw new Error('Falta la lista "notes" con al menos una nota.');
+    if (list.length > 500) throw new Error('La canción tiene más de 500 notas.');
+    const t = Number(obj.tempo ?? 90);
+    const defOct = Number(obj.octave ?? obj.octava ?? 1);
+    if (defOct !== 1 && defOct !== 2) throw new Error('"octave" debe ser 1 o 2.');
+    const auto = Boolean(obj.auto_octave ?? obj.octava_auto ?? false);
+    const bar = clamp(Math.round(Number(obj.beats_per_bar ?? obj.compas ?? 4)) || 4, 1, 12);
+
+    const notes = list.map(parseNote);
+    // Segunda pasada: decidir la octava de cada nota y la tecla que le toca
+    let prev = null;
+    notes.forEach((n, i) => {
+      if (n.rest) return;
+      let oct = n.octGiven ? n.oct : defOct;
+      if (!n.octGiven && auto && prev !== null) {
+        const fits = [1, 2].filter(o => o + n.shift >= 1 && o + n.shift <= 2);
+        if (fits.length) oct = fits.reduce((a, b) => Math.abs(pitch(n, b) - prev) < Math.abs(pitch(n, a) - prev) ? b : a);
+      }
+      const final = oct + n.shift;
+      if (final < 1 || final > 2) throw new Error(`Nota ${i + 1}: queda fuera del xilófono (solo hay 2 octavas).`);
+      prev = pitch(n, oct);
+      n.oct = final;
+      n.key = keyId(n.deg, final, n.sharp);
+    });
+    return {
+      raw: data,
+      title: String(obj.title ?? obj.titulo ?? 'Sin título').slice(0, 80),
+      tempo: clamp(Number.isFinite(t) && t > 0 ? t : 90, 30, 240),
+      bar,
+      notes,
+    };
+  }
+
+  /* ================= Audio (síntesis, sin archivos) ================= */
+  let ctx = null;
+  const pendingNotes = [];                        // notas tocadas mientras el audio seguía bloqueado
+  const UNLOCK_EVENTS = ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'];
+
+  function audio() {
+    if (!ctx) { const AC = window.AudioContext || window.webkitAudioContext; ctx = new AC(); }
+    return ctx;
+  }
+
+  // Una nota: fundamental + dos armónicos con caída rápida (timbre de marimba / xilófono)
+  function voice(c, f) {
+    const t = c.currentTime;
+    const master = c.createGain();
+    master.gain.value = 0.5;
+    master.connect(c.destination);
+    for (const [ratio, vol, dur] of [[1, 1, 1.1], [4, 0.3, 0.3], [10, 0.08, 0.1]]) {
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.value = f * ratio;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(master);
+      o.start(t); o.stop(t + dur + 0.05);
+    }
+  }
+
+  // Toca las notas que quedaron en espera (si son recientes, para no sonar tarde y de golpe)
+  function flushPending() {
+    if (!ctx || ctx.state !== 'running') return;
+    const now = performance.now();
+    while (pendingNotes.length) {
+      const n = pendingNotes.shift();
+      if (now - n.at < 600) voice(ctx, n.f);
+    }
+  }
+
+  function tone(f) {
+    const c = audio();
+    if (c.state === 'running') { voice(c, f); return; }
+    // El navegador aún no permite sonido (el primer toque no cuenta como gesto hasta que se suelta):
+    // guardamos la nota y la tocamos apenas el audio se desbloquee.
+    pendingNotes.push({ f, at: performance.now() });
+    c.resume().then(flushPending).catch(() => {});
+  }
+
+  // Desbloquea el audio con el primer gesto completo (tocar, soltar, clic o tecla).
+  function unlockAudio() {
+    const c = audio();
+    c.resume().then(() => {
+      const s = c.createBufferSource();           // sonido vacío: también desbloquea iOS/Safari
+      s.buffer = c.createBuffer(1, 1, 22050);
+      s.connect(c.destination);
+      s.start(0);
+      flushPending();
+      for (const ev of UNLOCK_EVENTS) removeEventListener(ev, unlockAudio, true);
+    }).catch(() => {});
+  }
+  for (const ev of UNLOCK_EVENTS) addEventListener(ev, unlockAudio, { capture: true, passive: true });
+
+  /* ================= Xilófono (UI) ================= */
+  const keyEls = KEYS.map(k => {
+    const n = NOTES[k.deg];
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'key ' + (k.sharp ? 'sharp' : 'nat');
+    b.setAttribute('aria-label', `${n.name}${k.sharp ? ' sostenido' : ''} ${k.oct}`);
+    // Los sostenidos usan el tono oscuro de su nota natural, para reconocerlos por color
+    const look = k.sharp ? `--c:${n.d};--d:color-mix(in srgb,${n.d} 60%,black);--on:#fff`
+                         : `--c:${n.c};--d:${n.d};--on:${n.on}`;
+    b.style.cssText = `${look};--i:${k.id};--j:${k.deg};--o:${k.oct};--col:${(k.oct - 1) * 7 + k.deg + 1};--pcol:${k.deg + 1}`;
+    const name = document.createElement('span'); name.textContent = noteLabel(k);
+    const oct = document.createElement('small'); oct.textContent = k.oct;
+    b.append(name, oct);
+    b.addEventListener('pointerdown', e => { e.preventDefault(); onKey(k.id); });
+    b.addEventListener('click', e => { if (e.detail === 0) onKey(k.id); }); // teclado (Enter/Espacio)
+    els.xylo.append(b);
+    return b;
+  });
+
+  const litTimers = new Map();
+  function flash(k, ms) {
+    const el = keyEls[k];
+    el.classList.add('lit');
+    clearTimeout(litTimers.get(k));
+    litTimers.set(k, setTimeout(() => el.classList.remove('lit'), ms));
+  }
+  function pressKey(k, litMs = 220) { tone(freq(k)); flash(k, litMs); }
+
+  /* ================= Partitura (pentagrama) ================= */
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const S = 16;                                   // separación entre líneas del pentagrama (unidades del dibujo)
+  const U = 4.2 * S;                              // ancho de un pulso
+  const HEAD_DX = 1.3 * S;                        // del inicio de una nota al centro de su cabeza
+  const TOP = -2.2 * S;                           // borde superior del dibujo
+  const LABEL_Y = 6.95 * S, LYRIC_Y = LABEL_Y + 1.15 * S;
+  const CLEF_W = 5.6 * S;
+  const LEAD_BEATS = 2;                           // pulsos de entrada antes de la primera nota
+  const PLAYHEAD = 0.22;                          // posición de la línea de lectura (fracción del ancho visible)
+
+  // Clave de sol: contorno del glifo de la tipografía Noto Music (SIL Open Font License 1.1)
+  const CLEF_PATH = 'M314 801Q300 854 291 906Q282 958 282 1012Q282 1059 288 1100Q295 1142 307 1177Q320 1217 341 1252Q362 1288 386 1311Q409 1334 427 1334Q451 1334 493 1249Q514 1206 524 1156Q534 1106 534 1049Q534 978 515 908Q496 837 460 775Q423 713 372 666L407 498Q422 500 432 501Q442 502 447 502Q508 502 556 468Q604 433 632 377Q661 321 661 254Q661 177 622 116Q582 54 503 25Q508 8 532 -117Q538 -147 541 -164Q544 -182 545 -195Q546 -208 546 -225Q546 -275 522 -314Q497 -354 456 -376Q414 -398 363 -398Q311 -398 271 -378Q231 -359 208 -324Q185 -290 185 -245Q185 -197 212 -165Q238 -133 287 -133Q329 -133 356 -164Q382 -194 382 -236Q382 -272 357 -299Q332 -326 292 -326H282Q308 -365 364 -365Q433 -365 472 -320Q511 -275 511 -205Q511 -188 507 -160Q503 -131 493 -91Q483 -51 478 -25Q472 1 470 12Q436 2 390 2Q304 2 222 52Q142 102 96 184Q50 266 50 361Q50 451 91 530Q132 609 192 675Q253 741 314 801ZM341 826Q364 838 390 870Q416 903 440 945Q464 987 479 1030Q494 1072 494 1106Q494 1142 483 1163Q472 1184 445 1184Q421 1184 398 1162Q376 1140 358 1104Q341 1067 331 1022Q321 977 321 930Q321 898 328 872Q334 846 341 826ZM398 379Q371 373 347 354Q323 334 308 306Q294 279 294 248Q294 223 307 196Q320 170 339 154Q352 142 365 136Q380 129 380 123Q380 120 370 117Q332 126 302 151Q271 176 254 212Q236 247 236 287Q236 330 254 370Q271 410 302 442Q334 474 374 490L345 641Q229 547 174 456Q120 366 120 277Q120 212 154 156Q188 100 247 66Q306 31 380 31Q400 31 420 35Q441 39 464 45ZM495 55Q593 97 593 227Q593 270 571 306Q549 341 512 362Q475 383 429 383Z';
+  const CLEF_BOX = [50, -398, 661, 1334];         // xMin, yMin, xMax, yMax del glifo
+
+  const svgEl = (tag, attrs, parent) => {
+    const e = document.createElementNS(SVGNS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.append(e);
+    return e;
+  };
+  const lookOf = (deg, sharp) => {
+    const n = NOTES[deg];
+    return sharp ? `--c:${n.d};--d:color-mix(in srgb,${n.d} 60%,black);--on:#fff`
+                 : `--c:${n.c};--d:${n.d};--on:${n.on}`;
+  };
+
+  // Figura musical según la duración (en pulsos; el pulso es la negra)
+  function figure(beats) {
+    if (beats >= 4)    return { kind: 'whole',     dots: 0 };
+    if (beats >= 3)    return { kind: 'half',      dots: 1 };
+    if (beats >= 2)    return { kind: 'half',      dots: 0 };
+    if (beats >= 1.5)  return { kind: 'quarter',   dots: 1 };
+    if (beats >= 1)    return { kind: 'quarter',   dots: 0 };
+    if (beats >= 0.75) return { kind: 'eighth',    dots: 1 };
+    if (beats >= 0.5)  return { kind: 'eighth',    dots: 0 };
+    return { kind: 'sixteenth', dots: 0 };
+  }
+
+  function drawRest(g, n) {
+    const { kind, dots } = figure(n.beats), cx = n.cx;
+    const path = d => svgEl('path', { class: 'rest', d }, g);
+    if (kind === 'whole') {
+      svgEl('rect', { class: 'rest-fill', x: cx - 0.65 * S, y: S, width: 1.3 * S, height: 0.5 * S, rx: 2 }, g);
+    } else if (kind === 'half') {
+      svgEl('rect', { class: 'rest-fill', x: cx - 0.65 * S, y: 1.5 * S, width: 1.3 * S, height: 0.5 * S, rx: 2 }, g);
+    } else if (kind === 'quarter') {
+      path(`M${cx - 0.25 * S} ${S}L${cx + 0.3 * S} ${1.6 * S}L${cx - 0.3 * S} ${2.25 * S}L${cx + 0.25 * S} ${2.85 * S}q${-0.55 * S} ${0.05 * S} ${-0.2 * S} ${0.6 * S}`);
+    } else {
+      const flags = kind === 'eighth' ? 1 : 2;
+      path(`M${cx + 0.35 * S} ${1.15 * S}L${cx - 0.25 * S} ${1.5 * S + flags * 0.8 * S}`);
+      for (let f = 0; f < flags; f++) {
+        svgEl('circle', { class: 'rest-fill', cx: cx - 0.15 * S - f * 0.1 * S, cy: 1.35 * S + f * 0.8 * S, r: 0.24 * S }, g);
+      }
+    }
+    for (let d = 0; d < dots; d++) svgEl('circle', { class: 'rest-fill', cx: cx + (0.95 + 0.4 * d) * S, cy: 1.6 * S, r: 0.16 * S }, g);
+  }
+
+  function drawNote(g, n) {
+    const { kind, dots } = figure(n.beats), cx = n.cx;
+    const step = (n.oct - 1) * 7 + n.deg - 2;     // 0 = Mi de la octava 1 (línea de abajo); cada paso = media separación
+    const y = 4 * S - step * S / 2;
+
+    // Líneas adicionales (Do 1 abajo; La y Si de la octava 2 arriba)
+    const ledger = yy => svgEl('line', { class: 'ledger', x1: cx - 1.05 * S, x2: cx + 1.05 * S, y1: yy, y2: yy }, g);
+    for (let ly = 5 * S; ly <= y + 0.01; ly += S) ledger(ly);
+    for (let ly = -S; ly >= y - 0.01; ly -= S) ledger(ly);
+
+    if (n.sharp) {                                // sostenido ♯
+      const x = cx - 1.0 * S;
+      svgEl('path', { class: 'sharp-v', d: `M${x - 0.17 * S} ${y - 0.85 * S}V${y + 1.0 * S}M${x + 0.17 * S} ${y - 1.0 * S}V${y + 0.85 * S}` }, g);
+      svgEl('path', { class: 'sharp-h', d: `M${x - 0.38 * S} ${y + 0.12 * S}L${x + 0.38 * S} ${y - 0.28 * S}M${x - 0.38 * S} ${y + 0.62 * S}L${x + 0.38 * S} ${y + 0.22 * S}` }, g);
+    }
+
+    const hollow = kind === 'whole' || kind === 'half';
+    svgEl('ellipse', {
+      class: 'head' + (hollow ? ' hollow' : ''), cx, cy: y,
+      rx: (kind === 'whole' ? 0.78 : 0.68) * S, ry: 0.5 * S, transform: `rotate(-18 ${cx} ${y})`,
+    }, g);
+
+    if (kind !== 'whole') {                       // plica, y corchetes para las notas rápidas
+      const up = step < 4;
+      const sx = up ? cx + 0.62 * S : cx - 0.62 * S;
+      const ye = up ? y - 3.4 * S : y + 3.4 * S;
+      svgEl('line', { class: 'stem', x1: sx, y1: y, x2: sx, y2: ye }, g);
+      const flags = kind === 'eighth' ? 1 : kind === 'sixteenth' ? 2 : 0;
+      for (let f = 0; f < flags; f++) {
+        const y0 = ye + f * 0.8 * S * (up ? 1 : -1);
+        const k = up ? 1 : -1;
+        svgEl('path', { class: 'flag', d: `M${sx} ${y0}c${0.25 * S} ${0.55 * S * k} ${0.95 * S} ${0.9 * S * k} ${0.8 * S} ${2.0 * S * k}` }, g);
+      }
+    }
+    for (let d = 0; d < dots; d++) {              // puntillo (si la nota está sobre una línea, sube al espacio)
+      svgEl('circle', { class: 'dot', cx: cx + (1.05 + 0.4 * d) * S, cy: step % 2 === 0 ? y - S / 2 : y, r: 0.16 * S }, g);
+    }
+    if (n.beats >= 2) {                           // la nota larga se "estira" hasta la siguiente
+      svgEl('line', { class: 'tail', x1: cx + (dots ? 1.7 : 1.15) * S, x2: n.x + n.adv - 0.7 * S, y1: y, y2: y }, g);
+    }
+    const nm = svgEl('text', { class: 'nm', x: cx, y: LABEL_Y }, g);
+    nm.textContent = noteLabel(n);
+  }
+
+  /* --- Construcción de la partitura --- */
+  let song = null, noteEls = [];
+  const view = { scale: 1, clefPx: 0, ph: 0, padU: 0, t: -LEAD_BEATS, content: null, lines: [] };
+
+  function renderScore() {
+    els.title.textContent = song.title;
+    els.meta.textContent = `${song.notes.length} notas · ${Math.round(song.tempo)} ppm · compás de ${song.bar}`;
+
+    // Posición de cada nota: el ancho es proporcional a su duración (con un mínimo para que quepa la cabeza)
+    let t = 0, x = 0.7 * S;
+    for (const n of song.notes) {
+      n.start = t; t += n.beats;
+      n.x = x; n.adv = Math.max(n.beats * U, n.rest ? 2.2 * S : 2.9 * S); n.cx = n.x + HEAD_DX;
+      x += n.adv;
+    }
+    song.total = t; song.endX = x; song.W = x + 1.2 * S;
+    song.hasLyrics = song.notes.some(n => n.lyric);
+    song.vbH = (song.hasLyrics ? LYRIC_Y : LABEL_Y) + 0.45 * S - TOP;
+
+    // Clave de sol + compás (se queda fija a la izquierda)
+    const clef = els.clefSvg; clef.replaceChildren();
+    clef.setAttribute('viewBox', `0 ${TOP} ${CLEF_W} ${song.vbH}`);
+    for (let i = 0; i < 5; i++) svgEl('line', { class: 'staff-line', x1: 0, x2: CLEF_W, y1: i * S, y2: i * S }, clef);
+    const k = 7.02 * S / (CLEF_BOX[3] - CLEF_BOX[1]);
+    svgEl('path', {
+      class: 'clef-glyph', d: CLEF_PATH,
+      transform: `translate(${0.5 * S - CLEF_BOX[0] * k} ${-1.39 * S + CLEF_BOX[3] * k}) scale(${k} ${-k})`,
+    }, clef);
+    for (const [txt, yy] of [[String(song.bar), 2.0 * S], ['4', 4.0 * S]]) {
+      const ts = svgEl('text', { class: 'ts', x: 4.55 * S, y: yy }, clef); ts.textContent = txt;
+    }
+
+    // Pentagrama con las notas
+    const st = els.staffSvg; st.replaceChildren();
+    view.lines = Array.from({ length: 5 }, (_, i) => svgEl('line', { class: 'staff-line', x1: 0, y1: i * S, y2: i * S }, st));
+    view.content = svgEl('g', {}, st);
+    const c = view.content;
+    song.notes.forEach(n => {                     // barras de compás
+      const r = n.start / song.bar;
+      if (n.start > 0 && Math.abs(r - Math.round(r)) < 1e-6) {
+        svgEl('line', { class: 'bar-line', x1: n.x - 0.45 * S, x2: n.x - 0.45 * S, y1: 0, y2: 4 * S }, c);
+      }
+    });
+    svgEl('line', { class: 'bar-line', x1: x + 0.2 * S, x2: x + 0.2 * S, y1: 0, y2: 4 * S }, c);       // doble barra final
+    svgEl('line', { class: 'bar-end', x1: x + 0.55 * S, x2: x + 0.55 * S, y1: 0, y2: 4 * S }, c);
+
+    noteEls = song.notes.map(n => {
+      const g = svgEl('g', { class: 'note', style: n.rest ? '' : lookOf(n.deg, n.sharp) }, c);
+      svgEl('rect', { class: 'halo', x: n.cx - 1.5 * S, y: TOP + 0.2 * S, width: 3 * S, height: (n.lyric ? LYRIC_Y : LABEL_Y) + 0.3 * S - TOP - 0.2 * S, rx: 10 }, g);
+      if (n.rest) drawRest(g, n); else drawNote(g, n);
+      if (n.lyric) { const l = svgEl('text', { class: 'ly', x: n.cx, y: LYRIC_Y }, g); l.textContent = n.lyric; }
+      return g;
+    });
+    view.t = -LEAD_BEATS;
+    layoutView();
+  }
+
+  // Posición horizontal (en unidades del dibujo) que corresponde a un instante, medido en pulsos
+  function xAt(t) {
+    const ns = song.notes;
+    if (t < 0) return ns[0].cx + t * U;
+    if (t >= song.total) { const l = ns[ns.length - 1]; return l.cx + l.adv + (t - song.total) * U; }
+    let i = ns.length - 1;
+    while (ns[i].start > t) i--;
+    return ns[i].cx + (t - ns[i].start) / ns[i].beats * ns[i].adv;
+  }
+  const scrollForT = t => Math.max(0, view.clefPx + (view.padU + xAt(t)) * view.scale - view.ph);
+  function scrollToT(t, smooth) {
+    view.t = t;
+    els.scroller.scrollTo({ left: scrollForT(t), behavior: smooth ? 'smooth' : 'auto' });
+  }
+
+  // Ajusta el dibujo al tamaño disponible (se llama al cambiar el tamaño de la pantalla)
+  function layoutView() {
+    if (!song) return;
+    const h = els.score.clientHeight, vw = els.score.clientWidth;
+    if (!h || !vw) return;
+    view.scale = h / song.vbH;
+    view.clefPx = CLEF_W * view.scale;
+    view.ph = view.clefPx + (vw - view.clefPx) * PLAYHEAD;
+    view.padU = view.ph / view.scale + LEAD_BEATS * U;          // espacio vacío antes de la primera nota
+    const totalU = view.padU + song.W + vw / view.scale;
+    els.clefSvg.style.cssText = `width:${view.clefPx}px;height:${h}px`;
+    els.staffSvg.style.cssText = `width:${totalU * view.scale}px;height:${h}px`;
+    els.staffSvg.setAttribute('viewBox', `0 ${TOP} ${totalU} ${song.vbH}`);
+    for (const l of view.lines) l.setAttribute('x2', totalU);
+    view.content.setAttribute('transform', `translate(${view.padU} 0)`);
+    els.playhead.style.left = view.ph + 'px';
+    els.scroller.scrollLeft = scrollForT(view.t);
+  }
+  new ResizeObserver(layoutView).observe(els.score);
+
+  const hitTimers = new Map();
+  function hitNote(i, ms) {
+    const g = noteEls[i];
+    g.classList.add('hit');
+    clearTimeout(hitTimers.get(i));
+    hitTimers.set(i, setTimeout(() => g.classList.remove('hit'), ms));
+  }
+
+  /* ================= Modos ================= */
+  let mode = 'idle', run = 0, target = -1, raf = 0;
+
+  function setMode(m) {
+    mode = m;
+    document.body.dataset.mode = m;
+    els.btnPlay.setAttribute('aria-pressed', m === 'play');
+    els.btnGuide.setAttribute('aria-pressed', m === 'guide');
+    els.btnPlay.querySelector('.lbl').textContent  = m === 'play'  ? 'Detener' : 'Escuchar';
+    els.btnGuide.querySelector('.lbl').textContent = m === 'guide' ? 'Salir de la guía' : 'Guía';
+  }
+  function clearTarget() {
+    for (const k of keyEls) k.classList.remove('target');
+    for (const g of noteEls) g.classList.remove('now');
+    target = -1;
+  }
+  function stopAll() {
+    run++;
+    cancelAnimationFrame(raf);
+    clearTarget();
+    setMode('idle');
+    for (const [k, t] of litTimers) { clearTimeout(t); keyEls[k].classList.remove('lit'); }
+    for (const [i, t] of hitTimers) { clearTimeout(t); if (noteEls[i]) noteEls[i].classList.remove('hit'); }
+    if (song) scrollToT(-LEAD_BEATS, true);       // la partitura vuelve al inicio
+  }
+
+  /* --- Escuchar: la partitura avanza al ritmo de la canción; cada nota suena al cruzar la línea de lectura --- */
+  function playSong() {
+    stopAll();
+    const id = run;
+    setMode('play');
+    say('Escuchando la canción…');
+    const beatMs = 60000 / song.tempo;
+    const t0 = performance.now();
+    let next = 0;
+    const frame = now => {
+      if (id !== run) return;
+      const t = (now - t0) / beatMs - LEAD_BEATS;       // tiempo en pulsos (negativo = entrada)
+      view.t = t;
+      els.scroller.scrollLeft = scrollForT(t);
+      while (next < song.notes.length && song.notes[next].start <= t) {
+        const n = song.notes[next];
+        if (!n.rest) {
+          const ms = Math.min(beatMs * n.beats * 0.8, 400);
+          pressKey(n.key, ms);
+          hitNote(next, ms);
+        }
+        next++;
+      }
+      if (t >= song.total) { stopAll(); say('Terminó la canción.'); return; }
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+  }
+
+  /* --- Guía: la nota que toca queda en la línea de lectura y su tecla se ilumina --- */
+  const nextNote = from => song.notes.findIndex((n, i) => i >= from && !n.rest);
+
+  function goTarget(i) {
+    clearTarget();
+    target = i;
+    const n = song.notes[i];
+    keyEls[n.key].classList.add('target');
+    noteEls[i].classList.add('now');
+    scrollToT(n.start, true);
+    say(`Toca: ${noteLabel(n)} (${n.oct})`);
+  }
+  function startGuide() {
+    stopAll();
+    const first = nextNote(0);
+    if (first < 0) { say('La canción no tiene notas para tocar.', true); return; }
+    setMode('guide');
+    goTarget(first);
+  }
+
+  /* --- Toque en una tecla (libre o en guía) --- */
+  function onKey(k) {
+    pressKey(k);
+    if (mode !== 'guide') return;
+    if (k === song.notes[target].key) {
+      hitNote(target, 300);
+      const nx = nextNote(target + 1);
+      if (nx < 0) { stopAll(); say('Terminó la canción. Toca Guía para repetir.'); }
+      else goTarget(nx);
+    } else {
+      const el = keyEls[k];
+      el.classList.remove('miss'); void el.offsetWidth; el.classList.add('miss');
+      setTimeout(() => el.classList.remove('miss'), 300);
+    }
+  }
+
+  /* ================= Cargar canción ================= */
+  function setSong(s) {
+    stopAll();
+    song = s;
+    document.body.classList.toggle('has-sharps', song.notes.some(n => !n.rest && n.sharp));
+    renderScore();
+  }
+
+  function openPanel() {
+    els.panel.hidden = false; els.scrim.hidden = false;
+    els.btnUrl.setAttribute('aria-expanded', 'true');
+    els.url.focus();
+  }
+  function closePanel() {
+    els.panel.hidden = true; els.scrim.hidden = true;
+    els.btnUrl.setAttribute('aria-expanded', 'false');
+  }
+
+  async function loadUrl(raw) {
+    if (!raw) { say('Escribe la dirección del JSON.', true); return false; }
+    say('Cargando…');
+    try {
+      const url = new URL(raw, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+        throw new Error('Desde un archivo local no se puede leer una URL. Abre esta página con un servidor (por ejemplo "python -m http.server") o usa "O pega el JSON aquí".');
+      }
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`El servidor respondió ${res.status}.`);
+      setSong(parseSong(await res.json()));
+      try { localStorage.setItem('xilofono:url', raw); } catch (_) {}
+      say(`Canción cargada: ${song.title}`);
+      return true;
+    } catch (e) {
+      const msg = e.name === 'TypeError' ? 'revisa la dirección y que el servidor permita CORS.'
+                : e.name === 'SyntaxError' ? 'el archivo no es un JSON válido.'
+                : e.message;
+      say(`No se pudo cargar: ${msg}`, true);
+      return false;
+    }
+  }
+
+  function loadPasted() {
+    try {
+      setSong(parseSong(JSON.parse(els.json.value)));
+      say(`Canción cargada: ${song.title}`);
+      closePanel();
+    } catch (e) {
+      say(`No se pudo usar el JSON: ${e.name === 'SyntaxError' ? 'no es un JSON válido.' : e.message}`, true);
+    }
+  }
+
+  /* ================= Compartir ================= */
+  // El enlace lleva la canción completa en el fragmento (#s=...), sin servidor.
+  const b64e = str => btoa(String.fromCharCode(...new TextEncoder().encode(str)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const b64d = b => new TextDecoder().decode(Uint8Array.from(
+    atob(b.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)));
+  function shareLink() {
+    return location.href.split('#')[0] + '#s=' + b64e(JSON.stringify(song.raw));
+  }
+  function loadFromHash() {
+    const m = /[#&]s=([^&]+)/.exec(location.hash);
+    if (!m) return false;
+    try {
+      setSong(parseSong(JSON.parse(b64d(m[1]))));
+      say(`Canción compartida cargada: ${song.title}`);
+      return true;
+    } catch (e) {
+      say('El enlace compartido no tiene una canción válida.', true);
+      return false;
+    }
+  }
+  async function shareSong() {
+    const url = shareLink();
+    const data = { title: song.title, text: `Escucha "${song.title}" en el xilófono`, url };
+    try {
+      if (navigator.share) { await navigator.share(data); return; }
+    } catch (e) {
+      if (e && e.name === 'AbortError') return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      say('Enlace copiado. Quien lo abra podrá escuchar y tocar esta canción.');
+    } catch (_) {
+      els.json.value = JSON.stringify(song.raw, null, 1);
+      openPanel();
+      els.json.closest('details') && (els.json.closest('details').open = true);
+      say('Copia el JSON del cuadro y compártelo.');
+    }
+  }
+
+  /* ================= Eventos ================= */
+  els.btnShare.addEventListener('click', shareSong);
+  addEventListener('hashchange', loadFromHash);
+  els.btnUrl.addEventListener('click', () => (els.panel.hidden ? openPanel() : closePanel()));
+  els.close.addEventListener('click', closePanel);
+  els.scrim.addEventListener('click', closePanel);
+  els.panel.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (await loadUrl(els.url.value.trim())) closePanel();
+  });
+  els.paste.addEventListener('click', loadPasted);
+  els.btnPlay.addEventListener('click', () => (mode === 'play' ? (stopAll(), say('Detenido.')) : playSong()));
+  els.btnGuide.addEventListener('click', () => (mode === 'guide' ? (stopAll(), say('Guía terminada.')) : startGuide()));
+
+  addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !els.panel.hidden) { closePanel(); return; }
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.target.matches('input,textarea,summary')) return;
+    const k = KBD[e.key.toLowerCase()];
+    if (k !== undefined) onKey(k);
+  });
+
+  /* ================= Inicio ================= */
+  setSong(parseSong(DEFAULT_SONG));
+  say('Toca las teclas, o carga una canción.');
+  try { els.url.value = localStorage.getItem('xilofono:url') || ''; } catch (_) {}
+  const q = new URLSearchParams(location.search).get('json');
+  if (!loadFromHash() && q) { els.url.value = q; loadUrl(q); }
+})();
+</script>
+</body>
+</html>

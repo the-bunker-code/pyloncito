@@ -5,3 +5,4 @@ playwright-report
 test-results
 node_modules
 pnpm-lock.yaml
+docs/prototipos
