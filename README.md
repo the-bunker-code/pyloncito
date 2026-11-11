@@ -4,13 +4,13 @@ Sistema de juegos educativos para aprender jugando.
 
 **Aprender jugando, tapita a tapita.**
 
-Pyloncito reúne cuatro juegos para niñas y niños de 3 a 7 años, pensados para jugar
+Pyloncito reúne cinco juegos para niñas y niños de 3 a 7 años, pensados para jugar
 con un adulto cerca. El sitio es público, estático, sin cuentas y sin publicidad. La
 analítica es opcional y solo se activa con consentimiento. El progreso queda en el
 dispositivo.
 
-> Estado: Mira y Dime y Miradas están en beta. Se juegan en `/juegos/mira-y-dime/` y `/juegos/miradas/`.
-> Estado: Mira y Dime está en beta y ya se puede jugar en `/juegos/mira-y-dime/`.
+> Estado: Mira y Dime, Miradas y Xilófono están en beta. Se juegan en `/juegos/mira-y-dime/`,
+> `/juegos/miradas/` y `/juegos/xilofono/`.
 
 [Repo](https://github.com/the-bunker-code/pyloncito) ·
 [Project](https://github.com/orgs/the-bunker-code/projects/2) ·
@@ -25,6 +25,7 @@ dispositivo.
 | Memo Colores    | Memoria visual      | [memo-colores](https://github.com/the-bunker-code/memo-colores)                   |
 | Miradas         | Atención compartida | [miradas](https://github.com/the-bunker-code/miradas)                             |
 | Mira y Dime     | Lenguaje y sílabas  | [mira-dime](https://github.com/the-bunker-code/mira-y-dime)                       |
+| Xilófono        | Música y atención   | Nuevo; prototipo en `docs/prototipos/xilofono/`                                   |
 
 ## Estado
 

@@ -6,6 +6,7 @@ Todas las fechas usan ISO 8601. El formato sigue [Keep a Changelog](https://keep
 
 ### Agregado
 
+- Xilófono en beta (`/juegos/xilofono/`): teclado de 2 octavas con sostenidos solo si la canción los usa, partitura que avanza sola, modos Escuchar y Guía, carga de canciones por URL o JSON, enlaces `#s=` para compartir y 4 canciones de ejemplo en `public/canciones/`.
 - Miradas migrado a Pyloncito en beta: 3 niveles, 1–3 adultos, sesión de 5 minutos y progreso local.
 - Componentes compartidos `StarPill`, `SessionClock` y `ConfirmDialog`, con estilos comunes de juego en `game-ui.css`.
 - Espera de mirada ajustable (3–30 s) desde ajustes y con `−`/`+` durante la ronda.
