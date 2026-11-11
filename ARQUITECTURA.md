@@ -183,6 +183,20 @@ juegos.
 2. Diseñar el ícono y el color del juego. Una vez publicado, no se cambian.
 3. Escribir reglas y tests primero; luego motor; luego vista.
 4. Cambiar a `beta` para probar en el preview; a `ready` cuando quede estable.
+5. Registrar el tema visual: agregar el nombre a `GameTheme` en `games.ts`, y las clases
+   `.game-card--<slug>` y `.game-header--<slug>` en `src/styles/components.css`. Los íconos
+   nuevos van en `src/components/ui/icons.ts` (trazos de Lucide).
+6. Estilos propios en `src/styles/<slug>.css`, con tokens en `:root` y prefijo del juego. Sin
+   `style=""` literal: los valores por elemento pasan como custom properties con `:style`.
+7. Textos: el motor emite códigos (estado, error) y un módulo `messages.ts` los traduce con
+   `copy`. La lógica no arma frases.
+8. CSP: si el juego necesita algo que la política global no permite, se abre **solo en su
+   página** con `Astro.csp?.insertDirective(...)`. Astro fusiona la directiva con la global;
+   revisar el `<meta>` del build y agregar la página a `tests/e2e/csp.spec.ts`.
+9. Si el juego cambia el número de juegos jugables, actualizar `hub.gamesHint` en
+   `content/es/common.ts`, `README.md` y `tests/e2e/hub.spec.ts`.
+10. Contraste del texto sobre colores del juego: >= 4.5:1. Si un color de marca no lo cumple
+    con blanco, se cambia el color del texto, no el del fondo.
 
 ## 5. Arquitectura de la app
 
