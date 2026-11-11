@@ -25,9 +25,9 @@ test('el hub carga sin errores y sin scroll horizontal', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Pyloncito' })).toBeVisible();
   await expect(
-    page.getByText('Cuatro juegos para mirar, contar, recordar y hablar.'),
+    page.getByText('Juegos para mirar, contar, recordar, hablar y tocar música.'),
   ).toBeVisible();
-  await expect(page.locator('.game-card')).toHaveCount(4);
+  await expect(page.locator('.game-card')).toHaveCount(5);
   await expect(page.getByText('Próximamente').first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Guía', exact: true })).toBeVisible();
 

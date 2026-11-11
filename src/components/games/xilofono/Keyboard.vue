@@ -30,10 +30,6 @@ function keyStyle(key: KeyDefinition) {
   return { '--i': key.sharp ? 0 : key.id, '--col': (key.octave - 1) * 7 + key.degree + 1 };
 }
 
-function ariaLabel(key: KeyDefinition): string {
-  return `${noteLabel(key.degree, false)}${key.sharp ? ` ${copy.sharp}` : ''} ${key.octave}`;
-}
-
 /** Touch and mouse play on press; keyboard activation (Enter/Space) arrives as a click with detail 0. */
 function onPointerDown(event: PointerEvent, key: number) {
   if (event.button !== 0) return;
@@ -59,12 +55,16 @@ function onClick(event: MouseEvent, key: number) {
         type="button"
         :class="keyClass(key)"
         :style="keyStyle(key)"
-        :aria-label="ariaLabel(key)"
         @pointerdown="onPointerDown($event, key.id)"
         @click="onClick($event, key.id)"
       >
-        <span aria-hidden="true">{{ noteLabel(key.degree, key.sharp) }}</span>
-        <small aria-hidden="true">{{ key.octave }}</small>
+        <!-- Screen readers hear "Do sostenido 1"; the key shows "Do♯ 1". -->
+        <span v-if="key.sharp">
+          <span aria-hidden="true">{{ noteLabel(key.degree, true) }}</span>
+          <span class="sr-only">{{ noteLabel(key.degree, false) }} {{ copy.sharp }}</span>
+        </span>
+        <span v-else>{{ noteLabel(key.degree, false) }}</span>
+        {{ ' ' }}<small>{{ key.octave }}</small>
       </button>
     </template>
   </div>

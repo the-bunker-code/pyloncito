@@ -20,6 +20,8 @@
   --xilo-la-dark: #1f3480;
   --xilo-si: #8e44c9;
   --xilo-si-dark: #62298f;
+  /* Dark label for keys where white text would fall below 4.5:1. */
+  --xilo-on-dark: #111111;
 
   --xilo-panel: var(--color-sky-bottom);
   --xilo-line: var(--color-wood-dark);
@@ -260,6 +262,7 @@
 .xilo-tone--1 {
   --tone: var(--xilo-re);
   --tone-dark: var(--xilo-re-dark);
+  --tone-on: var(--xilo-on-dark);
 }
 
 .xilo-tone--2 {
@@ -271,6 +274,7 @@
 .xilo-tone--3 {
   --tone: var(--xilo-fa);
   --tone-dark: var(--xilo-fa-dark);
+  --tone-on: var(--xilo-on-dark);
 }
 
 .xilo-tone--4 {
@@ -293,6 +297,11 @@
   --c: var(--tone-dark);
   --d: color-mix(in srgb, var(--tone-dark) 60%, black);
   --on: var(--color-white);
+}
+
+.xilo-tone--2.xilo-tone--sharp,
+.xilo-tone--4.xilo-tone--sharp {
+  --on: var(--xilo-on-dark);
 }
 
 /* 5. Controls ------------------------------------------------------------ */
