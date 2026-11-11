@@ -1,7 +1,7 @@
 import type { IconName } from '../components/ui/icons';
 
 export type GameStatus = 'ready' | 'beta' | 'coming' | 'hidden';
-export type GameTheme = 'dados' | 'memoria' | 'miradas' | 'mira-y-dime';
+export type GameTheme = 'dados' | 'memoria' | 'miradas' | 'mira-y-dime' | 'xilofono';
 
 export interface GameEntry {
   slug: string;
@@ -59,6 +59,17 @@ export const games: readonly GameEntry[] = [
     minutes: [5, 10],
     status: 'beta',
     description: 'Arma sílabas, palabras y frases con lo que ves.',
+  },
+  {
+    slug: 'xilofono',
+    name: 'Xilófono',
+    icon: 'music',
+    theme: 'xilofono',
+    age: '3–7 años',
+    skill: 'Música y atención',
+    minutes: [5, 10],
+    status: 'beta',
+    description: 'Toca, escucha y sigue canciones con colores.',
   },
 ];
 
